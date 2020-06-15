@@ -1,0 +1,16 @@
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.csprojAssemblyReference.cache
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\MainWindow.g.cs
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\App.g.cs
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject_MarkupCompile.cache
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject_MarkupCompile.lref
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\bin\Debug\SettingsProject.exe.config
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\bin\Debug\SettingsProject.exe
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\bin\Debug\SettingsProject.pdb
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\MainWindow.baml
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.g.resources
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.Properties.Resources.resources
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.csproj.GenerateResource.cache
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.csproj.CoreCompileInputs.cache
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.exe
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\SettingsProject.pdb
+C:\Users\metrevin\source\repos\SettingsProject\SettingsProject\obj\Debug\GeneratedInternalTypeHelper.g.cs
