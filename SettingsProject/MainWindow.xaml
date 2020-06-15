@@ -8,16 +8,26 @@
         Title="MainWindow" Height="450" Width="800">
 
     <Window.Resources>
-        <DataTemplate DataType="{x:Type local:Setting}">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <Button>OK</Button>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="Width" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <DataTemplate DataType="{x:Type local:StringSetting}">
+            <StackPanel Orientation="Vertical" Margin="0, 6">
+                <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" />
+                <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:BoolSetting}">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding Path=Value}" />
+                <TextBlock Text="{Binding Path=Name}" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
 
-    <ItemsControl ItemsSource="{Binding Path=Settings}">
+    <ItemsControl ItemsSource="{Binding Path=Settings}" Margin="32, 16">
         <!--<ItemsControl.ItemTemplate>
             <DataTemplate>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
