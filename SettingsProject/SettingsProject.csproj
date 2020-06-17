@@ -56,7 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="SettingsViewModel.cs" />
     <Page Include="MainWindow.xaml">

@@ -59,11 +59,20 @@
         <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" IsTabStop="False">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel LastChildFill="True" Margin="0, 6">
-                        <Rectangle DockPanel.Dock="Left" Fill="Blue" Width="4" VerticalAlignment="Stretch" Visibility="{Binding IsModified, Converter={x:Static local:BoolToVisibilityConverter.HiddenWhenFalse}}" />
-                        <ContentPresenter Content="{Binding}" Margin="8,0,0,0" />
-                    </DockPanel>
-                </DataTemplate>
+                    <Grid Margin="0, 6">
+                        <Grid.ColumnDefinitions>
+                            <!-- Modification state indicator -->
+                            <ColumnDefinition Width="5" />
+                            <!-- Empty column, just for spacing -->
+                            <ColumnDefinition Width="8" />
+                            <!-- Actual property editor -->
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Grid.Column="0" Fill="#CDCDCD" Width="4" VerticalAlignment="Stretch" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
+                        <Rectangle Grid.Column="0" Fill="#3296D5" Width="4" VerticalAlignment="Stretch" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
+                        <ContentPresenter Grid.Column="2" Content="{Binding}" />
+                    </Grid>
+                  </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </ScrollViewer>
