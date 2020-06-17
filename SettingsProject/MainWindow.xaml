@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:SettingsProject"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Background="#FBFBFB">
+        Background="#FBFBFB"
+        d:DataContext="{d:DesignInstance local:SettingsViewModel}">
 
     <Window.Resources>
         <Style TargetType="TextBox">
