@@ -14,7 +14,7 @@
 
     <Window.Resources>
         <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="2" />
+            <Setter Property="Padding" Value="3" />
             <Setter Property="MinWidth" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
