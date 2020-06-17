@@ -77,7 +77,7 @@
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
-            <ItemsControl ItemsSource="{Binding Settings}" Margin="16,8,16,32" IsTabStop="False">
+            <ItemsControl ItemsSource="{Binding Settings}" Margin="32,8,16,32" IsTabStop="False">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="0,0,0,24">
