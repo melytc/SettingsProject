@@ -27,19 +27,19 @@
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
         <DataTemplate DataType="{x:Type local:StringSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
+            <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
+            <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:BoolSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
+            <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <StackPanel Orientation="Horizontal">
                     <CheckBox IsChecked="{Binding Value}" Padding="4" />
@@ -48,7 +48,7 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:EnumSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
+            <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </StackPanel>
@@ -56,7 +56,13 @@
     </Window.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
-        <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" IsTabStop="False" />
+        <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" IsTabStop="False">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentPresenter Margin="0, 6" Content="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </ScrollViewer>
 
 </Window>
