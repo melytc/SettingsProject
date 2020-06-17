@@ -17,7 +17,7 @@ namespace SettingsProject
 
         public abstract bool IsModified { get; protected set; }
 
-        protected Setting(string name, int priority, bool isModified = false)
+        protected Setting(string name, int priority)
         {
             Name = name;
             Priority = priority;
@@ -29,6 +29,7 @@ namespace SettingsProject
         public event PropertyChangedEventHandler? PropertyChanged;
         
         private readonly T _defaultValue;
+        private readonly bool _trackModification;
         private T _value;
 
         //public string? Description { get; }
@@ -60,26 +61,29 @@ namespace SettingsProject
                     _value = value;
                     OnPropertyChanged(nameof(Value));
 
-                    // IsModified can only change when Value changes
-                    var isModified = !comparer.Equals(value, _defaultValue);
-
-                    if (isModified != IsModified)
+                    if (_trackModification)
                     {
-                        // Only raise event when IsModified actually changes
-                        IsModified = isModified;
-                        OnPropertyChanged(nameof(IsModified));
+                        // IsModified can only change when Value changes
+                        var isModified = !comparer.Equals(value, _defaultValue);
+
+                        if (isModified != IsModified)
+                        {
+                            // Only raise event when IsModified actually changes
+                            IsModified = isModified;
+                            OnPropertyChanged(nameof(IsModified));
+                        }
                     }
                 }
-
             }
         }
 
 #pragma warning disable CS8618 // _value is not initialized.
-        protected Setting(string name, T initialValue, T defaultValue, int priority)
+        protected Setting(string name, T initialValue, T defaultValue, int priority, bool trackModification)
 #pragma warning restore CS8618 // _value is not initialized.
             : base(name, priority)
         {
             _defaultValue = defaultValue;
+            _trackModification = trackModification;
             Value = initialValue;
         }
 
@@ -93,8 +97,8 @@ namespace SettingsProject
     {
         public override IEqualityComparer<string>? Comparer { get; }
 
-        public StringSetting(string name, string initialValue, string defaultValue, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue, priority)
+        public StringSetting(string name, string initialValue, string? defaultValue, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", priority, trackModification: defaultValue != null)
         {
             Comparer = comparer;
         }
@@ -104,8 +108,8 @@ namespace SettingsProject
     {
         public override IEqualityComparer<string>? Comparer { get; }
 
-        public MultiLineStringSetting(string name, string initialValue, string defaultValue, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue, priority)
+        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", priority, trackModification: defaultValue != null)
         {
             Comparer = comparer;
         }
@@ -113,8 +117,8 @@ namespace SettingsProject
 
     class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool initialValue, bool defaultValue, string description, int priority)
-            : base(name, initialValue, defaultValue, priority)
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority)
+            : base(name, initialValue, defaultValue ?? false, priority, trackModification: defaultValue.HasValue)
         {
             Description = description;
         }
@@ -127,8 +131,8 @@ namespace SettingsProject
         public List<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string defaultValue, List<string> enumValues, int priority)
-            : base(name, initialValue, defaultValue, priority)
+        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, int priority)
+            : base(name, initialValue, defaultValue ?? "", priority, trackModification: defaultValue != null)
         {
             EnumValues = enumValues;
         }

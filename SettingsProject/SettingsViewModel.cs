@@ -22,13 +22,13 @@ namespace SettingsProject
                 defaultValue: "ConsoleApp1"),
             new StringSetting(
                 name: "Target framework",
-                initialValue: ".NET Code 3.0",
-                defaultValue: "",
+                initialValue: ".NET Core 3.0",
+                defaultValue: null,
                 priority: 3),
             new EnumSetting(
                 name: "Output type",
                 initialValue: "Console Application",
-                defaultValue: "Console Application",
+                defaultValue: null,
                 enumValues: new List<string> { "Console Application", "Windows Application", "Class Library" },
                 priority: 4),
             new BoolSetting(
