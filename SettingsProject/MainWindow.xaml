@@ -55,8 +55,8 @@
         </DataTemplate>
     </Window.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" />
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
+        <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" IsTabStop="False" />
     </ScrollViewer>
 
 </Window>
