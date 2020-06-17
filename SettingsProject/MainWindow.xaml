@@ -67,6 +67,15 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="8">
+            <TextBlock Margin="0,4">Application</TextBlock>
+            <TextBlock Margin="0,4">Build</TextBlock>
+            <TextBlock Margin="0,4">Build Events</TextBlock>
+            <TextBlock Margin="0,4">Debug</TextBlock>
+            <TextBlock Margin="0,4">Signing</TextBlock>
+            <TextBlock Margin="0,4">Code Analysis</TextBlock>
+        </StackPanel>
+
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
             <ItemsControl ItemsSource="{Binding Settings}" Margin="16,8,16,32" IsTabStop="False">
                 <ItemsControl.ItemTemplate>
