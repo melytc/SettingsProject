@@ -53,8 +53,6 @@ namespace SettingsProject
         private readonly IEqualityComparer<T> _comparer;
         private T _value;
 
-        //public string? Description { get; }
-
         public override SettingModificationState ModificationState { get; protected set; } = SettingModificationState.Default;
 
         /// <summary>
