@@ -18,6 +18,8 @@ namespace SettingsProject
     {
         public string Name { get; }
 
+        public string? Description { get; }
+
         /// <summary>
         /// Relative priority of the setting, to use when ordering items in the UI.
         /// </summary>
@@ -25,9 +27,10 @@ namespace SettingsProject
 
         public abstract SettingModificationState ModificationState { get; protected set; }
 
-        protected Setting(string name, int priority)
+        protected Setting(string name, string? description, int priority)
         {
             Name = name;
+            Description = description;
             Priority = priority;
         }
     }
@@ -80,9 +83,9 @@ namespace SettingsProject
         }
 
 #pragma warning disable CS8618 // _value is not initialized.
-        protected Setting(string name, T initialValue, T defaultValue, int priority, IEqualityComparer<T> comparer)
+        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, IEqualityComparer<T> comparer)
 #pragma warning restore CS8618 // _value is not initialized.
-            : base(name, priority)
+            : base(name, description, priority)
         {
             _initialValue = initialValue;
             _defaultValue = defaultValue;
@@ -98,16 +101,16 @@ namespace SettingsProject
 
     class StringSetting : Setting<string>
     {
-        public StringSetting(string name, string initialValue, string? defaultValue, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", priority, comparer ?? StringComparer.Ordinal)
+        public StringSetting(string name, string initialValue, string? defaultValue, string description, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, comparer ?? StringComparer.Ordinal)
         {
         }
     }
 
     class MultiLineStringSetting : Setting<string>
     {
-        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", priority, comparer ?? StringComparer.Ordinal)
+        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string description, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, comparer ?? StringComparer.Ordinal)
         {
         }
     }
@@ -115,12 +118,9 @@ namespace SettingsProject
     class BoolSetting : Setting<bool>
     {
         public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority)
-            : base(name, initialValue, defaultValue ?? false, priority, EqualityComparer<bool>.Default)
+            : base(name, initialValue, defaultValue ?? false, description, priority, EqualityComparer<bool>.Default)
         {
-            Description = description;
         }
-
-        public string Description { get; }
     }
 
     class EnumSetting : Setting<string>
@@ -128,8 +128,8 @@ namespace SettingsProject
         public List<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", priority, comparer ?? StringComparer.Ordinal)
+        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, string description, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, comparer ?? StringComparer.Ordinal)
         {
             EnumValues = enumValues;
         }
