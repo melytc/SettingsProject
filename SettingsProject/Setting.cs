@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
+#nullable enable
+
 namespace SettingsProject
 {
-#nullable enable
     abstract class Setting
     {
         public string Name { get; }
