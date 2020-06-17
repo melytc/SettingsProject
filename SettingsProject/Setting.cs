@@ -33,6 +33,12 @@ namespace SettingsProject
             Description = description;
             Priority = priority;
         }
+
+        public bool MatchesSearchText(string searchString)
+        {
+            return Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1 
+                || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1);
+        }
     }
 
     abstract class Setting<T> : Setting, INotifyPropertyChanged

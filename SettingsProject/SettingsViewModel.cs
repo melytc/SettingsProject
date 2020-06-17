@@ -8,6 +8,8 @@ namespace SettingsProject
 {
     internal sealed class SettingsViewModel
     {
+        private string _searchString = "";
+
         public List<Setting> Settings { get; } = new List<Setting>
         {
             new StringSetting(
@@ -54,6 +56,22 @@ namespace SettingsProject
                 priority: 7,
                 description: "Commands to execute after a build completes.")
         };
+
+        public string SearchString
+        {
+            get => _searchString;
+            set
+            {
+                if (_searchString == value)
+                {
+                    return;
+                }
+
+                _searchString = value;
+                var view = CollectionViewSource.GetDefaultView(Settings);
+                view.Filter = o => o is Setting setting && setting.MatchesSearchText(_searchString);
+            }
+        }
 
         public SettingsViewModel()
         {

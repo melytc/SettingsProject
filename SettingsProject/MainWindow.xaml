@@ -67,6 +67,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
+
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="8">
             <TextBlock Margin="0,4">Application</TextBlock>
             <TextBlock Margin="0,4">Build</TextBlock>
