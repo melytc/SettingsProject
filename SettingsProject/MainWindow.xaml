@@ -42,8 +42,7 @@
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding Value}" Padding="4" />
-                    <TextBlock Text="{Binding Description}" />
+                    <CheckBox IsChecked="{Binding Value}" Content="{Binding Description}" />
                 </StackPanel>
             </StackPanel>
         </DataTemplate>
