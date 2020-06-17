@@ -46,6 +46,8 @@
         </DataTemplate>
     </Window.Resources>
 
-    <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16">
-    </ItemsControl>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" />
+    </ScrollViewer>
+
 </Window>
