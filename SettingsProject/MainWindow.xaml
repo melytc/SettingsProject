@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Project Properties Spike"
         Icon="VisualStudio.Preview.ico"
-        Height="450"
-        Width="800"
+        Height="800"
+        Width="1000"
         Background="#FBFBFB"
         d:DataContext="{d:DesignInstance local:SettingsViewModel}">
 
