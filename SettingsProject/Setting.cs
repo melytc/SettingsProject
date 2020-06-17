@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace SettingsProject
 {
+#nullable enable
     abstract class Setting
     {
         public string Name { get; }
+        //public string? Description { get; }
 
         protected Setting(string name)
         {
@@ -33,18 +35,33 @@ namespace SettingsProject
             new StringSetting("Assembly name", "ConsoleApp1"),
             new StringSetting("Default namespace", "ConsoleApp1"),
             new StringSetting("Target framework", ".NET Code 3.0"),
-            new StringSetting("Output type", "Console Application"),
-            new BoolSetting("Auto-generate binding redirects", true)
+            new EnumSetting("Output type", new List<string>{ "Console Application", "Windows Application", "Class Library" }),
+            new BoolSetting("Binding redirects", true, "Auto-generate binding redirects")
         };
     }
 
     class BoolSetting : Setting
     {
-        public BoolSetting(string name, bool value) : base(name)
+        public BoolSetting(string name, bool value, string description) : base(name)
         {
             Value = value;
+            Description = description;
         }
 
         public bool Value { get; set; }
+        public string Description { get; }
+    }
+
+    class EnumSetting : Setting
+    {
+        public List<string> EnumValues { get; }
+        public string SelectedValue { get; set; }
+
+        // Note: We might want to use IEnumValue here.
+        public EnumSetting(string name, List<string> enumValues) : base(name)
+        {
+            EnumValues = enumValues;
+            SelectedValue = enumValues[0];
+        }
     }
 }

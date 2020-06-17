@@ -5,37 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SettingsProject"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Background="#FBFBFB">
 
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="2" />
-            <Setter Property="Width" Value="300" />
+            <Setter Property="MinWidth" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style x:Key="PropertyHeadingStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
         <DataTemplate DataType="{x:Type local:StringSetting}">
             <StackPanel Orientation="Vertical" Margin="0, 6">
-                <TextBlock Text="{Binding Path=Name}" FontWeight="Bold" />
-                <TextBox Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:BoolSetting}">
-            <StackPanel Orientation="Horizontal">
-                <CheckBox IsChecked="{Binding Path=Value}" />
-                <TextBlock Text="{Binding Path=Name}" />
+            <StackPanel Orientation="Vertical" Margin="0, 6">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox IsChecked="{Binding Value}" Padding="4" />
+                    <TextBlock Text="{Binding Description}" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:EnumSetting}">
+            <StackPanel Orientation="Vertical" Margin="0, 6">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding SelectedValue}" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
 
-    <ItemsControl ItemsSource="{Binding Path=Settings}" Margin="32, 16">
-        <!--<ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                    <TextBox Text="{Binding Path=Value}"></TextBox>
-                    <Button>OK</Button>
-                </StackPanel>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>-->
+    <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16">
     </ItemsControl>
 </Window>
