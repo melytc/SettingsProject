@@ -29,12 +29,14 @@
         <DataTemplate DataType="{x:Type local:StringSetting}">
             <DockPanel LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
             <DockPanel LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
             </DockPanel>
         </DataTemplate>
@@ -47,6 +49,7 @@
         <DataTemplate DataType="{x:Type local:EnumSetting}">
             <DockPanel LastChildFill="True">
                 <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
                 <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </DockPanel>
         </DataTemplate>
