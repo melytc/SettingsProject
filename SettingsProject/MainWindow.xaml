@@ -41,9 +41,7 @@
         <DataTemplate DataType="{x:Type local:BoolSetting}">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding Value}" Content="{Binding Description}" />
-                </StackPanel>
+                <CheckBox IsChecked="{Binding Value}" Content="{Binding Description}" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:EnumSetting}">
