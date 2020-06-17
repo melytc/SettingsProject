@@ -27,28 +27,28 @@
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
         <DataTemplate DataType="{x:Type local:StringSetting}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+            <DockPanel LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+            <DockPanel LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:BoolSetting}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+            <DockPanel LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <CheckBox IsChecked="{Binding Value}" Content="{Binding Description}" />
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:EnumSetting}">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+            <DockPanel LastChildFill="True">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
                 <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
     </Window.Resources>
 
