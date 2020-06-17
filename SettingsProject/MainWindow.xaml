@@ -29,6 +29,12 @@
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
+            <StackPanel Orientation="Vertical" Margin="0, 6">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+            </StackPanel>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type local:BoolSetting}">
             <StackPanel Orientation="Vertical" Margin="0, 6">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
@@ -46,7 +52,7 @@
         </DataTemplate>
     </Window.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" />
     </ScrollViewer>
 

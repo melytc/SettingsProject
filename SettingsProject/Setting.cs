@@ -37,6 +37,16 @@ namespace SettingsProject
         public string Value { get; set; }
     }
 
+    class MultiLineStringSetting : Setting
+    {
+        public MultiLineStringSetting(string name, string value, int priority) : base(name, priority)
+        {
+            Value = value;
+        }
+
+        public string Value { get; set; }
+    }
+
     class SettingsViewModel
     {
         public List<Setting> Settings { get; } = new List<Setting>
@@ -45,7 +55,8 @@ namespace SettingsProject
             new StringSetting("Default namespace", "ConsoleApp1", priority: 2),
             new StringSetting("Target framework", ".NET Code 3.0", priority: 3),
             new EnumSetting("Output type", new List<string>{ "Console Application", "Windows Application", "Class Library" }, priority: 4),
-            new BoolSetting("Binding redirects", true, "Auto-generate binding redirects", priority: 5)
+            new BoolSetting("Binding redirects", true, "Auto-generate binding redirects", priority: 5),
+            new MultiLineStringSetting("Pre-build event", "", priority: 6)
         };
 
         public SettingsViewModel()
