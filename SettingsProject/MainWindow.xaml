@@ -55,26 +55,40 @@
         </DataTemplate>
     </Window.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
-        <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16" IsTabStop="False">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0, 6">
-                        <Grid.ColumnDefinitions>
-                            <!-- Modification state indicator -->
-                            <ColumnDefinition Width="5" />
-                            <!-- Empty column, just for spacing -->
-                            <ColumnDefinition Width="8" />
-                            <!-- Actual property editor -->
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Column="0" Fill="#CDCDCD" ToolTip="Non-default value" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
-                        <Rectangle Grid.Column="0" Fill="#3296D5" ToolTip="Unsaved change" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
-                        <ContentPresenter Grid.Column="2" Content="{Binding}" />
-                    </Grid>
-                  </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
+            <ItemsControl ItemsSource="{Binding Settings}" Margin="16,8,16,32" IsTabStop="False">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,24">
+                            <Grid.ColumnDefinitions>
+                                <!-- Modification state indicator -->
+                                <ColumnDefinition Width="5" />
+                                <!-- Empty column, just for spacing -->
+                                <ColumnDefinition Width="8" />
+                                <!-- Actual property editor -->
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Rectangle Grid.Column="0" Fill="#CDCDCD" ToolTip="Non-default value" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
+                            <Rectangle Grid.Column="0" Fill="#3296D5" ToolTip="Unsaved change" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
+                            <ContentPresenter Grid.Column="2" Content="{Binding}" />
+                        </Grid>
+                      </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+    </Grid>
 
 </Window>
