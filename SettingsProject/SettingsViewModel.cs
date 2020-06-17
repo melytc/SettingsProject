@@ -54,7 +54,50 @@ namespace SettingsProject
                 initialValue: "",
                 defaultValue: "",
                 priority: 7,
-                description: "Commands to execute after a build completes.")
+                description: "Commands to execute after a build completes."),
+            new StringSetting(
+                name: "Conditional compilation symbols",
+                initialValue: "TRACE",
+                defaultValue: null,
+                priority: 8,
+                description: "A semicolon-delimited list of symbols to define for the compilation."),
+            new BoolSetting(
+                name: "Define DEBUG symbol",
+                initialValue: false,
+                defaultValue: false,
+                description: "Specifies whether to define the DEBUG compilation symbol.",
+                priority: 9),
+            new BoolSetting(
+                name: "Define TRACE symbol",
+                initialValue: false,
+                defaultValue: false,
+                description: "Specifies whether to define the TRACE compilation symbol.",
+                priority: 10),
+            new EnumSetting(
+                name: "Platform target",
+                initialValue: "Any CPU",
+                defaultValue: "Any CPU",
+                enumValues: new List<string> { "Any CPU", "x86" },
+                priority: 11,
+                description: "The platform to target in this project configuration."),
+            new BoolSetting(
+                name: "Prefer 32-bit",
+                initialValue: false,
+                defaultValue: false,
+                description: "Specifies whether to prefer 32-bit when available.",
+                priority: 12),
+            new BoolSetting(
+                name: "Unsafe code",
+                initialValue: false,
+                defaultValue: false,
+                description: "Allow unsafe code in this project.",
+                priority: 13),
+            new BoolSetting(
+                name: "Optimize code",
+                initialValue: false,
+                defaultValue: false,
+                description: "Produce optimized output. Optimized binaries may be harder to debug.",
+                priority: 14),
         };
 
         public string SearchString
