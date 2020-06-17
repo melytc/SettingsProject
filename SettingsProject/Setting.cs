@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Windows.Data;
 
 #nullable enable
@@ -19,8 +16,6 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        //public string? Description { get; }
-
         protected Setting(string name, int priority)
         {
             Name = name;
@@ -28,36 +23,117 @@ namespace SettingsProject
         }
     }
 
-    class StringSetting : Setting
+    abstract class Setting<T> : Setting, INotifyPropertyChanged
     {
-        public StringSetting(string name, string value, int priority) : base(name, priority)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        
+        private readonly T _defaultValue;
+        private T _value;
+
+        //public string? Description { get; }
+
+        /// <summary>
+        /// An optional comparer to use when evaluating value change events.
+        /// </summary>
+        /// <remarks>
+        /// If an override does not exist, or returns <see langword="null"/>,
+        /// the <see cref="EqualityComparer{T}.Default"/> is used.
+        /// </remarks>
+        public virtual IEqualityComparer<T>? Comparer => null;
+
+        /// <summary>
+        /// Gets and sets the current value of the property.
+        /// </summary>
+        public T Value
         {
-            Value = value;
+            get => _value;
+            set
+            {
+                var comparer = Comparer ?? EqualityComparer<T>.Default;
+
+                if (!comparer.Equals(value, Value))
+                {
+                    // Only raise event when Value actually changes
+                    _value = value;
+                    OnPropertyChanged(nameof(Value));
+                }
+
+            }
         }
 
-        public string Value { get; set; }
+#pragma warning disable CS8618 // _value is not initialized.
+        protected Setting(string name, T initialValue, T defaultValue, int priority)
+#pragma warning restore CS8618 // _value is not initialized.
+            : base(name, priority)
+        {
+            _defaultValue = defaultValue;
+            Value = initialValue;
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    class MultiLineStringSetting : Setting
+    class StringSetting : Setting<string>
     {
-        public MultiLineStringSetting(string name, string value, int priority) : base(name, priority)
-        {
-            Value = value;
-        }
+        public override IEqualityComparer<string>? Comparer { get; }
 
-        public string Value { get; set; }
+        public StringSetting(string name, string initialValue, string defaultValue, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue, priority)
+        {
+            Comparer = comparer;
+        }
+    }
+
+    class MultiLineStringSetting : Setting<string>
+    {
+        public override IEqualityComparer<string>? Comparer { get; }
+
+        public MultiLineStringSetting(string name, string initialValue, string defaultValue, int priority, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue, priority)
+        {
+            Comparer = comparer;
+        }
     }
 
     class SettingsViewModel
     {
         public List<Setting> Settings { get; } = new List<Setting>
         {
-            new StringSetting("Assembly name", "ConsoleApp1", priority: 1),
-            new StringSetting("Default namespace", "ConsoleApp1", priority: 2),
-            new StringSetting("Target framework", ".NET Code 3.0", priority: 3),
-            new EnumSetting("Output type", new List<string>{ "Console Application", "Windows Application", "Class Library" }, priority: 4),
-            new BoolSetting("Binding redirects", true, "Auto-generate binding redirects", priority: 5),
-            new MultiLineStringSetting("Pre-build event", "", priority: 6)
+            new StringSetting(
+                name: "Assembly name",
+                initialValue: "ConsoleApp1",
+                priority: 1,
+                defaultValue: "ConsoleApp1"),
+            new StringSetting(
+                name: "Default namespace",
+                initialValue: "ConsoleApp1",
+                priority: 2,
+                defaultValue: "ConsoleApp1"),
+            new StringSetting(
+                name: "Target framework",
+                initialValue: ".NET Code 3.0",
+                defaultValue: "",
+                priority: 3),
+            new EnumSetting(
+                name: "Output type",
+                initialValue: "Console Application",
+                defaultValue: "Console Application",
+                enumValues: new List<string> { "Console Application", "Windows Application", "Class Library" },
+                priority: 4),
+            new BoolSetting(
+                name: "Binding redirects",
+                initialValue: true,
+                defaultValue: true,
+                description: "Auto-generate binding redirects",
+                priority: 5),
+            new MultiLineStringSetting(
+                name: "Pre-build event",
+                initialValue: "",
+                defaultValue: "",
+                priority: 6)
         };
 
         public SettingsViewModel()
@@ -72,28 +148,26 @@ namespace SettingsProject
         }
     }
 
-    class BoolSetting : Setting
+    class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool value, string description, int priority) : base(name, priority)
+        public BoolSetting(string name, bool initialValue, bool defaultValue, string description, int priority)
+            : base(name, initialValue, defaultValue, priority)
         {
-            Value = value;
             Description = description;
         }
 
-        public bool Value { get; set; }
         public string Description { get; }
     }
 
-    class EnumSetting : Setting
+    class EnumSetting : Setting<string>
     {
         public List<string> EnumValues { get; }
-        public string SelectedValue { get; set; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, List<string> enumValues, int priority) : base(name, priority)
+        public EnumSetting(string name, string initialValue, string defaultValue, List<string> enumValues, int priority)
+            : base(name, initialValue, defaultValue, priority)
         {
             EnumValues = enumValues;
-            SelectedValue = enumValues[0];
         }
     }
 }

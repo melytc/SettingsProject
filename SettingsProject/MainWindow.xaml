@@ -50,7 +50,7 @@
         <DataTemplate DataType="{x:Type local:EnumSetting}">
             <StackPanel Orientation="Vertical" Margin="0, 6">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding SelectedValue}" />
+                <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
