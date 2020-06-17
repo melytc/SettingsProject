@@ -17,87 +17,101 @@ namespace SettingsProject
                 initialValue: "ConsoleApp1",
                 priority: 1,
                 defaultValue: "ConsoleApp1",
-                description: "Specifies the name of the generated assembly, both on the file system and in metadata."),
+                description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
+                category: "General"),
             new StringSetting(
                 name: "Default namespace",
                 initialValue: "ConsoleApp1",
                 priority: 2,
                 defaultValue: "ConsoleApp1",
-                description: "Specifies the root namespace for the project, which controls code generation and analyzers."),
+                description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
+                category: "General"),
             new StringSetting(
                 name: "Target frameworks",
                 initialValue: ".NET Core 3.0",
                 defaultValue: null,
                 priority: 3,
-                description: "Specifies the semicolon-delimited list of frameworks that this project will target. Often just a single value."),
+                description: "Specifies the semicolon-delimited list of frameworks that this project will target. Often just a single value.",
+                category: "General"),
             new EnumSetting(
                 name: "Output type",
                 initialValue: "Console Application",
                 defaultValue: null,
                 enumValues: new List<string> { "Console Application", "Windows Application", "Class Library" },
                 priority: 4,
-                description: "Specifies whether the output is executable, and whether is runs in a console or as a desktop application."),
+                description: "Specifies whether the output is executable, and whether is runs in a console or as a desktop application.",
+                category: "General"),
             new BoolSetting(
                 name: "Binding redirects",
                 initialValue: true,
                 defaultValue: true,
                 description: "Whether to auto-generate binding redirects.",
-                priority: 5),
+                priority: 5,
+                category: "General"),
             new MultiLineStringSetting(
                 name: "Pre-build event",
                 initialValue: "",
                 defaultValue: "",
                 priority: 6,
-                description: "Commands to execute before a build occurs."),
+                description: "Commands to execute before a build occurs.",
+                category: "General"),
             new MultiLineStringSetting(
                 name: "Post-build event",
                 initialValue: "",
                 defaultValue: "",
                 priority: 7,
-                description: "Commands to execute after a build completes."),
+                description: "Commands to execute after a build completes.",
+                category: "General"),
             new StringSetting(
                 name: "Conditional compilation symbols",
                 initialValue: "TRACE",
                 defaultValue: null,
                 priority: 8,
-                description: "A semicolon-delimited list of symbols to define for the compilation."),
+                description: "A semicolon-delimited list of symbols to define for the compilation.",
+                category: "General"),
             new BoolSetting(
                 name: "Define DEBUG symbol",
                 initialValue: false,
                 defaultValue: false,
                 description: "Specifies whether to define the DEBUG compilation symbol.",
-                priority: 9),
+                priority: 9,
+                category: "General"),
             new BoolSetting(
                 name: "Define TRACE symbol",
                 initialValue: false,
                 defaultValue: false,
                 description: "Specifies whether to define the TRACE compilation symbol.",
-                priority: 10),
+                priority: 10,
+                category: "General"),
             new EnumSetting(
                 name: "Platform target",
                 initialValue: "Any CPU",
                 defaultValue: "Any CPU",
                 enumValues: new List<string> { "Any CPU", "x86" },
                 priority: 11,
-                description: "The platform to target in this project configuration."),
+                description: "The platform to target in this project configuration.",
+                category: "General"),
             new BoolSetting(
                 name: "Prefer 32-bit",
                 initialValue: false,
                 defaultValue: false,
                 description: "Specifies whether to prefer 32-bit when available.",
-                priority: 12),
+                priority: 12,
+                category: "General"),
             new BoolSetting(
                 name: "Unsafe code",
                 initialValue: false,
                 defaultValue: false,
                 description: "Allow unsafe code in this project.",
-                priority: 13),
+                priority: 13,
+                category: "General"),
             new BoolSetting(
                 name: "Optimize code",
                 initialValue: false,
                 defaultValue: false,
                 description: "Produce optimized output. Optimized binaries may be harder to debug.",
-                priority: 14),
+                priority: 14,
+                category: "General"),
         };
 
         public string SearchString
@@ -125,6 +139,11 @@ namespace SettingsProject
 
             // Specify the property to sort on, and direction to sort.
             view.SortDescriptions.Add(new SortDescription(nameof(Setting.Priority), ListSortDirection.Ascending));
+
+            if (view.CanGroup)
+            {
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
+            }
         }
     }
 }

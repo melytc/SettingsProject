@@ -97,6 +97,15 @@
                         </Grid>
                       </DataTemplate>
                 </ItemsControl.ItemTemplate>
+                <ItemsControl.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="16,8,0,16" FontSize="20" Text="{Binding Path=Name}"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ItemsControl.GroupStyle>
             </ItemsControl>
         </ScrollViewer>
 

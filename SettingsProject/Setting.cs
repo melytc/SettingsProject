@@ -18,6 +18,8 @@ namespace SettingsProject
     {
         public string Name { get; }
 
+        public string Category { get; }
+
         public string? Description { get; }
 
         /// <summary>
@@ -27,11 +29,12 @@ namespace SettingsProject
 
         public abstract SettingModificationState ModificationState { get; protected set; }
 
-        protected Setting(string name, string? description, int priority)
+        protected Setting(string name, string? description, int priority, string category)
         {
             Name = name;
             Description = description;
             Priority = priority;
+            Category = category;
         }
 
         public bool MatchesSearchText(string searchString)
@@ -89,9 +92,9 @@ namespace SettingsProject
         }
 
 #pragma warning disable CS8618 // _value is not initialized.
-        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, IEqualityComparer<T> comparer)
+        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, string category, IEqualityComparer<T> comparer)
 #pragma warning restore CS8618 // _value is not initialized.
-            : base(name, description, priority)
+            : base(name, description, priority, category)
         {
             _initialValue = initialValue;
             _defaultValue = defaultValue;
@@ -107,24 +110,24 @@ namespace SettingsProject
 
     class StringSetting : Setting<string>
     {
-        public StringSetting(string name, string initialValue, string? defaultValue, string description, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, comparer ?? StringComparer.Ordinal)
+        public StringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string category, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, category, comparer ?? StringComparer.Ordinal)
         {
         }
     }
 
     class MultiLineStringSetting : Setting<string>
     {
-        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string description, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, comparer ?? StringComparer.Ordinal)
+        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string category, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, category, comparer ?? StringComparer.Ordinal)
         {
         }
     }
 
     class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority)
-            : base(name, initialValue, defaultValue ?? false, description, priority, EqualityComparer<bool>.Default)
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string category)
+            : base(name, initialValue, defaultValue ?? false, description, priority, category, EqualityComparer<bool>.Default)
         {
         }
     }
@@ -134,8 +137,8 @@ namespace SettingsProject
         public List<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, string description, int priority, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, comparer ?? StringComparer.Ordinal)
+        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, string description, int priority, string category, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, category, comparer ?? StringComparer.Ordinal)
         {
             EnumValues = enumValues;
         }
