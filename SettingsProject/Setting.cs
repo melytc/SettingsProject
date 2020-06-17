@@ -16,7 +16,9 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        protected Setting(string name, int priority)
+        public abstract bool IsModified { get; protected set; }
+
+        protected Setting(string name, int priority, bool isModified = false)
         {
             Name = name;
             Priority = priority;
@@ -41,6 +43,8 @@ namespace SettingsProject
         /// </remarks>
         public virtual IEqualityComparer<T>? Comparer => null;
 
+        public override bool IsModified { get; protected set; }
+
         /// <summary>
         /// Gets and sets the current value of the property.
         /// </summary>
@@ -56,6 +60,16 @@ namespace SettingsProject
                     // Only raise event when Value actually changes
                     _value = value;
                     OnPropertyChanged(nameof(Value));
+
+                    // IsModified can only change when Value changes
+                    var isModified = !comparer.Equals(value, _defaultValue);
+
+                    if (isModified != IsModified)
+                    {
+                        // Only raise event when IsModified actually changes
+                        IsModified = isModified;
+                        OnPropertyChanged(nameof(IsModified));
+                    }
                 }
 
             }
