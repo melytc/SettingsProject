@@ -68,8 +68,8 @@
                             <!-- Actual property editor -->
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Column="0" Fill="#CDCDCD" Width="4" VerticalAlignment="Stretch" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
-                        <Rectangle Grid.Column="0" Fill="#3296D5" Width="4" VerticalAlignment="Stretch" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
+                        <Rectangle Grid.Column="0" Fill="#CDCDCD" ToolTip="Non-default value" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
+                        <Rectangle Grid.Column="0" Fill="#3296D5" ToolTip="Unsaved change" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
                         <ContentPresenter Grid.Column="2" Content="{Binding}" />
                     </Grid>
                   </DataTemplate>
