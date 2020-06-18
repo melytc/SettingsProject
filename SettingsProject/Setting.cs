@@ -20,6 +20,8 @@ namespace SettingsProject
 
         public string Name { get; }
 
+        public string Page { get; }
+
         public string Category { get; }
 
         public bool HasDescription => !string.IsNullOrWhiteSpace(_description);
@@ -38,6 +40,7 @@ namespace SettingsProject
             Name = name;
             _description = description;
             Priority = priority;
+            Page = page;
             Category = category;
         }
 

@@ -37,6 +37,7 @@ namespace SettingsProject
 
             if (view.CanGroup)
             {
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
                 view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
             }
 
