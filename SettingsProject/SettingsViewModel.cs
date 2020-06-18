@@ -84,6 +84,15 @@ namespace SettingsProject
                 description: "Commands to execute after a build completes.",
                 page: "Build Events",
                 category: "General"),
+            new EnumSetting(
+                name: "Run the post-build event",
+                initialValue: "On successful build",
+                defaultValue: "On successful build",
+                enumValues: new List<string> { "Always", "On successful build", "When the build updates the project output" },
+                priority: 4,
+                description: "Controls when any post-build event is executed.",
+                page: "Build Events",
+                category: "General"),
             new StringSetting(
                 name: "Conditional compilation symbols",
                 initialValue: "TRACE",
