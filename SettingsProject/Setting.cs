@@ -109,7 +109,7 @@ namespace SettingsProject
 
     class StringSetting : Setting<string>
     {
-        public StringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+        public StringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
             : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
         }
@@ -117,7 +117,7 @@ namespace SettingsProject
 
     class MultiLineStringSetting : Setting<string>
     {
-        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
             : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
         }
@@ -125,7 +125,7 @@ namespace SettingsProject
 
     class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category)
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string? description, int priority, string page, string category)
             : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default)
         {
         }
@@ -136,7 +136,7 @@ namespace SettingsProject
         public IReadOnlyList<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, IReadOnlyList<string> enumValues, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+        public EnumSetting(string name, string initialValue, string? defaultValue, IReadOnlyList<string> enumValues, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
             : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
             EnumValues = enumValues;
