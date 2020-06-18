@@ -59,6 +59,7 @@
     <Compile Include="Converters.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="Setting.cs" />
+    <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingsViewModel.cs" />
     <Compile Include="WatermarkTextBox.cs" />
     <Page Include="MainWindow.xaml">

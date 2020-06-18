@@ -8,7 +8,11 @@ namespace SettingsProject
         {
             InitializeComponent();
 
-            DataContext = new SettingsViewModel();
+            var searchViewModel = new SearchViewModel();
+            
+            var settingsListViewModel = new SettingsViewModel(SettingsLoader.DefaultSettings, searchViewModel);
+
+            DataContext = new ApplicationViewModel(settingsListViewModel, searchViewModel);
         }
     }
 }

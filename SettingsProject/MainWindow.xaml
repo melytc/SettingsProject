@@ -82,7 +82,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:WatermarkTextBox x:Name="_searchBox" Grid.Row="0" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
+        <local:WatermarkTextBox x:Name="_searchBox" Grid.Row="0" Grid.Column="0" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
 
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="8">
             <TextBlock Margin="0,4">Application</TextBlock>
@@ -116,7 +116,7 @@
                     <GroupStyle>
                         <GroupStyle.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="16,8,0,16" FontSize="20" Text="{Binding Path=Name}"/>
+                                <TextBlock Margin="16,8,0,16" FontSize="20" Text="{Binding Path=Name}" />
                             </DataTemplate>
                         </GroupStyle.HeaderTemplate>
                     </GroupStyle>
