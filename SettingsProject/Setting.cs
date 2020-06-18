@@ -133,10 +133,10 @@ namespace SettingsProject
 
     class EnumSetting : Setting<string>
     {
-        public List<string> EnumValues { get; }
+        public IReadOnlyList<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+        public EnumSetting(string name, string initialValue, string? defaultValue, IReadOnlyList<string> enumValues, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
             : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
             EnumValues = enumValues;
