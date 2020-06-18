@@ -18,6 +18,7 @@ namespace SettingsProject
                 priority: 1,
                 defaultValue: "ConsoleApp1",
                 description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
+                page: "Application",
                 category: "General"),
             new StringSetting(
                 name: "Default namespace",
@@ -25,6 +26,7 @@ namespace SettingsProject
                 priority: 2,
                 defaultValue: "ConsoleApp1",
                 description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
+                page: "Application",
                 category: "General"),
             new StringSetting(
                 name: "Target frameworks",
@@ -32,6 +34,7 @@ namespace SettingsProject
                 defaultValue: null,
                 priority: 3,
                 description: "Specifies the semicolon-delimited list of frameworks that this project will target. Often just a single value.",
+                page: "Application",
                 category: "General"),
             new EnumSetting(
                 name: "Output type",
@@ -40,6 +43,7 @@ namespace SettingsProject
                 enumValues: new List<string> { "Console Application", "Windows Application", "Class Library" },
                 priority: 4,
                 description: "Specifies whether the output is executable, and whether is runs in a console or as a desktop application.",
+                page: "Application",
                 category: "General"),
             new BoolSetting(
                 name: "Binding redirects",
@@ -47,6 +51,7 @@ namespace SettingsProject
                 defaultValue: true,
                 description: "Whether to auto-generate binding redirects.",
                 priority: 5,
+                page: "Application",
                 category: "General"),
             new MultiLineStringSetting(
                 name: "Pre-build event",
@@ -54,6 +59,7 @@ namespace SettingsProject
                 defaultValue: "",
                 priority: 6,
                 description: "Commands to execute before a build occurs.",
+                page: "Build Events",
                 category: "General"),
             new MultiLineStringSetting(
                 name: "Post-build event",
@@ -61,6 +67,7 @@ namespace SettingsProject
                 defaultValue: "",
                 priority: 7,
                 description: "Commands to execute after a build completes.",
+                page: "Build Events",
                 category: "General"),
             new StringSetting(
                 name: "Conditional compilation symbols",
@@ -68,6 +75,7 @@ namespace SettingsProject
                 defaultValue: null,
                 priority: 8,
                 description: "A semicolon-delimited list of symbols to define for the compilation.",
+                page: "Application",
                 category: "General"),
             new BoolSetting(
                 name: "Define DEBUG symbol",
@@ -75,6 +83,7 @@ namespace SettingsProject
                 defaultValue: false,
                 description: "Specifies whether to define the DEBUG compilation symbol.",
                 priority: 9,
+                page: "Application",
                 category: "General"),
             new BoolSetting(
                 name: "Define TRACE symbol",
@@ -82,6 +91,7 @@ namespace SettingsProject
                 defaultValue: false,
                 description: "Specifies whether to define the TRACE compilation symbol.",
                 priority: 10,
+                page: "Application",
                 category: "General"),
             new EnumSetting(
                 name: "Platform target",
@@ -90,6 +100,7 @@ namespace SettingsProject
                 enumValues: new List<string> { "Any CPU", "x86" },
                 priority: 11,
                 description: "The platform to target in this project configuration.",
+                page: "Application",
                 category: "General"),
             new BoolSetting(
                 name: "Prefer 32-bit",
@@ -97,6 +108,7 @@ namespace SettingsProject
                 defaultValue: false,
                 description: "Specifies whether to prefer 32-bit when available.",
                 priority: 12,
+                page: "Application",
                 category: "General"),
             new BoolSetting(
                 name: "Unsafe code",
@@ -104,6 +116,7 @@ namespace SettingsProject
                 defaultValue: false,
                 description: "Allow unsafe code in this project.",
                 priority: 13,
+                page: "Application",
                 category: "General"),
             new BoolSetting(
                 name: "Optimize code",
@@ -111,6 +124,7 @@ namespace SettingsProject
                 defaultValue: false,
                 description: "Produce optimized output. Optimized binaries may be harder to debug.",
                 priority: 14,
+                page: "Application",
                 category: "General"),
         };
 

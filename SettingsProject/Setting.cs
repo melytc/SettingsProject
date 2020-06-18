@@ -29,7 +29,7 @@ namespace SettingsProject
 
         public abstract SettingModificationState ModificationState { get; }
 
-        protected Setting(string name, string? description, int priority, string category)
+        protected Setting(string name, string? description, int priority, string page, string category)
         {
             Name = name;
             Description = description;
@@ -91,9 +91,9 @@ namespace SettingsProject
         }
 
 #pragma warning disable CS8618 // _value is not initialized.
-        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, string category, IEqualityComparer<T> comparer)
+        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, string page, string category, IEqualityComparer<T> comparer)
 #pragma warning restore CS8618 // _value is not initialized.
-            : base(name, description, priority, category)
+            : base(name, description, priority, page, category)
         {
             _initialValue = initialValue;
             _defaultValue = defaultValue;
@@ -109,24 +109,24 @@ namespace SettingsProject
 
     class StringSetting : Setting<string>
     {
-        public StringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string category, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, category, comparer ?? StringComparer.Ordinal)
+        public StringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
         }
     }
 
     class MultiLineStringSetting : Setting<string>
     {
-        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string category, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, category, comparer ?? StringComparer.Ordinal)
+        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
         }
     }
 
     class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string category)
-            : base(name, initialValue, defaultValue ?? false, description, priority, category, EqualityComparer<bool>.Default)
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category)
+            : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default)
         {
         }
     }
@@ -136,8 +136,8 @@ namespace SettingsProject
         public List<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, string description, int priority, string category, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, category, comparer ?? StringComparer.Ordinal)
+        public EnumSetting(string name, string initialValue, string? defaultValue, List<string> enumValues, string description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
+            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
         {
             EnumValues = enumValues;
         }
