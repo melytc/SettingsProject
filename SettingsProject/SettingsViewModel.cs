@@ -125,8 +125,18 @@ namespace SettingsProject
                 }
 
                 _searchString = value;
+
+                var trimmed = value.Trim();
                 var view = CollectionViewSource.GetDefaultView(Settings);
-                view.Filter = o => o is Setting setting && setting.MatchesSearchText(_searchString);
+
+                if (string.IsNullOrEmpty(trimmed))
+                {
+                    view.Filter = null;
+                }
+                else
+                {
+                    view.Filter = o => o is Setting setting && setting.MatchesSearchText(trimmed);
+                }
             }
         }
 
