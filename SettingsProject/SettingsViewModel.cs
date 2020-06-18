@@ -47,7 +47,7 @@ namespace SettingsProject
                 defaultValue: null,
                 enumValues: new List<string> { "Console Application", "Windows Application", "Class Library" },
                 priority: 4,
-                description: "Specifies whether the output is executable, and whether is runs in a console or as a desktop application.",
+                description: "Specifies whether the output is executable, and whether it runs in a console or as a desktop application.",
                 page: "Application",
                 category: "General"),
             new BoolSetting(
