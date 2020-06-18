@@ -59,11 +59,14 @@
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:LinkAction}">
-            <TextBlock>
-                <Hyperlink>
-                    <Run Text="{Binding Name, Mode=OneTime}" />
-                </Hyperlink>
-            </TextBlock>
+            <DockPanel LastChildFill="True">
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding HeadingText}" Style="{StaticResource PropertyHeadingStyle}" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                <TextBlock>
+                    <Hyperlink>
+                        <Run Text="{Binding LinkText, Mode=OneTime}" />
+                    </Hyperlink>
+                </TextBlock>
+            </DockPanel>
         </DataTemplate>
     </Window.Resources>
 

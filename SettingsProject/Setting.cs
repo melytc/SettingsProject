@@ -149,10 +149,14 @@ namespace SettingsProject
 
     class LinkAction : Setting
     {
-        public LinkAction(string text, int priority, string page, string category)
-            : base(text, null, priority, page, category)
+        public LinkAction(string name, int priority, string page, string category, string? description = null)
+            : base(name, description, priority, page, category)
         {
         }
+
+        public string HeadingText => HasDescription ? Name : "";
+        
+        public string LinkText => HasDescription ? Description : Name;
 
         public override SettingModificationState ModificationState => SettingModificationState.Default;
     }
