@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
+#nullable enable
+
 namespace SettingsProject
 {
     internal static class Converters

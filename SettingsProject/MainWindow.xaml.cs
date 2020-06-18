@@ -1,4 +1,6 @@
-﻿namespace SettingsProject
+﻿#nullable enable
+
+namespace SettingsProject
 {
     public partial class MainWindow
     {
