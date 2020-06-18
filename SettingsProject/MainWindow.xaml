@@ -22,34 +22,39 @@
             <Setter Property="MinWidth" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
+        <Style TargetType="local:HighlightTextBlock">
+            <Setter Property="HighlightBrush" Value="Yellow" />
+        </Style>
         <Style x:Key="PropertyHeadingStyle" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Margin" Value="0,0,0,4" />
         </Style>
         <DataTemplate DataType="{x:Type local:StringSetting}">
             <DockPanel LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
             <DockPanel LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:BoolSetting}">
             <DockPanel LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <CheckBox IsChecked="{Binding Value}" Content="{Binding Description}" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <CheckBox IsChecked="{Binding Value}">
+                    <local:HighlightTextBlock HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" TextWrapping="Wrap" />
+                </CheckBox>
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:EnumSetting}">
             <DockPanel LastChildFill="True">
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <TextBlock DockPanel.Dock="Top" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
                 <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </DockPanel>
         </DataTemplate>
@@ -67,7 +72,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
+        <local:WatermarkTextBox x:Name="_searchBox" Grid.Row="0" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
 
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="8">
             <TextBlock Margin="0,4">Application</TextBlock>
