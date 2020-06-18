@@ -28,14 +28,15 @@ namespace SettingsProject
                 description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
                 page: "Application",
                 category: "General"),
-            new StringSetting(
-                name: "Target frameworks",
-                initialValue: ".NET Core 3.0",
+            new EnumSetting(
+                name: "Target framework",
+                initialValue: ".NET 5",
                 defaultValue: null,
                 priority: 3,
                 description: "Specifies the semicolon-delimited list of frameworks that this project will target. Often just a single value.",
                 page: "Application",
-                category: "General"),
+                category: "General",
+                enumValues: new List<string> { ".NET 5", ".NET Core 3.1", ".NET Core 3.0", ".NET Core 2.2", ".NET Core 2.1", ".NET Core 2.0", ".NET Core 1.1", ".NET Core 1.0" }),
             new LinkAction(
                 text: "Install other frameworks",
                 priority: 3,
