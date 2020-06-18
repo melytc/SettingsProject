@@ -9,21 +9,21 @@ namespace SettingsProject
 {
     internal sealed class ApplicationViewModel
     {
-        public SettingsViewModel SettingsListListViewModel { get; }
+        public SettingsListViewModel SettingsListListViewModel { get; }
         public SearchViewModel SearchViewModel { get; }
 
-        public ApplicationViewModel(SettingsViewModel settingsListListViewModel, SearchViewModel searchViewModel)
+        public ApplicationViewModel(SettingsListViewModel settingsListListViewModel, SearchViewModel searchViewModel)
         {
             SettingsListListViewModel = settingsListListViewModel;
             SearchViewModel = searchViewModel;
         }
     }
 
-    internal sealed class SettingsViewModel
+    internal sealed class SettingsListViewModel
     {
         public IReadOnlyList<Setting> Settings { get; }
 
-        public SettingsViewModel(IReadOnlyList<Setting> settings, SearchViewModel searchViewModel)
+        public SettingsListViewModel(IReadOnlyList<Setting> settings, SearchViewModel searchViewModel)
         {
             Settings = settings;
 

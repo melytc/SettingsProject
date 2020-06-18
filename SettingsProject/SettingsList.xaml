@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="SettingsProject.SettingsList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SettingsProject"
+             mc:Ignorable="d" 
+             d:DesignHeight="800"
+             d:DesignWidth="600"
+             x:ClassModifier="internal"
+             x:Name="_settingsListControl">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="3" />
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="MinWidth" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="local:HighlightTextBlock">
+            <Setter Property="HighlightBrush" Value="Yellow" />
+        </Style>
+        <Style x:Key="PropertyHeadingStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+        <DataTemplate DataType="{x:Type local:StringSetting}">
+            <DockPanel LastChildFill="True">
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
+            <DockPanel LastChildFill="True">
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:BoolSetting}">
+            <DockPanel LastChildFill="True">
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <CheckBox IsChecked="{Binding Value}">
+                    <local:HighlightTextBlock HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" />
+                </CheckBox>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:EnumSetting}">
+            <DockPanel LastChildFill="True">
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:LinkAction}">
+            <DockPanel LastChildFill="True">
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding HeadingText}" Style="{StaticResource PropertyHeadingStyle}" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                <TextBlock>
+                    <Hyperlink>
+                        <Run Text="{Binding LinkText, Mode=OneTime}" />
+                    </Hyperlink>
+                </TextBlock>
+            </DockPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <ItemsControl ItemsSource="{Binding ElementName=_settingsListControl, Path=Settings}" IsTabStop="False">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Grid Margin="0,0,0,24">
+                    <Grid.ColumnDefinitions>
+                        <!-- Modification state indicator -->
+                        <ColumnDefinition Width="5" />
+                        <!-- Empty column, just for spacing -->
+                        <ColumnDefinition Width="8" />
+                        <!-- Actual property editor -->
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Grid.Column="0" Fill="#CDCDCD" ToolTip="Non-default value" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
+                    <Rectangle Grid.Column="0" Fill="#3296D5" ToolTip="Unsaved change" Visibility="{Binding ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
+                    <ContentPresenter Grid.Column="2" Content="{Binding}" />
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.GroupStyle>
+            <GroupStyle>
+                <GroupStyle.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Margin="16,8,0,16" FontSize="20" Text="{Binding Path=Name}" />
+                    </DataTemplate>
+                </GroupStyle.HeaderTemplate>
+            </GroupStyle>
+        </ItemsControl.GroupStyle>
+    </ItemsControl>
+
+</UserControl>

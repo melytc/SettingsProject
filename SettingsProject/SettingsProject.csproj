@@ -59,8 +59,11 @@
     <Compile Include="Converters.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="Setting.cs" />
+    <Compile Include="SettingsList.xaml.cs">
+      <DependentUpon>SettingsList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsLoader.cs" />
-    <Compile Include="SettingsViewModel.cs" />
+    <Compile Include="ViewModels.cs" />
     <Compile Include="WatermarkTextBox.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -74,6 +77,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SettingsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WatermarkTextBoxResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

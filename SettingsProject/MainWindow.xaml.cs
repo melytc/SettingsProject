@@ -10,7 +10,7 @@ namespace SettingsProject
 
             var searchViewModel = new SearchViewModel();
             
-            var settingsListViewModel = new SettingsViewModel(SettingsLoader.DefaultSettings, searchViewModel);
+            var settingsListViewModel = new SettingsListViewModel(SettingsLoader.DefaultSettings, searchViewModel);
 
             DataContext = new ApplicationViewModel(settingsListViewModel, searchViewModel);
         }
