@@ -68,6 +68,7 @@ namespace SettingsProject
                 description: "Specifies the entry point for the executable.",
                 page: "Application",
                 category: "General"),
+            // TODO both these build events can be edited in a pop-out editor with macro support
             new MultiLineStringSetting(
                 name: "Pre-build event",
                 initialValue: "",
