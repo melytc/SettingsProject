@@ -58,6 +58,13 @@
                 <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </DockPanel>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:LinkAction}">
+            <TextBlock>
+                <Hyperlink>
+                    <Run Text="{Binding Name, Mode=OneTime}" />
+                </Hyperlink>
+            </TextBlock>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>

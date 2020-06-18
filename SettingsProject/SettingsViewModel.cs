@@ -36,6 +36,11 @@ namespace SettingsProject
                 description: "Specifies the semicolon-delimited list of frameworks that this project will target. Often just a single value.",
                 page: "Application",
                 category: "General"),
+            new LinkAction(
+                text: "Install other frameworks",
+                priority: 3,
+                page: "Application",
+                category: "General"),
             new EnumSetting(
                 name: "Output type",
                 initialValue: "Console Application",

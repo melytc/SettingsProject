@@ -142,4 +142,14 @@ namespace SettingsProject
             EnumValues = enumValues;
         }
     }
+
+    class LinkAction : Setting
+    {
+        public LinkAction(string text, int priority, string page, string category)
+            : base(text, null, priority, page, category)
+        {
+        }
+
+        public override SettingModificationState ModificationState => SettingModificationState.Default;
+    }
 }
