@@ -64,7 +64,7 @@ namespace SettingsProject
                 initialValue: "(Not set)",
                 defaultValue: "(Not set)",
                 enumValues: new List<string> { "(Not set)" },
-                priority:64,
+                priority:6,
                 description: "Specifies the entry point for the executable.",
                 page: "Application",
                 category: "General"),
