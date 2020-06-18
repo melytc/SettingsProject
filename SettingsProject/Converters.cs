@@ -28,12 +28,12 @@ namespace SettingsProject
                 _elseValue = elseValue;
             }
 
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 return Equals(value, _value) ? _matchValue : _elseValue;
             }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 if (Equals(value, _matchValue))
                     return true;
@@ -54,7 +54,7 @@ namespace SettingsProject
                 _falseVisibility = falseVisibility;
             }
 
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 if (value is bool b)
                 {
@@ -64,7 +64,7 @@ namespace SettingsProject
                 return value;
             }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 if (value is Visibility v)
                 {
