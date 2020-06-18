@@ -58,6 +58,15 @@ namespace SettingsProject
                 priority: 5,
                 page: "Application",
                 category: "General"),
+            new EnumSetting(
+                name: "Startup object",
+                initialValue: "(Not set)",
+                defaultValue: "(Not set)",
+                enumValues: new List<string> { "(Not set)" },
+                priority:64,
+                description: "Specifies the entry point for the executable.",
+                page: "Application",
+                category: "General"),
             new MultiLineStringSetting(
                 name: "Pre-build event",
                 initialValue: "",
