@@ -16,11 +16,13 @@ namespace SettingsProject
 
     abstract class Setting
     {
+        private readonly string? _description;
+
         public string Name { get; }
 
         public string Category { get; }
 
-        public string? Description { get; }
+        public string Description => _description ?? "";
 
         /// <summary>
         /// Relative priority of the setting, to use when ordering items in the UI.
@@ -32,7 +34,7 @@ namespace SettingsProject
         protected Setting(string name, string? description, int priority, string page, string category)
         {
             Name = name;
-            Description = description;
+            _description = description;
             Priority = priority;
             Category = category;
         }
