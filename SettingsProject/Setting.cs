@@ -22,6 +22,8 @@ namespace SettingsProject
 
         public string Category { get; }
 
+        public bool HasDescription => !string.IsNullOrWhiteSpace(_description);
+
         public string Description => _description ?? "";
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace SettingsProject
 
     class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string? description, int priority, string page, string category)
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category)
             : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default)
         {
         }

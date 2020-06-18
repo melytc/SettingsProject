@@ -32,14 +32,14 @@
         <DataTemplate DataType="{x:Type local:StringSetting}">
             <DockPanel LastChildFill="True">
                 <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
-                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
             </DockPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
             <DockPanel LastChildFill="True">
                 <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
             </DockPanel>
         </DataTemplate>
@@ -54,7 +54,7 @@
         <DataTemplate DataType="{x:Type local:EnumSetting}">
             <DockPanel LastChildFill="True">
                 <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding Path=Text, ElementName=_searchBox}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
                 <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </DockPanel>
         </DataTemplate>
