@@ -11,6 +11,7 @@ namespace SettingsProject
     {
         public static IValueConverter HiddenWhenFalse    { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Visible, falseVisibility: Visibility.Hidden);
         public static IValueConverter CollapsedWhenFalse { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Visible, falseVisibility: Visibility.Collapsed);
+        public static IValueConverter CollapsedWhenTrue  { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Collapsed, falseVisibility: Visibility.Visible);
 
         public static IValueConverter VisibleWhenModified        { get; } = new SingleValueVisibilityConverter(value: SettingModificationState.Modified,        matchValue: Visibility.Visible, elseValue: Visibility.Collapsed);
         public static IValueConverter VisibleWhenModifiedUnsaved { get; } = new SingleValueVisibilityConverter(value: SettingModificationState.ModifiedUnsaved, matchValue: Visibility.Visible, elseValue: Visibility.Collapsed);

@@ -132,9 +132,14 @@ namespace SettingsProject
 
     class BoolSetting : Setting<bool>
     {
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category)
+        public IReadOnlyList<Setting>? TrueSettings { get; }
+        public IReadOnlyList<Setting>? FalseSettings { get; }
+
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category, IReadOnlyList<Setting>? trueSettings = null, IReadOnlyList<Setting>? falseSettings = null)
             : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default)
         {
+            TrueSettings = trueSettings;
+            FalseSettings = falseSettings;
         }
     }
 
