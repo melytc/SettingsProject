@@ -27,7 +27,7 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        public abstract SettingModificationState ModificationState { get; protected set; }
+        public abstract SettingModificationState ModificationState { get; }
 
         protected Setting(string name, string? description, int priority, string category)
         {
@@ -52,8 +52,9 @@ namespace SettingsProject
         private readonly T _defaultValue;
         private readonly IEqualityComparer<T> _comparer;
         private T _value;
+        private SettingModificationState _modificationState = SettingModificationState.Default;
 
-        public override SettingModificationState ModificationState { get; protected set; } = SettingModificationState.Default;
+        public override SettingModificationState ModificationState => _modificationState;
 
         /// <summary>
         /// Gets and sets the current value of the property.
@@ -82,7 +83,7 @@ namespace SettingsProject
 
                     if (state != ModificationState)
                     {
-                        ModificationState = state;
+                        _modificationState = state;
                         OnPropertyChanged(nameof(ModificationState));
                     }
                 }
