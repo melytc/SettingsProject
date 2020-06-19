@@ -15,8 +15,10 @@ namespace SettingsProject
         ModifiedUnsaved
     }
 
-    abstract class Setting
+    abstract class Setting : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         private readonly string? _description;
 
         public string Name { get; }
@@ -50,12 +52,15 @@ namespace SettingsProject
             return Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1 
                 || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1);
         }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
-    abstract class Setting<T> : Setting, INotifyPropertyChanged
+    abstract class Setting<T> : Setting
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        
         private readonly T _initialValue;
         private readonly T _defaultValue;
         private readonly IEqualityComparer<T> _comparer;
@@ -117,11 +122,6 @@ namespace SettingsProject
             _comparer = comparer;
             _value = initialValue;
             UpdateModificationState();
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
