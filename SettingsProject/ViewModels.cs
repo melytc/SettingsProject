@@ -20,6 +20,17 @@ namespace SettingsProject
             Pages = pages;
             SearchViewModel = searchViewModel;
             SelectedPage = pages.FirstOrDefault();
+
+            searchViewModel.SearchChanged += searchString =>
+            {
+                foreach (var page in pages)
+                {
+                    foreach (var setting in page.SettingsListListViewModel.Settings)
+                    {
+                        setting.IsVisible = setting.MatchesSearchText(searchString);
+                    }
+                }
+            };
         }
     }
 
@@ -52,6 +63,18 @@ namespace SettingsProject
             // We will be able to use this view for filtering too (search, advanced mode, etc).
             var view = CollectionViewSource.GetDefaultView(Settings);
 
+            if (view is ICollectionViewLiveShaping shaping)
+            {
+                if (shaping.CanChangeLiveFiltering)
+                {
+                    shaping.LiveFilteringProperties.Add(nameof(Setting.IsVisible));
+                }
+
+                shaping.IsLiveFiltering = true;
+            }
+
+            view.Filter = o => o is Setting setting && setting.IsVisible;
+
             // Specify the property to sort on, and direction to sort.
             view.SortDescriptions.Add(new SortDescription(nameof(Setting.Priority), ListSortDirection.Ascending));
 
@@ -64,18 +87,6 @@ namespace SettingsProject
                     view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
                 }
             }
-
-            searchViewModel.SearchChanged += searchString =>
-            {
-                if (string.IsNullOrEmpty(searchString))
-                {
-                    view.Filter = null;
-                }
-                else
-                {
-                    view.Filter = o => o is Setting setting && setting.MatchesSearchText(searchString);
-                }
-            };
         }
     }
 

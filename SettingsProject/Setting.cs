@@ -20,6 +20,7 @@ namespace SettingsProject
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly string? _description;
+        private bool _isVisible = true;
 
         public string Name { get; }
 
@@ -37,6 +38,18 @@ namespace SettingsProject
         public int Priority { get; }
 
         public abstract SettingModificationState ModificationState { get; }
+
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                if (_isVisible == value)
+                    return;
+                _isVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         protected Setting(string name, string? description, int priority, string page, string category)
         {
