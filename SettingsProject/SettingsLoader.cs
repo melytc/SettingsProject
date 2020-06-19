@@ -37,7 +37,7 @@ namespace SettingsProject
                 name: "Multi-targeting",
                 initialValue: false,
                 defaultValue: null,
-                description: "Specifies whether this project builds for multiple target frameworks.",
+                description: "Build this project for multiple target frameworks.",
                 priority: 300,
                 page: "Application",
                 category: "General",
