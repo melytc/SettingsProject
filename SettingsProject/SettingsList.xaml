@@ -54,7 +54,7 @@
                 <DockPanel LastChildFill="True">
                     <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
                     <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
                 </DockPanel>
             </ContentControl>
         </DataTemplate>
