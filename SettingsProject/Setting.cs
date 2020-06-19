@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 #nullable enable
@@ -191,5 +192,56 @@ namespace SettingsProject
         public string LinkText => HasDescription ? Description : Name;
 
         public override SettingModificationState ModificationState => SettingModificationState.Default;
+    }
+
+    class RadioSetting : Setting<string>
+    {
+        private readonly IReadOnlyList<RadioOption> _options;
+
+        public IReadOnlyList<Setting>? SelectedSettings { get; private set; }
+
+        public string SelectedDescription { get; private set; } = "";
+
+        public IEnumerable<string> EnumValues => _options.Select(option => option.Name);
+
+        public RadioSetting(string name, string? description, int priority, string page, string category, IReadOnlyList<RadioOption> options, string initialValue, string defaultValue)
+            : base(name, initialValue, defaultValue, description, priority, page, category, StringComparer.Ordinal)
+        {
+            _options = options;
+            OnValueChanged(Value);
+        }
+
+        protected override void OnValueChanged(string newValue)
+        {
+            RadioOption? option = _options.FirstOrDefault(option => option.Name == newValue);
+
+            if (!ReferenceEquals(SelectedSettings, option?.Settings))
+            {
+                SelectedSettings = option?.Settings;
+                OnPropertyChanged(nameof(SelectedSettings));
+            }
+
+            string description = option?.Description ?? "";
+
+            if (!Equals(SelectedDescription, description))
+            {
+                SelectedDescription = description;
+                OnPropertyChanged(nameof(SelectedDescription));
+            }
+        }
+    }
+
+    class RadioOption
+    {
+        public string Name { get; }
+        public string? Description { get; }
+        public IReadOnlyList<Setting> Settings { get; }
+
+        public RadioOption(string name, string? description, IReadOnlyList<Setting> settings)
+        {
+            Name = name;
+            Description = description;
+            Settings = settings;
+        }
     }
 }

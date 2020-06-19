@@ -15,6 +15,7 @@ namespace SettingsProject
 
         public static IValueConverter VisibleWhenModified        { get; } = new SingleValueVisibilityConverter(value: SettingModificationState.Modified,        matchValue: Visibility.Visible, elseValue: Visibility.Collapsed);
         public static IValueConverter VisibleWhenModifiedUnsaved { get; } = new SingleValueVisibilityConverter(value: SettingModificationState.ModifiedUnsaved, matchValue: Visibility.Visible, elseValue: Visibility.Collapsed);
+        public static IValueConverter CollapsedWhenEmptyString   { get; } = new SingleValueVisibilityConverter(value: "", matchValue: Visibility.Collapsed, elseValue: Visibility.Visible);
         public static IValueConverter CollapsedWhenNull          { get; } = new SingleValueVisibilityConverter(value: null, matchValue: Visibility.Collapsed, elseValue: Visibility.Visible);
 
         private sealed class SingleValueVisibilityConverter : IValueConverter

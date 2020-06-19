@@ -80,6 +80,19 @@
                 <local:SettingsList Settings="{Binding SelectedSettings}" Visibility="{Binding SelectedSettings, Converter={x:Static local:Converters.CollapsedWhenNull}}" />
             </StackPanel>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:RadioSetting}">
+            <StackPanel>
+                <ContentControl Style="{StaticResource SettingContainer}">
+                    <DockPanel LastChildFill="True">
+                        <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
+                        <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding Description, Converter={x:Static local:Converters.CollapsedWhenEmptyString}}" />
+                        <local:HighlightTextBlock DockPanel.Dock="Bottom" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding SelectedDescription}" Margin="0,6,0,0" TextWrapping="Wrap" Visibility="{Binding SelectedDescription, Converter={x:Static local:Converters.CollapsedWhenEmptyString}}" />
+                        <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
+                    </DockPanel>
+                </ContentControl>
+                <local:SettingsList Settings="{Binding SelectedSettings}" Visibility="{Binding SelectedSettings, Converter={x:Static local:Converters.CollapsedWhenNull}}" />
+            </StackPanel>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type local:EnumSetting}">
             <ContentControl Style="{StaticResource SettingContainer}">
                 <DockPanel LastChildFill="True">

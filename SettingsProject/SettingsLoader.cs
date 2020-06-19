@@ -97,58 +97,58 @@ namespace SettingsProject
                 page: "Application",
                 category: "General"),
 
-//            new RadioSetting(
-//                name: "Resources",
-//                initialValue: "Icon and manifest",
-//                defaultValue: "Icon and manifest",
-//                priority: 800,
-//                description: "Specifies how application resources will be managed.",
-//                page: "Application",
-//                category: "Resources",
-//                options: new[]
-//                {
-//                    new RadioOption(
-//                        name: "Icon and manifest",
-//                        description: "A manifest determines specific settings for an application.",
-//                        settings: new Setting[]
-//                        {
-//                            // TODO make this IconBrowseSetting
-//                            new StringSetting(
-//                                name: "Icon path",
-//                                initialValue: "(Default Icon)",
-//                                defaultValue: "(Default Icon)",
-//                                description: "Path to the icon to embed into the output assembly.",
-//                                priority: 100,
-//                                page: "Application",
-//                                category: "Resources"),
-//                            // TODO make this FileBrowseSetting
-//                            // TODO this can appear disabled, find out why
-//                            new EnumSetting(
-//                                name: "Manifest path",
-//                                initialValue: "",
-//                                defaultValue: "",
-//                                description: "To embed a custom manifest, first add it to your project and then select it from the list.",
-//                                priority: 200,
-//                                page: "Application",
-//                                category: "Resources",
-//                                enumValues: new[] { "" })
-//                        }),
-//                    new RadioOption(
-//                        name: "Resource file",
-//                        description: "Specifies a Win32 res file to compile into this project.",
-//                        settings: new Setting[]
-//                        {
-//                            // TODO make this FileBrowseSetting
-//                            new StringSetting(
-//                                name: "Resource file path",
-//                                initialValue: "",
-//                                defaultValue: "",
-//                                description: "",
-//                                priority: 100,
-//                                page: "Application",
-//                                category: "Resources")
-//                        })
-//                }),
+            new RadioSetting(
+                name: "Resources",
+                initialValue: "Icon and manifest",
+                defaultValue: "Icon and manifest",
+                priority: 800,
+                description: "Specifies how application resources will be managed.",
+                page: "Application",
+                category: "Resources",
+                options: new[]
+                {
+                    new RadioOption(
+                        name: "Icon and manifest",
+                        description: null,
+                        settings: new Setting[]
+                        {
+                            // TODO make this IconBrowseSetting
+                            new StringSetting(
+                                name: "Icon path",
+                                initialValue: "(Default Icon)",
+                                defaultValue: "(Default Icon)",
+                                description: "Path to the icon to embed into the output assembly.",
+                                priority: 100,
+                                page: "Application",
+                                category: "Resources"),
+                            // TODO make this FileBrowseSetting
+                            // TODO this can appear disabled, find out why
+                            new EnumSetting(
+                                name: "Manifest path",
+                                initialValue: "",
+                                defaultValue: "",
+                                description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
+                                priority: 200,
+                                page: "Application",
+                                category: "Resources",
+                                enumValues: new[] { "" })
+                        }),
+                    new RadioOption(
+                        name: "Resource file",
+                        description: null,
+                        settings: new Setting[]
+                        {
+                            // TODO make this FileBrowseSetting
+                            new StringSetting(
+                                name: "Resource file path",
+                                initialValue: "",
+                                defaultValue: "",
+                                description: "Specifies a Win32 res file to compile into this project.",
+                                priority: 100,
+                                page: "Application",
+                                category: "Resources")
+                        })
+                }),
 
             //////
             ///// ASSEMBLY INFORMATION
