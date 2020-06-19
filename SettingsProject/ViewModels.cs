@@ -12,6 +12,18 @@ namespace SettingsProject
         public SettingsListViewModel SettingsListListViewModel { get; }
         public SearchViewModel SearchViewModel { get; }
 
+        public IReadOnlyList<string> PageNames { get; } = new[]
+        {
+            "Application",
+            "Build",
+            "Build Events",
+            "Debug",
+            "Signing",
+            "Code Analysis"
+        };
+
+        public string SelectedPage { get; set; } = "Application";
+
         public ApplicationViewModel(SettingsListViewModel settingsListListViewModel, SearchViewModel searchViewModel)
         {
             SettingsListListViewModel = settingsListListViewModel;

@@ -13,6 +13,66 @@
         Background="#FBFBFB"
         d:DataContext="{d:DesignInstance local:ApplicationViewModel}">
     
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBox}" x:Key="PageListBoxStyle">
+            <Style.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="Padding" Value="16,12" />
+                    <Setter Property="FocusVisualStyle">
+                        <Setter.Value>
+                            <Style TargetType="{x:Type IFrameworkInputElement}">
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Rectangle Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2" Margin="2" SnapsToDevicePixels="True" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border 
+                                    Padding="{TemplateBinding Control.Padding}"
+                                    Background="Transparent"
+                                    Name="BackgroundBorder"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        Content="{TemplateBinding ContentControl.Content}"
+                                        ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                        ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                        HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                        <Setter Property="Panel.Background" TargetName="BackgroundBorder" Value="#80d9e0f8" />
+                                    </Trigger>
+                                    <Trigger Property="Selector.IsSelected" Value="True">
+                                        <Setter Property="Panel.Background" TargetName="BackgroundBorder" Value="#d9e0f8" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Style.Resources>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <ScrollViewer Focusable="False">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
 
         <Grid.RowDefinitions>
@@ -48,14 +108,7 @@
             </DockPanel>
         </WrapPanel>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="8">
-            <TextBlock Margin="0,4">Application</TextBlock>
-            <TextBlock Margin="0,4">Build</TextBlock>
-            <TextBlock Margin="0,4">Build Events</TextBlock>
-            <TextBlock Margin="0,4">Debug</TextBlock>
-            <TextBlock Margin="0,4">Signing</TextBlock>
-            <TextBlock Margin="0,4">Code Analysis</TextBlock>
-        </StackPanel>
+        <ListBox Grid.Row="1" Grid.Column="0" Margin="0,24,0,0" Style="{StaticResource PageListBoxStyle}" ItemsSource="{Binding Path=PageNames}" SelectedItem="{Binding Path=SelectedPage}" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
             <local:SettingsList  Margin="32,8,16,32" Settings="{Binding SettingsListListViewModel.Settings}" SearchViewModel="{Binding SearchViewModel}" />
