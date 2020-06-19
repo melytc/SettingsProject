@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <Style TargetType="ContentControl" x:Key="SettingContainer">
+            <Setter Property="IsTabStop" Value="False" />
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
