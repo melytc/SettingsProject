@@ -42,17 +42,16 @@ namespace SettingsProject
                 category: "General",
                 trueSettings: new Setting[]
                 {
-//                  new FlagsEnumSetting(
-//                      name: "Target frameworks",
-//                      initialValue: "netcoreapp3.0",
-//                      defaultValue: null,
-//                      enumValues: new[] { "Console Application", "Windows Application", "Class Library" },
-//                      priority: 100,
-//                      description: "Specifies whether the output is executable, and whether is runs in a console or as a desktop application.",
-//                      page: "Application",
-//                      category: "General",
-//                      // TODO what about netstandard, others, do we really want to have a fixed set here?
-//                      enumValues: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }),
+                    // TODO come up with a better editing experience, perhaps via a FlagsEnumSetting
+                    // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
+                    new StringSetting(
+                        name: "Target frameworks",
+                        initialValue: "net5",
+                        priority: 100,
+                        defaultValue: null,
+                        description: "Specifies the semicolon-delimited list of frameworks that this project will target.",
+                        page: "Application",
+                        category: "General"),
                 },
                 falseSettings: new Setting[]
                 {
@@ -61,7 +60,7 @@ namespace SettingsProject
                         initialValue: ".NET 5",
                         defaultValue: null,
                         priority: 100,
-                        description: "Specifies the semicolon-delimited list of frameworks that this project will target. Often just a single value.",
+                        description: "Specifies the framework that this project will target.",
                         page: "Application",
                         category: "General",
                         enumValues: new[] { ".NET 5", ".NET Core 3.1", ".NET Core 3.0", ".NET Core 2.2", ".NET Core 2.1", ".NET Core 2.0", ".NET Core 1.1", ".NET Core 1.0" }),
