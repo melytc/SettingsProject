@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable enable
 
@@ -414,6 +415,385 @@ namespace SettingsProject
                 description: "Controls when any post-build event is executed.",
                 page: "Build Events",
                 category: "General"),
-        };
+
+            /////////////
+            //////////// PACKAGING
+            ///////////
+
+            //////
+            ///// GENERAL
+            ////
+
+            new BoolSetting(
+                name: "Generate NuGet package on build",
+                initialValue: false,
+                defaultValue: false,
+                description: "Specifies whether a NuGet package should be produced in the output directory when the project is build.",
+                priority: 100,
+                page: "Packaging",
+                category: "General"),
+            new BoolSetting(
+                name: "Require license acceptance",
+                initialValue: false,
+                defaultValue: false,
+                description: "Controls whether consumers of the generated package are presented with a license acceptance prompt when adding a reference to this package.",
+                priority: 200,
+                page: "Packaging",
+                category: "General"),
+            new StringSetting(
+                name: "Package ID",
+                initialValue: "ConsoleApp1",
+                defaultValue: "ConsoleApp1",
+                priority: 300,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
+            new StringSetting(
+                name: "Package version",
+                initialValue: "1.0.0",
+                defaultValue: "1.0.0",
+                priority: 400,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            new StringSetting(
+                name: "Authors",
+                initialValue: "ConsoleApp1",
+                defaultValue: "ConsoleApp1",
+                priority: 500,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            new StringSetting(
+                name: "Company",
+                initialValue: "ConsoleApp1",
+                defaultValue: "ConsoleApp1",
+                priority: 600,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            new StringSetting(
+                name: "Product",
+                initialValue: "ConsoleApp1",
+                defaultValue: "ConsoleApp1",
+                priority: 700,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            new MultiLineStringSetting(
+                name: "Description",
+                initialValue: "",
+                defaultValue: null,
+                priority: 800,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            new StringSetting(
+                name: "Copyright",
+                initialValue: "",
+                defaultValue: null,
+                priority: 900,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            new RadioSetting(
+                name: "License specification",
+                initialValue: "None",
+                defaultValue: "None",
+                priority: 1000,
+                description: "Controls how the package's license is specified.",
+                page: "Packaging",
+                category: "General",
+                options: new[]
+                {
+                    new RadioOption(
+                        name: "None",
+                        description: "No license is specified for this package.",
+                        settings: Array.Empty<Setting>()),
+                    new RadioOption(
+                        name: "Expression",
+                        description: "The license is specified using a SPDX expression",
+                        settings: new Setting[]
+                        {
+                            // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
+                            new StringSetting(
+                                name: "License expression",
+                                initialValue: "",
+                                defaultValue: null,
+                                description: "The SPDX expression that specifies the package's license.",
+                                priority: 100,
+                                page: "Packaging",
+                                category: "General"),
+                            new LinkAction(
+                                // https://spdx.org/licenses/
+                                name: "Read about SPDX license expressions",
+                                priority: 200,
+                                page: "Packaging",
+                                category: "General")
+                        }),
+                    new RadioOption(
+                        name: "File",
+                        description: "The license is provided in a file which will be included in the package.",
+                        settings: new Setting[]
+                        {
+                            // TODO make this FileBrowseSetting
+                            new StringSetting(
+                                name: "License file path",
+                                initialValue: "",
+                                defaultValue: null,
+                                description: "The path to the license file to include in the package. May be relative to the project directory.",
+                                priority: 100,
+                                page: "Packaging",
+                                category: "General")
+                        })
+                }),
+                // TODO make this IconBrowseSetting
+                new StringSetting(
+                    name: "Package icon file",
+                    initialValue: "",
+                    defaultValue: null,
+                    description: "Path to the icon to include in and use for the package.",
+                    priority: 1100,
+                    page: "Packaging",
+                    category: "General"),
+                new StringSetting(
+                    name: "Repository URL",
+                    initialValue: "",
+                    defaultValue: null,
+                    priority: 1200,
+                    description: null, // TODO describe what this URL means
+                    page: "Packaging",
+                    category: "General"),
+                // TODO provide feedback about valid URLs here
+                new StringSetting(
+                    name: "Repository type",
+                    initialValue: "",
+                    defaultValue: null,
+                    priority: 1300,
+                    description: null,
+                    page: "Packaging",
+                    category: "General"),
+                new StringSetting(
+                    name: "Tags",
+                    initialValue: "",
+                    defaultValue: null,
+                    priority: 1400,
+                    description: null, // TODO describe how this is delimited
+                    page: "Packaging",
+                    category: "General"),
+                new MultiLineStringSetting(
+                    name: "Release notes",
+                    initialValue: "",
+                    defaultValue: null,
+                    priority: 1500,
+                    description: null,
+                    page: "Packaging",
+                    category: "General"),
+                // TODO this is a combo box with many languages listed
+                new StringSetting(
+                    name: "Assembly neutral language",
+                    initialValue: "(None)",
+                    defaultValue: "(None)",
+                    priority: 1600,
+                    description: null,
+                    page: "Packaging",
+                    category: "General"),
+                // TODO VersionSetting
+                new StringSetting(
+                    name: "Assembly version",
+                    initialValue: "1.0.0.0",
+                    defaultValue: "1.0.0.0",
+                    priority: 1700,
+                    description: null,
+                    page: "Packaging",
+                    category: "General"),
+                // TODO VersionSetting
+                new StringSetting(
+                    name: "Assembly file version",
+                    initialValue: "1.0.0.0",
+                    defaultValue: "1.0.0.0",
+                    priority: 1800,
+                    description: null,
+                    page: "Packaging",
+                    category: "General"),
+ 
+                /////////////
+                //////////// PACKAGING
+                ///////////
+
+                //////
+                ///// GENERAL
+                ////
+                
+                new RadioSetting(
+                    name: "Launch type",
+                    description: null,
+                    initialValue: "Project",
+                    defaultValue: "Project",
+                    priority: 100,
+                    page: "Debug",
+                    category: "General",
+                    options: new[]
+                    {
+                        new RadioOption(
+                            name: "Project",
+                            description: null,
+                            settings: Array.Empty<Setting>()),
+                        new RadioOption(
+                            name: "Executable",
+                            description: null,
+                            settings: new Setting[]
+                            {
+                                // TODO make this FileBrowseSetting
+                                new StringSetting(
+                                    name: "Executable path",
+                                    initialValue: "",
+                                    defaultValue: null,
+                                    description: "Path to the executable to debug.",
+                                    priority: 100,
+                                    page: "Debug",
+                                    category: "General"),
+                            })
+                    }),
+                new StringSetting(
+                    name: "Application arguments",
+                    initialValue: "",
+                    defaultValue: null,
+                    description: "Arguments to be passed to the launched application.",
+                    priority: 200,
+                    page: "Debug",
+                    category: "General"),
+                // TODO make this FileBrowseSetting
+                new StringSetting(
+                    name: "Working directory",
+                    initialValue: "",
+                    defaultValue: null,
+                    description: "Absolute path to the working directory.",
+                    priority: 300,
+                    page: "Debug",
+                    category: "General"),
+                new BoolSetting(
+                    name: "Use remote machine",
+                    initialValue: false,
+                    defaultValue: false,
+                    description: "The debug target is on a remote machine.",
+                    priority: 400,
+                    page: "Debug",
+                    category: "General",
+                    trueSettings: new Setting[]
+                    {
+                        // TODO make this RemoteMachineSetting, with support for the 'Find' button
+                        new StringSetting(
+                            name: "Remote machine host name",
+                            initialValue: "",
+                            defaultValue: null,
+                            description: null,
+                            priority: 100,
+                            page: "Debug",
+                            category: "General"),
+                        new EnumSetting(
+                            name: "Authentication mode",
+                            initialValue: "None",
+                            defaultValue: "None",
+                            description: null,
+                            priority: 200,
+                            enumValues: new[] { "None", "Windows" },
+                            page: "Debug",
+                            category: "General")
+                    }),
+                // TODO NameValueListSetting
+                new StringSetting(
+                    name: "Environment variables",
+                    initialValue: "",
+                    defaultValue: "",
+                    description: "Specifies environment variables to be set for the launched application.",
+                    priority: 500,
+                    page: "Debug",
+                    category: "General"),
+                new BoolSetting(
+                    name: "Native code debugging",
+                    initialValue: false,
+                    defaultValue: false,
+                    description: "Enable native code debugging.",
+                    priority: 600,
+                    page: "Debug",
+                    category: "General"),
+                new BoolSetting(
+                    name: "SQL Server debugging",
+                    initialValue: false,
+                    defaultValue: false,
+                    description: "Enable SQL Server debugging.",
+                    priority: 700,
+                    page: "Debug",
+                    category: "General"),
+
+                /////////////
+                //////////// SIGNING
+                ///////////
+
+                //////
+                ///// GENERAL
+                ////
+                
+                new BoolSetting(
+                    name: "Signing",
+                    initialValue: false,
+                    defaultValue: false,
+                    description: "Sign the project's output assembly.",
+                    priority: 100,
+                    page: "Signing",
+                    category: "General",
+                    trueSettings: new Setting[]
+                    {
+                        // TODO StrongNameKeySetting -- with new/add and change password actions
+                        new StringSetting(
+                            name: "Key file path",
+                            initialValue: "",
+                            defaultValue: null,
+                            description: "Choose a string name key file",
+                            priority: 100,
+                            page: "Signing",
+                            category: "General"),
+                        new BoolSetting(
+                            name: "Delay signing",
+                            initialValue: false,
+                            defaultValue: false,
+                            description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
+                            priority: 200,
+                            page: "Signing",
+                            category: "General")
+                    }),
+
+                /////////////
+                //////////// CODE ANALYSIS
+                ///////////
+
+                //////
+                ///// ANALYZERS
+                ////
+                
+                new LinkAction(
+                    name: "What are the benefits of source code analyzers?",
+                    priority: 100,
+                    page: "Code Analysis",
+                    category: "Analyzers"),
+                new BoolSetting(
+                    name: "Run on build",
+                    initialValue: false,
+                    defaultValue: false,
+                    description: "Run analyzers during build.",
+                    priority: 200,
+                    page: "Code Analysis",
+                    category: "Analyzers"),
+                new BoolSetting(
+                    name: "Run live analysis",
+                    initialValue: false,
+                    defaultValue: false,
+                    description: "Run analyzers live in the IDE.",
+                    priority: 300,
+                    page: "Code Analysis",
+                    category: "Analyzers"),
+       };
     }
 }
