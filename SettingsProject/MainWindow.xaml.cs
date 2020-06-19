@@ -1,4 +1,6 @@
-﻿#nullable enable
+﻿using System.Linq;
+
+#nullable enable
 
 namespace SettingsProject
 {
@@ -9,10 +11,18 @@ namespace SettingsProject
             InitializeComponent();
 
             var searchViewModel = new SearchViewModel();
-            
-            var settingsListViewModel = new SettingsListViewModel(SettingsLoader.DefaultSettings, searchViewModel);
 
-            DataContext = new ApplicationViewModel(settingsListViewModel, searchViewModel);
+            var settings = SettingsLoader.DefaultSettings;
+
+            var settingsByPage = settings.ToLookup(setting => setting.Page);
+
+            // TODO populate context objects
+
+            var pageViewModels = settingsByPage
+                .Select(settings => new SettingsPageViewModel(settings.Key, new SettingsListViewModel(settings.ToList(), searchViewModel), null))
+                .ToList();
+
+            DataContext = new ApplicationViewModel(pageViewModels, searchViewModel);
         }
     }
 }

@@ -87,6 +87,14 @@
 
         <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
 
+        <ListBox Grid.Row="1" Grid.Column="0" Margin="0,24,0,0" Style="{StaticResource PageListBoxStyle}" ItemsSource="{Binding Path=Pages}" SelectedItem="{Binding Path=SelectedPage}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="local:SettingsPageViewModel">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
         <!-- TODO load this via ActivePageContext property -->
         <!-- TODO allow settings to run to top of screen when no context needed -->
         <WrapPanel Grid.Row="0" Grid.Column="1" Margin="24,0,0,0">
@@ -108,10 +116,8 @@
             </DockPanel>
         </WrapPanel>
 
-        <ListBox Grid.Row="1" Grid.Column="0" Margin="0,24,0,0" Style="{StaticResource PageListBoxStyle}" ItemsSource="{Binding Path=PageNames}" SelectedItem="{Binding Path=SelectedPage}" />
-
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
-            <local:SettingsList  Margin="32,8,16,32" Settings="{Binding SettingsListListViewModel.Settings}" SearchViewModel="{Binding SearchViewModel}" />
+            <local:SettingsList  Margin="32,8,16,32" Settings="{Binding SelectedPage.SettingsListListViewModel.Settings}" SearchViewModel="{Binding SearchViewModel}" />
         </ScrollViewer>
 
     </Grid>

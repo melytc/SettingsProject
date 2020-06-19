@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 
 #nullable enable
@@ -9,25 +10,32 @@ namespace SettingsProject
 {
     internal sealed class ApplicationViewModel
     {
-        public SettingsListViewModel SettingsListListViewModel { get; }
         public SearchViewModel SearchViewModel { get; }
+        public IReadOnlyList<SettingsPageViewModel> Pages { get; }
 
-        public IReadOnlyList<string> PageNames { get; } = new[]
+        public SettingsPageViewModel? SelectedPage { get; set; }
+
+        public ApplicationViewModel(IReadOnlyList<SettingsPageViewModel> pages, SearchViewModel searchViewModel)
         {
-            "Application",
-            "Build",
-            "Build Events",
-            "Debug",
-            "Signing",
-            "Code Analysis"
-        };
-
-        public string SelectedPage { get; set; } = "Application";
-
-        public ApplicationViewModel(SettingsListViewModel settingsListListViewModel, SearchViewModel searchViewModel)
-        {
-            SettingsListListViewModel = settingsListListViewModel;
+            Pages = pages;
             SearchViewModel = searchViewModel;
+            SelectedPage = pages.FirstOrDefault();
+        }
+    }
+
+    internal sealed class SettingsPageViewModel
+    {
+        public SettingsListViewModel SettingsListListViewModel { get; }
+
+        public object? ContextControl { get; }
+
+        public string Name { get; }
+
+        public SettingsPageViewModel(string name, SettingsListViewModel settingsListListViewModel, object? contextControl)
+        {
+            Name = name;
+            SettingsListListViewModel = settingsListListViewModel;
+            ContextControl = contextControl;
         }
     }
 
@@ -49,8 +57,12 @@ namespace SettingsProject
 
             if (view.CanGroup)
             {
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
+                bool hasMultipleCategories = settings.Select(setting => setting.Category).Distinct().Skip(1).Any();
+
+                if (hasMultipleCategories)
+                {
+                    view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
+                }
             }
 
             searchViewModel.SearchChanged += searchString =>
