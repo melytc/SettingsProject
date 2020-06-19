@@ -77,8 +77,7 @@
                         </CheckBox>
                     </DockPanel>
                 </ContentControl>
-                <local:SettingsList Settings="{Binding TrueSettings}" Visibility="{Binding Path=Value, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                <local:SettingsList Settings="{Binding FalseSettings}" Visibility="{Binding Path=Value, Converter={x:Static local:Converters.CollapsedWhenTrue}}" />
+                <local:SettingsList Settings="{Binding SelectedSettings}" Visibility="{Binding SelectedSettings, Converter={x:Static local:Converters.CollapsedWhenNull}}" />
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type local:EnumSetting}">

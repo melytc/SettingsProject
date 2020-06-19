@@ -75,26 +75,35 @@ namespace SettingsProject
                 {
                     _value = value;
                     OnPropertyChanged(nameof(Value));
-
-                    // ModificationState can only change when Value changes
-
-                    var state = SettingModificationState.Default;
-                    if (!_comparer.Equals(value, _initialValue))
-                    {
-                        state = SettingModificationState.ModifiedUnsaved;
-                    }
-                    else if (!_comparer.Equals(value, _defaultValue))
-                    {
-                        state = SettingModificationState.Modified;
-                    }
-
-                    if (state != ModificationState)
-                    {
-                        _modificationState = state;
-                        OnPropertyChanged(nameof(ModificationState));
-                    }
+                    OnValueChanged(_value);
+                    UpdateModificationState();
                 }
             }
+        }
+
+        private void UpdateModificationState()
+        {
+            // ModificationState can only change when Value changes
+
+            var state = SettingModificationState.Default;
+            if (!_comparer.Equals(_value, _initialValue))
+            {
+                state = SettingModificationState.ModifiedUnsaved;
+            }
+            else if (!_comparer.Equals(_value, _defaultValue))
+            {
+                state = SettingModificationState.Modified;
+            }
+
+            if (state != ModificationState)
+            {
+                _modificationState = state;
+                OnPropertyChanged(nameof(ModificationState));
+            }
+        }
+
+        protected virtual void OnValueChanged(T newValue)
+        {
         }
 
 #pragma warning disable CS8618 // _value is not initialized.
@@ -105,7 +114,8 @@ namespace SettingsProject
             _initialValue = initialValue;
             _defaultValue = defaultValue;
             _comparer = comparer;
-            Value = initialValue;
+            _value = initialValue;
+            UpdateModificationState();
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -135,11 +145,25 @@ namespace SettingsProject
         public IReadOnlyList<Setting>? TrueSettings { get; }
         public IReadOnlyList<Setting>? FalseSettings { get; }
 
+        public IReadOnlyList<Setting>? SelectedSettings { get; private set; }
+
         public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category, IReadOnlyList<Setting>? trueSettings = null, IReadOnlyList<Setting>? falseSettings = null)
             : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default)
         {
             TrueSettings = trueSettings;
             FalseSettings = falseSettings;
+            OnValueChanged(Value);
+        }
+
+        protected override void OnValueChanged(bool newValue)
+        {
+            var newSettings = newValue ? TrueSettings : FalseSettings;
+
+            if (!ReferenceEquals(SelectedSettings, newSettings))
+            {
+                SelectedSettings = newSettings;
+                OnPropertyChanged(nameof(SelectedSettings));
+            }
         }
     }
 
