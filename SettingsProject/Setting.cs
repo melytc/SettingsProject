@@ -60,7 +60,7 @@ namespace SettingsProject
             Category = category;
         }
 
-        public bool MatchesSearchText(string searchString)
+        public virtual bool MatchesSearchText(string searchString)
         {
             return Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1 
                 || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1);
@@ -191,6 +191,22 @@ namespace SettingsProject
         {
             EnumValues = enumValues;
         }
+
+        public override bool MatchesSearchText(string searchString)
+        {
+            if (base.MatchesSearchText(searchString))
+            {
+                return true;
+            }
+
+            foreach (var enumValue in EnumValues)
+            {
+                if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     class LinkAction : Setting
@@ -241,6 +257,22 @@ namespace SettingsProject
                 SelectedDescription = description;
                 OnPropertyChanged(nameof(SelectedDescription));
             }
+        }
+
+        public override bool MatchesSearchText(string searchString)
+        {
+            if (base.MatchesSearchText(searchString))
+            {
+                return true;
+            }
+
+            foreach (var option in _options)
+            {
+                if (option.Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+            }
+
+            return false;
         }
     }
 
