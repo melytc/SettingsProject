@@ -12,7 +12,7 @@
         Width="1000"
         Background="#FBFBFB"
         d:DataContext="{d:DesignInstance local:ApplicationViewModel}">
-    
+
     <Window.Resources>
         <Style TargetType="{x:Type ListBox}" x:Key="PageListBoxStyle">
             <Style.Resources>
@@ -79,7 +79,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
