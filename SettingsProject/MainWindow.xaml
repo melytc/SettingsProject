@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SettingsProject"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Project Properties Spike"
         Icon="VisualStudio.Preview.ico"
@@ -25,6 +26,27 @@
         </Grid.ColumnDefinitions>
 
         <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
+
+        <!-- TODO load this via ActivePageContext property -->
+        <!-- TODO allow settings to run to top of screen when no context needed -->
+        <WrapPanel Grid.Row="0" Grid.Column="1" Margin="24,0,0,0">
+            <DockPanel Margin="24,8,0,4">
+                <TextBlock VerticalAlignment="Center" Text="Configuration" FontWeight="Bold" MinWidth="80"/>
+                <ComboBox SelectedItem="Active (Debug)" Margin="9,0,0,0" MinWidth="160">
+                    <ComboBox.Items>
+                        <system:String>Active (Debug)</system:String>
+                    </ComboBox.Items>
+                </ComboBox>
+            </DockPanel>
+            <DockPanel Margin="24,8,0,4">
+                <TextBlock VerticalAlignment="Center" Text="Platform" FontWeight="Bold" MinWidth="80" />
+                <ComboBox SelectedItem="Active (Any CPU)" Margin="9,0,0,0" MinWidth="160">
+                    <ComboBox.Items>
+                        <system:String>Active (Any CPU)</system:String>
+                    </ComboBox.Items>
+                </ComboBox>
+            </DockPanel>
+        </WrapPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="8">
             <TextBlock Margin="0,4">Application</TextBlock>
