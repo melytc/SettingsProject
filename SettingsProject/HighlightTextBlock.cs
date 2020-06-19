@@ -8,6 +8,8 @@ using System.Windows.Media;
 
 namespace SettingsProject
 {
+    // TODO may be able to get better perf by not deriving from TextBlock and using GlyphRun/Glyph instead
+
     internal class HighlightTextBlock : TextBlock
     {
         static HighlightTextBlock()
@@ -41,33 +43,56 @@ namespace SettingsProject
             set => SetValue(HighlightBrushProperty, value);
         }
 
+        private bool _hasHighlights;
         private bool _isUpdating;
 
         private object OnCoerceTextPropertyValue(object baseValue)
         {
             if (_isUpdating)
             {
-                return string.Empty;
+                return baseValue;
             }
 
             var highlightText = HighlightText;
 
-            if (!string.IsNullOrWhiteSpace(highlightText))
+            if (string.IsNullOrWhiteSpace(highlightText))
+            {
+                if (_hasHighlights && baseValue is string s)
+                {
+                    _isUpdating = true;
+                    Inlines.Clear();
+                    Inlines.Add(new Run(s));
+                    _hasHighlights = false;
+                    _isUpdating = false;
+                }
+            }
+            else
             {
                 if (baseValue is string s && !string.IsNullOrWhiteSpace(s))
                 {
                     highlightText = highlightText.Trim();
 
                     int searchIndex = 0;
-                    
+
                     int GetNextMatchIndex() => s.IndexOf(highlightText, searchIndex, StringComparison.CurrentCultureIgnoreCase);
 
                     var matchIndex = GetNextMatchIndex();
 
                     if (matchIndex == -1)
                     {
+                        if (_hasHighlights)
+                        {
+                            _isUpdating = true;
+                            Inlines.Clear();
+                            Inlines.Add(new Run(s));
+                            _hasHighlights = false;
+                            _isUpdating = false;
+                        }
+
                         return baseValue;
                     }
+
+                    _hasHighlights = true;
 
                     var highlightBrush = HighlightBrush;
 
