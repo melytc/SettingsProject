@@ -117,7 +117,7 @@
         </WrapPanel>
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
-            <local:SettingsList  Margin="32,8,16,32" Settings="{Binding SelectedPage.SettingsListListViewModel.Settings}" SearchViewModel="{Binding SearchViewModel}" />
+            <local:SettingsList Margin="32,8,16,32" Settings="{Binding SelectedPage.SettingsListListViewModel.Settings}" SearchViewModel="{Binding SearchViewModel}" />
         </ScrollViewer>
 
     </Grid>
