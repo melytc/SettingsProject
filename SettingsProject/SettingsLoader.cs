@@ -311,7 +311,7 @@ namespace SettingsProject
                 name: "Register for COM interop",
                 initialValue: false,
                 defaultValue: false,
-                description: "Produce optimized output. Optimized binaries may be harder to debug.",
+                description: "Add metadata from the output assembly to the registry, allowing COM clients to create .NET classes.",
                 priority: 300,
                 page: "Build",
                 category: "Output"),
