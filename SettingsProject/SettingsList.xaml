@@ -16,19 +16,17 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Grid Margin="0,0,0,24">
-                            <Grid.ColumnDefinitions>
-                                <!-- Modification state indicator -->
-                                <ColumnDefinition Width="5" />
-                                <!-- Empty column, just for spacing -->
-                                <ColumnDefinition Width="8" />
-                                <!-- Actual property editor -->
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Rectangle Grid.Column="0" Fill="#CDCDCD" ToolTip="Non-default value" Visibility="{Binding DataContext.ModificationState, Converter={x:Static local:Converters.VisibleWhenModified}}" />
-                            <Rectangle Grid.Column="0" Fill="#3296D5" ToolTip="Unsaved change" Visibility="{Binding DataContext.ModificationState, Converter={x:Static local:Converters.VisibleWhenModifiedUnsaved}}" />
-                            <ContentPresenter Grid.Column="2" Content="{Binding}" />
-                        </Grid>
+                        <Border Name="SettingsBorder" Margin="0,0,0,24" Padding="8,0,0,0" BorderThickness="5,0,0,0" BorderBrush="Transparent">
+                            <ContentPresenter Content="{Binding}" />
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModificationState}" Value="{x:Static local:SettingModificationState.Modified}">
+                                <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#CDCDCD" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModificationState}" Value="{x:Static local:SettingModificationState.ModifiedUnsaved}">
+                                <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#3296D5" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
