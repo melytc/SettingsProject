@@ -74,6 +74,8 @@ namespace SettingsProject
 
     abstract class Setting<T> : Setting
     {
+        public bool SupportsPerConfigurationValues { get; }
+
         private readonly T _initialValue;
         private readonly T _defaultValue;
         private readonly IEqualityComparer<T> _comparer;
@@ -81,6 +83,8 @@ namespace SettingsProject
         private SettingModificationState _modificationState = SettingModificationState.Default;
 
         public override SettingModificationState ModificationState => _modificationState;
+
+        public bool IsPerConfiguration { get; set; }
 
         /// <summary>
         /// Gets and sets the current value of the property.
@@ -126,10 +130,11 @@ namespace SettingsProject
         }
 
 #pragma warning disable CS8618 // _value is not initialized.
-        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, string page, string category, IEqualityComparer<T> comparer)
+        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, string page, string category, IEqualityComparer<T> comparer, bool supportsPerConfigurationValues)
 #pragma warning restore CS8618 // _value is not initialized.
             : base(name, description, priority, page, category)
         {
+            SupportsPerConfigurationValues = supportsPerConfigurationValues;
             _initialValue = initialValue;
             _defaultValue = defaultValue;
             _comparer = comparer;
@@ -140,16 +145,16 @@ namespace SettingsProject
 
     class StringSetting : Setting<string>
     {
-        public StringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
+        public StringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
+            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal, supportsPerConfigurationValues)
         {
         }
     }
 
     class MultiLineStringSetting : Setting<string>
     {
-        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
+        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
+            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal, supportsPerConfigurationValues)
         {
         }
     }
@@ -161,8 +166,8 @@ namespace SettingsProject
 
         public IReadOnlyList<Setting>? SelectedSettings { get; private set; }
 
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category, IReadOnlyList<Setting>? trueSettings = null, IReadOnlyList<Setting>? falseSettings = null)
-            : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default)
+        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category, bool supportsPerConfigurationValues = false, IReadOnlyList<Setting>? trueSettings = null, IReadOnlyList<Setting>? falseSettings = null)
+            : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default, supportsPerConfigurationValues)
         {
             TrueSettings = trueSettings;
             FalseSettings = falseSettings;
@@ -186,8 +191,8 @@ namespace SettingsProject
         public IReadOnlyList<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, IReadOnlyList<string> enumValues, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null)
-            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal)
+        public EnumSetting(string name, string initialValue, string? defaultValue, IReadOnlyList<string> enumValues, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
+            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal, supportsPerConfigurationValues)
         {
             EnumValues = enumValues;
         }
@@ -233,8 +238,8 @@ namespace SettingsProject
 
         public IEnumerable<string> EnumValues => _options.Select(option => option.Name);
 
-        public RadioSetting(string name, string? description, int priority, string page, string category, IReadOnlyList<RadioOption> options, string initialValue, string defaultValue)
-            : base(name, initialValue, defaultValue, description, priority, page, category, StringComparer.Ordinal)
+        public RadioSetting(string name, string? description, int priority, string page, string category, IReadOnlyList<RadioOption> options, string initialValue, string defaultValue, bool supportsPerConfigurationValues = false)
+            : base(name, initialValue, defaultValue, description, priority, page, category, StringComparer.Ordinal, supportsPerConfigurationValues)
         {
             _options = options;
             OnValueChanged(Value);

@@ -183,7 +183,8 @@ namespace SettingsProject
                 priority: 100,
                 description: "A semicolon-delimited list of symbols to define for the compilation.",
                 page: "Build",
-                category: "General"),
+                category: "General",
+                supportsPerConfigurationValues: true),
             new BoolSetting(
                 name: "Define DEBUG symbol",
                 initialValue: false,
@@ -191,7 +192,8 @@ namespace SettingsProject
                 description: "Specifies whether to define the DEBUG compilation symbol.",
                 priority: 200,
                 page: "Build",
-                category: "General"),
+                category: "General",
+                supportsPerConfigurationValues: true),
             new BoolSetting(
                 name: "Define TRACE symbol",
                 initialValue: false,
@@ -199,7 +201,8 @@ namespace SettingsProject
                 description: "Specifies whether to define the TRACE compilation symbol.",
                 priority: 300,
                 page: "Build",
-                category: "General"),
+                category: "General",
+                supportsPerConfigurationValues: true),
             new EnumSetting(
                 name: "Platform target",
                 initialValue: "Any CPU",
@@ -242,7 +245,8 @@ namespace SettingsProject
                 description: "Produce optimized output. Optimized binaries may be harder to debug.",
                 priority: 800,
                 page: "Build",
-                category: "General"),
+                category: "General",
+                supportsPerConfigurationValues: true),
 
             //////
             ///// ERRORS AND WARNINGS
@@ -353,7 +357,8 @@ namespace SettingsProject
                 description: "Enable arithmetic overflow checking at runtime.",
                 priority: 300,
                 page: "Build",
-                category: "Advanced"),
+                category: "Advanced",
+                supportsPerConfigurationValues: true),
             new EnumSetting(
                 name: "Debugging information",
                 initialValue: "Portable",
@@ -362,7 +367,8 @@ namespace SettingsProject
                 priority: 400,
                 description: null,
                 page: "Build",
-                category: "Advanced"),
+                category: "Advanced",
+                supportsPerConfigurationValues: true),
             new EnumSetting(
                 name: "File alignment",
                 initialValue: "512",
@@ -431,7 +437,8 @@ namespace SettingsProject
                 description: "Specifies whether a NuGet package should be produced in the output directory when the project is build.",
                 priority: 100,
                 page: "Packaging",
-                category: "General"),
+                category: "General",
+                supportsPerConfigurationValues: true),
             new BoolSetting(
                 name: "Require license acceptance",
                 initialValue: false,
@@ -744,6 +751,7 @@ namespace SettingsProject
                     priority: 100,
                     page: "Signing",
                     category: "General",
+                    supportsPerConfigurationValues: true,
                     trueSettings: new Setting[]
                     {
                         // TODO StrongNameKeySetting -- with new/add and change password actions
@@ -754,7 +762,8 @@ namespace SettingsProject
                             description: "Choose a string name key file",
                             priority: 100,
                             page: "Signing",
-                            category: "General"),
+                            category: "General",
+                            supportsPerConfigurationValues: true),
                         new BoolSetting(
                             name: "Delay signing",
                             initialValue: false,
@@ -762,7 +771,8 @@ namespace SettingsProject
                             description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
                             priority: 200,
                             page: "Signing",
-                            category: "General")
+                            category: "General",
+                            supportsPerConfigurationValues: true)
                     }),
 
                 /////////////
@@ -785,7 +795,8 @@ namespace SettingsProject
                     description: "Run analyzers during build.",
                     priority: 200,
                     page: "Code Analysis",
-                    category: "Analyzers"),
+                    category: "Analyzers",
+                    supportsPerConfigurationValues: true),
                 new BoolSetting(
                     name: "Run live analysis",
                     initialValue: false,
