@@ -42,7 +42,14 @@
 -->
     </UserControl.Resources>
 
-    <ItemsControl ItemsSource="{Binding ElementName=_settingsListControl, Path=Settings}" IsTabStop="False" Focusable="False">
+    <ItemsControl
+        x:Name="_itemsControl"
+        ItemsSource="{Binding ElementName=_settingsListControl, Path=Settings}"
+        VirtualizingStackPanel.IsVirtualizing="True"
+        VirtualizingStackPanel.ScrollUnit="Pixel"
+        VirtualizingStackPanel.VirtualizationMode="Recycling"
+        IsTabStop="False"
+        Focusable="False">
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="local:Setting">
                 <DockPanel Margin="0,0,0,24" Background="Transparent">
@@ -76,6 +83,22 @@
                 </DataTemplate.Triggers>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel
+                    CanVerticallyScroll="True"
+                    CanHorizontallyScroll="False"
+                    ScrollUnit="Pixel"
+                    VirtualizationMode="Recycling" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.Template>
+            <ControlTemplate>
+                <ScrollViewer Focusable="False" ScrollChanged="OnScrollChanged" Name="scroll">
+                    <ItemsPresenter SnapsToDevicePixels="true" Margin="{Binding ElementName=scroll, Path=ActualHeight, Converter={x:Static local:Converters.DoubleToBottomThickness}}" />
+                </ScrollViewer>
+            </ControlTemplate>
+        </ItemsControl.Template>
         <ItemsControl.GroupStyle>
             <GroupStyle>
                 <GroupStyle.ContainerStyle>
@@ -83,7 +106,7 @@
                         <Setter Property="Control.Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type GroupItem}">
-                                    <StackPanel>
+                                    <StackPanel Background="Transparent">
                                         <ContentPresenter
                                             Content="{TemplateBinding ContentControl.Content}"
                                             ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
