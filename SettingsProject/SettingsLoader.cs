@@ -21,7 +21,7 @@ namespace SettingsProject
                 description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
                 page: "Application",
                 category: "General",
-                priority: 100,
+                priority: 10,
                 new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
             new StringSetting(
                 name: "Default namespace",
@@ -47,7 +47,7 @@ namespace SettingsProject
                         "Specifies the semicolon-delimited list of frameworks that this project will target.",
                         page: "Application",
                         category: "General",
-                        priority: 100,
+                        priority: 310,
                         new UnconfiguredStringSettingValue(initialValue: "net5", defaultValue: null)),
 //                },
 //                falseSettings: new Setting[]
@@ -57,7 +57,7 @@ namespace SettingsProject
                         description: "Specifies the framework that this project will target.",
                         page: "Application",
                         category: "General",
-                        priority: 100,
+                        priority: 320,
                         enumValues: new[]
                         {
                             ".NET 5",
@@ -127,7 +127,7 @@ namespace SettingsProject
                                 description: "Path to the icon to embed into the output assembly.",
                                 page: "Application",
                                 category: "Resources",
-                                priority: 100,
+                                priority: 710,
                                 new UnconfiguredStringSettingValue(initialValue: "(Default Icon)", defaultValue: "(Default Icon)")),
                             // TODO make this FileBrowseSetting
                             // TODO this can appear disabled, find out why
@@ -136,7 +136,7 @@ namespace SettingsProject
                                 description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
                                 page: "Application",
                                 category: "Resources",
-                                priority: 200,
+                                priority: 720,
                                 enumValues: new[] { "" },
                                 new UnconfiguredEnumSettingValue(initialValue: "", defaultValue: "")),
 //                        }),
@@ -151,7 +151,7 @@ namespace SettingsProject
                                 description: "Specifies a Win32 res file to compile into this project.",
                                 page: "Application",
                                 category: "Resources",
-                                priority: 100,
+                                priority: 730,
                                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
 //                        })
 //                }),
@@ -165,7 +165,7 @@ namespace SettingsProject
 //            new StringSetting(
 //                name: "Assembly name",
 //                initialValue: "ConsoleApp1",
-//                priority: 100,
+//                priority: 20,
 //                defaultValue: "ConsoleApp1",
 //                description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
 //                page: "Application",
@@ -186,7 +186,7 @@ namespace SettingsProject
                 description: "A semicolon-delimited list of symbols to define for the compilation.",
                 page: "Build",
                 category: "General",
-                priority: 100,
+                priority: 30,
                 new UnconfiguredStringSettingValue(initialValue: "TRACE", defaultValue: null),
                 supportsPerConfigurationValues: true),
             new BoolSetting(
@@ -255,7 +255,7 @@ namespace SettingsProject
 //              readMore: "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/warn-compiler-option",
                 page: "Build",
                 category: "Errors and warnings",
-                priority: 100,
+                priority: 40,
                 enumValues: new[] { "0", "1", "2", "3", "4" },
                 new UnconfiguredEnumSettingValue(initialValue: "4", defaultValue: "4")),
             new StringSetting(
@@ -291,7 +291,7 @@ namespace SettingsProject
                 description: "Relative destination path for build output.",
                 page: "Build",
                 category: "Output",
-                priority: 100,
+                priority: 50,
                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
             // TODO make this FileBrowseSetting
             new StringSetting(
@@ -327,7 +327,7 @@ namespace SettingsProject
                 description: "Why can't I select the C# language version?",
                 page: "Build",
                 category: "Advanced",
-                priority: 100),
+                priority: 60),
 
             new EnumSetting(
                 name: "Internal compiler error reporting",
@@ -383,7 +383,7 @@ namespace SettingsProject
                 name: "Pre-build event",
                 initialValue: "",
                 defaultValue: "",
-                priority: 100,
+                priority: 70,
                 description: "Commands to execute before a build occurs.",
                 page: "Build Events",
                 category: "General"),
@@ -424,7 +424,7 @@ namespace SettingsProject
                 description: "Specifies whether a NuGet package should be produced in the output directory when the project is build.",
                 page: "Packaging",
                 category: "General",
-                priority: 100,
+                priority: 80,
                 new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
                 supportsPerConfigurationValues: true),
             new BoolSetting(
@@ -510,7 +510,7 @@ namespace SettingsProject
                                 description: "The SPDX expression that specifies the package's license.",
                                 page: "Packaging",
                                 category: "General",
-                                priority: 100,
+                                priority: 910,
                                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
                             new LinkAction(
                                 // https://spdx.org/licenses/
@@ -518,7 +518,7 @@ namespace SettingsProject
                                 description: null,
                                 page: "Packaging",
                                 category: "General",
-                                priority: 200),
+                                priority: 920),
 //                        }),
 //                    new RadioOption(
 //                        name: "File",
@@ -531,7 +531,7 @@ namespace SettingsProject
                                 description: "The path to the license file to include in the package. May be relative to the project directory.",
                                 page: "Packaging",
                                 category: "General",
-                                priority: 100,
+                                priority: 930,
                                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
 //                        })
 //                }),
@@ -631,7 +631,7 @@ namespace SettingsProject
                                     description: "Path to the executable to debug.",
                                     page: "Debug",
                                     category: "General",
-                                    priority: 100,
+                                    priority: 90,
                                     new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
 //                            })
 //                    }),
@@ -665,14 +665,14 @@ namespace SettingsProject
                             description: null,
                             page: "Debug",
                             category: "General",
-                            priority: 100,
+                            priority: 410,
                             new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
                         new EnumSetting(
                             name: "Authentication mode",
                             description: null,
                             page: "Debug",
                             category: "General",
-                            priority: 200,
+                            priority: 420,
                             enumValues: new[] { "None", "Windows" },
                             new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
 //                    }),
@@ -712,7 +712,7 @@ namespace SettingsProject
                     description: "Sign the project's output assembly.",
                     page: "Signing",
                     category: "General",
-                    priority: 100,
+                    priority: 92,
                     new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
                     supportsPerConfigurationValues: true),
 //                    trueSettings: new Setting[]
@@ -723,7 +723,7 @@ namespace SettingsProject
                             description: "Choose a string name key file",
                             page: "Signing",
                             category: "General",
-                            priority: 100,
+                            priority: 110,
                             new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null),
                             supportsPerConfigurationValues: true),
                         new BoolSetting(
@@ -731,7 +731,7 @@ namespace SettingsProject
                             description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
                             page: "Signing",
                             category: "General",
-                            priority: 200,
+                            priority: 120,
                             new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
                             supportsPerConfigurationValues: true),
 //                    }),
@@ -749,7 +749,7 @@ namespace SettingsProject
                     description: null,
                     page: "Code Analysis",
                     category: "Analyzers",
-                    priority: 100),
+                    priority: 94),
                 new BoolSetting(
                     name: "Run on build",
                     description: "Run analyzers during build.",
