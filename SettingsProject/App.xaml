@@ -5,9 +5,56 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="WatermarkTextBoxResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:UnconfiguredStringSettingValue">
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="ConfiguredStringSettingValueTemplate" DataType="local:ConfiguredStringSettingValue">
+                <DockPanel Margin="0,2">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
+                    <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+                </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="UnconfiguredMultilineStringSettingValueTemplate" DataType="local:UnconfiguredMultilineStringSettingValue">
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="ConfiguredMultilineStringSettingValueTemplate" DataType="local:ConfiguredMultilineStringSettingValue">
+                <DockPanel Margin="0,2">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
+                    <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+                </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:UnconfiguredBoolSettingValue">
+                <CheckBox IsChecked="{Binding Value}">
+                    <local:HighlightTextBlock HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
+                </CheckBox>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:ConfiguredBoolSettingValue">
+                <CheckBox Margin="0,2" IsChecked="{Binding Value}">
+                    <TextBlock Text="{Binding Configuration}" TextWrapping="Wrap" />
+                </CheckBox>
+            </DataTemplate>
+
+            <DataTemplate x:Key="UnconfiguredEnumSettingValueTemplate" DataType="local:UnconfiguredEnumSettingValue">
+                <ComboBox ItemsSource="{Binding Parent.EnumValues}" SelectedItem="{Binding Value}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:ConfiguredEnumSettingValue">
+                <DockPanel Margin="0,2">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
+                    <ComboBox ItemsSource="{Binding Parent.EnumValues}" SelectedItem="{Binding Value}" />
+                </DockPanel>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

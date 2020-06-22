@@ -4,33 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SettingsProject"
+             xmlns:fa5="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="800"
              d:DesignWidth="600"
              x:ClassModifier="internal"
-             x:Name="_settingsListControl">
+             x:Name="_settingsListControl"
+             Focusable="False"
+             IsTabStop="False">
 
     <UserControl.Resources>
-        <Style TargetType="ContentControl" x:Key="SettingContainer">
-            <Setter Property="IsTabStop" Value="False" />
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <Border Name="SettingsBorder" Margin="0,0,0,24" Padding="8,0,0,0" BorderThickness="5,0,0,0" BorderBrush="Transparent">
-                            <ContentPresenter Content="{Binding}" />
-                        </Border>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModificationState}" Value="{x:Static local:SettingModificationState.Modified}">
-                                <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#CDCDCD" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModificationState}" Value="{x:Static local:SettingModificationState.ModifiedUnsaved}">
-                                <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#3296D5" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="3" />
             <Setter Property="MinWidth" Value="300" />
@@ -43,63 +26,7 @@
         <Style TargetType="local:HighlightTextBlock">
             <Setter Property="HighlightBrush" Value="Yellow" />
         </Style>
-        <Style x:Key="PropertyHeadingStyle" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,0,0,4" />
-        </Style>
-        <DataTemplate DataType="{x:Type local:StringSetting}">
-            <ContentControl Style="{StaticResource SettingContainer}">
-                <DockPanel LastChildFill="True">
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" TextWrapping="Wrap" />
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
-                </DockPanel>
-            </ContentControl>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:MultiLineStringSetting}">
-            <ContentControl Style="{StaticResource SettingContainer}">
-                <DockPanel LastChildFill="True">
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
-                </DockPanel>
-            </ContentControl>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:BoolSetting}">
-            <StackPanel>
-                <ContentControl Style="{StaticResource SettingContainer}">
-                    <DockPanel LastChildFill="True">
-                        <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                        <CheckBox IsChecked="{Binding Value}">
-                            <local:HighlightTextBlock HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" />
-                        </CheckBox>
-                    </DockPanel>
-                </ContentControl>
-                <local:SettingsList Settings="{Binding SelectedSettings}" Visibility="{Binding SelectedSettings, Converter={x:Static local:Converters.CollapsedWhenNull}}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:RadioSetting}">
-            <StackPanel>
-                <ContentControl Style="{StaticResource SettingContainer}">
-                    <DockPanel LastChildFill="True">
-                        <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                        <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding Description, Converter={x:Static local:Converters.CollapsedWhenEmptyString}}" />
-                        <local:HighlightTextBlock DockPanel.Dock="Bottom" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding SelectedDescription}" Margin="0,6,0,0" TextWrapping="Wrap" Visibility="{Binding SelectedDescription, Converter={x:Static local:Converters.CollapsedWhenEmptyString}}" />
-                        <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
-                    </DockPanel>
-                </ContentControl>
-                <local:SettingsList Settings="{Binding SelectedSettings}" Visibility="{Binding SelectedSettings, Converter={x:Static local:Converters.CollapsedWhenNull}}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:EnumSetting}">
-            <ContentControl Style="{StaticResource SettingContainer}">
-                <DockPanel LastChildFill="True">
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" Margin="0,0,0,6" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
-                </DockPanel>
-            </ContentControl>
-        </DataTemplate>
+<!--
         <DataTemplate DataType="{x:Type local:LinkAction}">
             <ContentControl Style="{StaticResource SettingContainer}">
                 <DockPanel LastChildFill="True">
@@ -112,9 +39,43 @@
                 </DockPanel>
             </ContentControl>
         </DataTemplate>
+-->
     </UserControl.Resources>
 
-    <ItemsControl ItemsSource="{Binding ElementName=_settingsListControl, Path=Settings}" IsTabStop="False">
+    <ItemsControl ItemsSource="{Binding ElementName=_settingsListControl, Path=Settings}" IsTabStop="False" Focusable="False">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="local:Setting">
+                <DockPanel Margin="0,0,0,24" Background="Transparent">
+                    <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
+                        <fa5:ImageAwesome Margin="0,2,0,0" Name="CommandMenuButton" Icon="Solid_Cog" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10" Foreground="#888" Visibility="{Binding HasCommands, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                    </ContentControl>
+                    <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
+                    <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                    <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="local:SettingValue">
+                                <Border Name="SettingsBorder" BorderThickness="4,0,0,0" Padding="8,0,0,0" BorderBrush="Transparent">
+                                    <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" />
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.Modified}">
+                                        <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#CDCDCD" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.ModifiedUnsaved}">
+                                        <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#3296D5" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DockPanel>
+                <DataTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Collapsed" />
+                    </Trigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
         <ItemsControl.GroupStyle>
             <GroupStyle>
                 <GroupStyle.HeaderTemplate>

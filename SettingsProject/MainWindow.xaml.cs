@@ -10,19 +10,15 @@ namespace SettingsProject
         {
             InitializeComponent();
 
-            var searchViewModel = new SearchViewModel();
-
             var settings = SettingsLoader.DefaultSettings;
 
             var settingsByPage = settings.ToLookup(setting => setting.Page);
 
-            // TODO populate context objects
-
             var pageViewModels = settingsByPage
-                .Select(settings => new SettingsPageViewModel(settings.Key, new SettingsListViewModel(settings.ToList(), searchViewModel), null))
+                .Select(settings => new SettingsPageViewModel(settings.Key, new SettingsListViewModel(settings.ToList())))
                 .ToList();
 
-            DataContext = new ApplicationViewModel(pageViewModels, searchViewModel);
+            DataContext = new ApplicationViewModel(pageViewModels, new SearchViewModel());
         }
     }
 }

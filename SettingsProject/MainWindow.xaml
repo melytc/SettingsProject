@@ -85,7 +85,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" Width="150" MinWidth="150" />
+        <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" />
 
         <ListBox Grid.Row="1" Grid.Column="0" Margin="0,24,0,0" Style="{StaticResource PageListBoxStyle}" ItemsSource="{Binding Path=Pages}" SelectedItem="{Binding Path=SelectedPage}">
             <ListBox.ItemTemplate>
@@ -95,28 +95,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- TODO load this via ActivePageContext property -->
-        <!-- TODO allow settings to run to top of screen when no context needed -->
-        <WrapPanel Grid.Row="0" Grid.Column="1" Margin="24,0,0,0">
-            <DockPanel Margin="24,8,0,4">
-                <TextBlock VerticalAlignment="Center" Text="Configuration" FontWeight="Bold" MinWidth="80"/>
-                <ComboBox SelectedItem="Active (Debug)" Margin="9,0,0,0" MinWidth="160">
-                    <ComboBox.Items>
-                        <system:String>Active (Debug)</system:String>
-                    </ComboBox.Items>
-                </ComboBox>
-            </DockPanel>
-            <DockPanel Margin="24,8,0,4">
-                <TextBlock VerticalAlignment="Center" Text="Platform" FontWeight="Bold" MinWidth="80" />
-                <ComboBox SelectedItem="Active (Any CPU)" Margin="9,0,0,0" MinWidth="160">
-                    <ComboBox.Items>
-                        <system:String>Active (Any CPU)</system:String>
-                    </ComboBox.Items>
-                </ComboBox>
-            </DockPanel>
-        </WrapPanel>
-
-        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" IsTabStop="False" Focusable="False">
             <local:SettingsList Margin="32,8,16,32" Settings="{Binding SelectedPage.SettingsListListViewModel.Settings}" SearchViewModel="{Binding SearchViewModel}" />
         </ScrollViewer>
 

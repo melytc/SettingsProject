@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 #nullable enable
 
@@ -15,8 +17,105 @@ namespace SettingsProject
         ModifiedUnsaved
     }
 
-    abstract class Setting : INotifyPropertyChanged
+    internal abstract class SettingValue : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        // null if this value applies to all configurations
+        public abstract string? Configuration { get; }
+
+        public abstract DataTemplate Template { get; }
+
+        public abstract SettingModificationState ModificationState { get; }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    internal abstract class SettingValue<T> : SettingValue
+    {
+        private readonly IEqualityComparer<T> _comparer;
+
+        private SettingModificationState _modificationState = SettingModificationState.Default;
+        private T _value;
+
+        public T DefaultValue { get; }
+        public T InitialValue { get; }
+
+        protected SettingValue(T initialValue, T defaultValue, IEqualityComparer<T>? comparer = null)
+        {
+            _comparer = comparer ?? EqualityComparer<T>.Default;
+            InitialValue = initialValue;
+            DefaultValue = defaultValue;
+            _value = initialValue;
+            UpdateModificationState();
+        }
+
+        public override SettingModificationState ModificationState => _modificationState;
+
+        /// <summary>
+        /// Gets and sets the current value of the property.
+        /// </summary>
+        public T Value
+        {
+            get => _value;
+            set
+            {
+                if (!_comparer.Equals(value, Value))
+                {
+                    _value = value;
+                    OnPropertyChanged(nameof(Value));
+                    UpdateModificationState();
+                }
+            }
+        }
+
+        private void UpdateModificationState()
+        {
+            // ModificationState can only change when Value changes
+
+            var state = SettingModificationState.Default;
+            if (!_comparer.Equals(_value, InitialValue))
+            {
+                state = SettingModificationState.ModifiedUnsaved;
+            }
+            else if (!_comparer.Equals(_value, DefaultValue))
+            {
+                state = SettingModificationState.Modified;
+            }
+
+            if (state != ModificationState)
+            {
+                _modificationState = state;
+                OnPropertyChanged(nameof(ModificationState));
+            }
+        }
+    }
+
+    // For drop-down menu on setting itself
+    internal class SettingCommand
+    {
+        public string Caption { get; }
+
+        // null if this command is not checkable
+        public bool? IsChecked { get; }
+
+        public SettingCommand(string caption)
+        {
+            Caption = caption;
+        }
+
+        public void Invoke(Setting setting)
+        {
+        }
+    }
+
+    internal abstract class Setting : INotifyPropertyChanged
+    {
+        public static ImmutableArray<SettingCommand> ToggleConfigurationCommands { get; } = ImmutableArray.Create(new SettingCommand("Use single value across configurations"), new SettingCommand("Specify value per configuration"));
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly string? _description;
@@ -28,7 +127,7 @@ namespace SettingsProject
 
         public string Category { get; }
 
-        public bool HasDescription => !string.IsNullOrWhiteSpace(_description);
+        public virtual bool HasDescription => !string.IsNullOrWhiteSpace(_description);
 
         public string Description => _description ?? "";
 
@@ -37,7 +136,9 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        public abstract SettingModificationState ModificationState { get; }
+        public ImmutableArray<SettingCommand> Commands { get; }
+
+        public ImmutableArray<SettingValue> Values { get; }
 
         public bool IsVisible
         {
@@ -51,13 +152,22 @@ namespace SettingsProject
             }
         }
 
-        protected Setting(string name, string? description, int priority, string page, string category)
+        public bool HasCommands => !Commands.IsEmpty;
+
+        protected Setting(string name, string? description, string page, string category, int priority, SettingValue value, ImmutableArray<SettingCommand> commands)
+            : this(name, description, page, category, priority, ImmutableArray.Create(value), commands)
+        {
+        }
+
+        protected Setting(string name, string? description, string page, string category, int priority, ImmutableArray<SettingValue> values, ImmutableArray<SettingCommand> commands)
         {
             Name = name;
             _description = description;
-            Priority = priority;
             Page = page;
             Category = category;
+            Priority = priority;
+            Values = values;
+            Commands = commands;
         }
 
         public virtual bool MatchesSearchText(string searchString)
@@ -72,129 +182,155 @@ namespace SettingsProject
         }
     }
 
-    abstract class Setting<T> : Setting
+    internal class StringSetting : Setting
     {
-        public bool SupportsPerConfigurationValues { get; }
-
-        private readonly T _initialValue;
-        private readonly T _defaultValue;
-        private readonly IEqualityComparer<T> _comparer;
-        private T _value;
-        private SettingModificationState _modificationState = SettingModificationState.Default;
-
-        public override SettingModificationState ModificationState => _modificationState;
-
-        public bool IsPerConfiguration { get; set; }
-
-        /// <summary>
-        /// Gets and sets the current value of the property.
-        /// </summary>
-        public T Value
-        {
-            get => _value;
-            set
-            {
-                if (!_comparer.Equals(value, Value))
-                {
-                    _value = value;
-                    OnPropertyChanged(nameof(Value));
-                    OnValueChanged(_value);
-                    UpdateModificationState();
-                }
-            }
-        }
-
-        private void UpdateModificationState()
-        {
-            // ModificationState can only change when Value changes
-
-            var state = SettingModificationState.Default;
-            if (!_comparer.Equals(_value, _initialValue))
-            {
-                state = SettingModificationState.ModifiedUnsaved;
-            }
-            else if (!_comparer.Equals(_value, _defaultValue))
-            {
-                state = SettingModificationState.Modified;
-            }
-
-            if (state != ModificationState)
-            {
-                _modificationState = state;
-                OnPropertyChanged(nameof(ModificationState));
-            }
-        }
-
-        protected virtual void OnValueChanged(T newValue)
+        public StringSetting(string name, string? description, string page, string category, int priority, UnconfiguredStringSettingValue value, bool supportsPerConfigurationValues = false)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
         {
         }
 
-#pragma warning disable CS8618 // _value is not initialized.
-        protected Setting(string name, T initialValue, T defaultValue, string? description, int priority, string page, string category, IEqualityComparer<T> comparer, bool supportsPerConfigurationValues)
-#pragma warning restore CS8618 // _value is not initialized.
-            : base(name, description, priority, page, category)
-        {
-            SupportsPerConfigurationValues = supportsPerConfigurationValues;
-            _initialValue = initialValue;
-            _defaultValue = defaultValue;
-            _comparer = comparer;
-            _value = initialValue;
-            UpdateModificationState();
-        }
-    }
-
-    class StringSetting : Setting<string>
-    {
-        public StringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
-            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal, supportsPerConfigurationValues)
+        public StringSetting(string name, string? description, string page, string category, int priority, params ConfiguredStringSettingValue[] values)
+            : base(name, description, page, category, priority, values.ToImmutableArray<SettingValue>(), ToggleConfigurationCommands)
         {
         }
     }
 
-    class MultiLineStringSetting : Setting<string>
+    internal sealed class UnconfiguredStringSettingValue : SettingValue<string>
+    {
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredStringSettingValueTemplate");
+
+        public UnconfiguredStringSettingValue(string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
+            : base(initialValue, defaultValue ?? "", comparer)
+        {
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration => null;
+    }
+
+    internal sealed class ConfiguredStringSettingValue : SettingValue<string>
+    {
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredStringSettingValueTemplate");
+
+        public ConfiguredStringSettingValue(string configuration, string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
+            : base(initialValue, defaultValue ?? "", comparer)
+        {
+            Configuration = configuration;
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration { get; }
+    }
+
+    internal class MultiLineStringSetting : Setting
     {
         public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
-            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal, supportsPerConfigurationValues)
+            : base(name, description, page, category, priority, new UnconfiguredMultilineStringSettingValue(initialValue, defaultValue ?? "", comparer ?? StringComparer.Ordinal), supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
         {
         }
     }
 
-    class BoolSetting : Setting<bool>
+    internal sealed class UnconfiguredMultilineStringSettingValue : SettingValue<string>
     {
-        public IReadOnlyList<Setting>? TrueSettings { get; }
-        public IReadOnlyList<Setting>? FalseSettings { get; }
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredMultilineStringSettingValueTemplate");
 
-        public IReadOnlyList<Setting>? SelectedSettings { get; private set; }
-
-        public BoolSetting(string name, bool initialValue, bool? defaultValue, string description, int priority, string page, string category, bool supportsPerConfigurationValues = false, IReadOnlyList<Setting>? trueSettings = null, IReadOnlyList<Setting>? falseSettings = null)
-            : base(name, initialValue, defaultValue ?? false, description, priority, page, category, EqualityComparer<bool>.Default, supportsPerConfigurationValues)
+        public UnconfiguredMultilineStringSettingValue(string initialValue, string defaultValue, IEqualityComparer<string>? comparer = null)
+            : base(initialValue, defaultValue, comparer)
         {
-            TrueSettings = trueSettings;
-            FalseSettings = falseSettings;
-            OnValueChanged(Value);
         }
 
-        protected override void OnValueChanged(bool newValue)
-        {
-            var newSettings = newValue ? TrueSettings : FalseSettings;
+        public override DataTemplate Template => _template;
+        public override string? Configuration => null;
+    }
 
-            if (!ReferenceEquals(SelectedSettings, newSettings))
+    internal sealed class ConfiguredMultilineStringSettingValue : SettingValue<string>
+    {
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredMultilineStringSettingValueTemplate");
+
+        public ConfiguredMultilineStringSettingValue(string configuration, string initialValue, string defaultValue, IEqualityComparer<string>? comparer = null)
+            : base(initialValue, defaultValue, comparer)
+        {
+            Configuration = configuration;
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration { get; }
+    }
+
+    internal class BoolSetting : Setting
+    {
+        public BoolSetting(string name, string? description, string page, string category, int priority, UnconfiguredBoolSettingValue value, bool supportsPerConfigurationValues = false)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
+        {
+            value.Parent = this;
+        }
+
+        public BoolSetting(string name, string? description, string page, string category, int priority, params ConfiguredBoolSettingValue[] values)
+            : base(name, description, page, category, priority, values.ToImmutableArray<SettingValue>(), ToggleConfigurationCommands)
+        {
+            foreach (var value in values)
             {
-                SelectedSettings = newSettings;
-                OnPropertyChanged(nameof(SelectedSettings));
+                value.Parent = this;
             }
         }
+
+        public override bool HasDescription => Values.All(value => value.Configuration != null);
     }
 
-    class EnumSetting : Setting<string>
+    internal sealed class UnconfiguredBoolSettingValue : SettingValue<bool>
+    {
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredBoolSettingValueTemplate");
+
+        public BoolSetting? Parent { get; internal set; }
+
+        // TODO allow a null default value?
+        public UnconfiguredBoolSettingValue(bool initialValue, bool? defaultValue, IEqualityComparer<bool>? comparer = null)
+            : base(initialValue, defaultValue ?? false, comparer)
+        {
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration => null;
+    }
+
+    internal sealed class ConfiguredBoolSettingValue : SettingValue<bool>
+    {
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredBoolSettingValueTemplate");
+
+        public BoolSetting? Parent { get; internal set; }
+
+        // TODO allow a null default value?
+        public ConfiguredBoolSettingValue(string configuration, bool initialValue, bool? defaultValue, IEqualityComparer<bool>? comparer = null)
+            : base(initialValue, defaultValue ?? false, comparer)
+        {
+            Configuration = configuration;
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration { get; }
+    }
+
+    internal class EnumSetting : Setting
     {
         public IReadOnlyList<string> EnumValues { get; }
 
         // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string initialValue, string? defaultValue, IReadOnlyList<string> enumValues, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
-            : base(name, initialValue, defaultValue ?? "", description, priority, page, category, comparer ?? StringComparer.Ordinal, supportsPerConfigurationValues)
+        public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, UnconfiguredEnumSettingValue value, bool supportsPerConfigurationValues = false)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
         {
             EnumValues = enumValues;
+            value.Parent = this;
+        }
+
+        public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, IReadOnlyList<ConfiguredEnumSettingValue> values)
+            : base(name, description, page, category, priority, values.ToImmutableArray<SettingValue>(), ToggleConfigurationCommands)
+        {
+            EnumValues = enumValues;
+            
+            foreach (var value in values)
+            {
+                value.Parent = this;
+            }
         }
 
         public override bool MatchesSearchText(string searchString)
@@ -214,84 +350,46 @@ namespace SettingsProject
         }
     }
 
-    class LinkAction : Setting
+    internal sealed class UnconfiguredEnumSettingValue : SettingValue<string>
     {
-        public LinkAction(string name, int priority, string page, string category, string? description = null)
-            : base(name, description, priority, page, category)
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredEnumSettingValueTemplate");
+
+        public EnumSetting? Parent { get; internal set; }
+
+        public UnconfiguredEnumSettingValue(string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
+            : base(initialValue, defaultValue ?? "", comparer)
+        {
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration => null;
+    }
+
+    internal sealed class ConfiguredEnumSettingValue : SettingValue<string>
+    {
+        private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredEnumSettingValueTemplate");
+
+        public EnumSetting? Parent { get; internal set; }
+
+        public ConfiguredEnumSettingValue(string configuration, string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
+            : base(initialValue, defaultValue ?? "", comparer)
+        {
+            Configuration = configuration;
+        }
+
+        public override DataTemplate Template => _template;
+        public override string? Configuration { get; }
+    }
+
+    internal class LinkAction : Setting
+    {
+        public LinkAction(string name, string? description, string page, string category, int priority)
+            : base(name, description, page, category, priority, ImmutableArray<SettingValue>.Empty, ImmutableArray<SettingCommand>.Empty)
         {
         }
 
         public string HeadingText => HasDescription ? Name : "";
         
         public string LinkText => HasDescription ? Description : Name;
-
-        public override SettingModificationState ModificationState => SettingModificationState.Default;
-    }
-
-    class RadioSetting : Setting<string>
-    {
-        private readonly IReadOnlyList<RadioOption> _options;
-
-        public IReadOnlyList<Setting>? SelectedSettings { get; private set; }
-
-        public string SelectedDescription { get; private set; } = "";
-
-        public IEnumerable<string> EnumValues => _options.Select(option => option.Name);
-
-        public RadioSetting(string name, string? description, int priority, string page, string category, IReadOnlyList<RadioOption> options, string initialValue, string defaultValue, bool supportsPerConfigurationValues = false)
-            : base(name, initialValue, defaultValue, description, priority, page, category, StringComparer.Ordinal, supportsPerConfigurationValues)
-        {
-            _options = options;
-            OnValueChanged(Value);
-        }
-
-        protected override void OnValueChanged(string newValue)
-        {
-            RadioOption? option = _options.FirstOrDefault(option => option.Name == newValue);
-
-            if (!ReferenceEquals(SelectedSettings, option?.Settings))
-            {
-                SelectedSettings = option?.Settings;
-                OnPropertyChanged(nameof(SelectedSettings));
-            }
-
-            string description = option?.Description ?? "";
-
-            if (!Equals(SelectedDescription, description))
-            {
-                SelectedDescription = description;
-                OnPropertyChanged(nameof(SelectedDescription));
-            }
-        }
-
-        public override bool MatchesSearchText(string searchString)
-        {
-            if (base.MatchesSearchText(searchString))
-            {
-                return true;
-            }
-
-            foreach (var option in _options)
-            {
-                if (option.Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
-                    return true;
-            }
-
-            return false;
-        }
-    }
-
-    class RadioOption
-    {
-        public string Name { get; }
-        public string? Description { get; }
-        public IReadOnlyList<Setting> Settings { get; }
-
-        public RadioOption(string name, string? description, IReadOnlyList<Setting> settings)
-        {
-            Name = name;
-            Description = description;
-            Settings = settings;
-        }
     }
 }

@@ -38,15 +38,12 @@ namespace SettingsProject
     {
         public SettingsListViewModel SettingsListListViewModel { get; }
 
-        public object? ContextControl { get; }
-
         public string Name { get; }
 
-        public SettingsPageViewModel(string name, SettingsListViewModel settingsListListViewModel, object? contextControl)
+        public SettingsPageViewModel(string name, SettingsListViewModel settingsListListViewModel)
         {
             Name = name;
             SettingsListListViewModel = settingsListListViewModel;
-            ContextControl = contextControl;
         }
     }
 
@@ -54,7 +51,7 @@ namespace SettingsProject
     {
         public IReadOnlyList<Setting> Settings { get; }
 
-        public SettingsListViewModel(IReadOnlyList<Setting> settings, SearchViewModel searchViewModel)
+        public SettingsListViewModel(IReadOnlyList<Setting> settings)
         {
             Settings = settings;
 
