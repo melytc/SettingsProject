@@ -112,7 +112,7 @@
                                             ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
                                             ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
                                             Name="PART_Header" />
-                                        <ItemsPresenter Name="ItemsPresenter" Margin="0,0,0,0" />
+                                        <ItemsPresenter Name="ItemsPresenter" />
                                     </StackPanel>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -126,10 +126,7 @@
                         </Border>
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding Path=IsBottomLevel}" Value="False">
-                                <!-- <Setter TargetName="border" Property="BorderThickness" Value="0,1,0,0" /> -->
-                                <!-- <Setter TargetName="border" Property="BorderBrush" Value="#ccc" /> -->
                                 <Setter TargetName="text" Property="FontSize" Value="24" />
-                                <!-- <Setter TargetName="text" Property="Margin" Value="0,0,0,10" /> -->
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
