@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -10,40 +11,66 @@ namespace SettingsProject
 {
     internal sealed class ApplicationViewModel
     {
+        public SettingsListViewModel SettingsListViewModel { get; }
         public SearchViewModel SearchViewModel { get; }
-        public IReadOnlyList<SettingsPageViewModel> Pages { get; }
+        public NavigationViewModel NavigationViewModel { get; }
 
-        public SettingsPageViewModel? SelectedPage { get; set; }
-
-        public ApplicationViewModel(IReadOnlyList<SettingsPageViewModel> pages, SearchViewModel searchViewModel)
+        public ApplicationViewModel()
         {
-            Pages = pages;
-            SearchViewModel = searchViewModel;
-            SelectedPage = pages.FirstOrDefault();
+            var settings = SettingsLoader.DefaultSettings;
 
-            searchViewModel.SearchChanged += searchString =>
+            SettingsListViewModel = new SettingsListViewModel(settings);
+
+            NavigationViewModel = new NavigationViewModel(settings);
+
+            SearchViewModel = new SearchViewModel();
+            
+            SearchViewModel.SearchChanged += searchString =>
             {
-                foreach (var page in pages)
+                foreach (var setting in settings)
                 {
-                    foreach (var setting in page.SettingsListListViewModel.Settings)
-                    {
-                        setting.IsVisible = setting.MatchesSearchText(searchString);
-                    }
+                    setting.IsVisible = setting.MatchesSearchText(searchString);
                 }
             };
         }
     }
 
-    internal sealed class SettingsPageViewModel
+    internal sealed class NavigationViewModel
     {
-        public SettingsListViewModel SettingsListListViewModel { get; }
+        public ImmutableArray<NavigationPageViewModel> Pages { get; }
 
+        public NavigationViewModel(IReadOnlyList<Setting> settings)
+        {
+            var categoriesByPage = new Dictionary<string, HashSet<string>>();
+
+            foreach (var setting in settings)
+            {
+                if (!categoriesByPage.TryGetValue(setting.Page, out var categories))
+                {
+                    categories = categoriesByPage[setting.Page] = new HashSet<string>();
+                }
+
+                categories.Add(setting.Category);
+            }
+
+            Pages = categoriesByPage.Select(pair => new NavigationPageViewModel(pair.Key, pair.Value.ToImmutableArray())).ToImmutableArray();
+
+            Pages[0].IsFocused = true;
+        }
+    }
+
+    internal sealed class NavigationPageViewModel
+    {
         public string Name { get; }
 
-        public SettingsPageViewModel(string name, SettingsListViewModel settingsListListViewModel)
+        public ImmutableArray<string> Categories { get; }
+
+        public bool IsFocused { get; set; }
+
+        public NavigationPageViewModel(string name, ImmutableArray<string> categories)
         {
             Name = name;
-            SettingsListListViewModel = settingsListListViewModel;
+            Categories = categories;
         }
     }
 
@@ -77,12 +104,8 @@ namespace SettingsProject
 
             if (view.CanGroup)
             {
-                bool hasMultipleCategories = settings.Select(setting => setting.Category).Distinct().Skip(1).Any();
-
-                if (hasMultipleCategories)
-                {
-                    view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
-                }
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
             }
         }
     }

@@ -78,9 +78,37 @@
         </ItemsControl.ItemTemplate>
         <ItemsControl.GroupStyle>
             <GroupStyle>
+                <GroupStyle.ContainerStyle>
+                    <Style>
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                    <StackPanel>
+                                        <ContentPresenter
+                                            Content="{TemplateBinding ContentControl.Content}"
+                                            ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                                            ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
+                                            Name="PART_Header" />
+                                        <ItemsPresenter Name="ItemsPresenter" Margin="0,0,0,0" />
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </GroupStyle.ContainerStyle>
                 <GroupStyle.HeaderTemplate>
                     <DataTemplate DataType="CollectionViewGroup">
-                        <TextBlock Margin="16,8,0,16" FontSize="20" Text="{Binding Path=Name}" />
+                        <Border Name="border" Margin="0">
+                            <TextBlock Name="text" FontSize="18" Text="{Binding Path=Name}" Margin="26,0,0,16" />
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsBottomLevel}" Value="False">
+                                <!-- <Setter TargetName="border" Property="BorderThickness" Value="0,1,0,0" /> -->
+                                <!-- <Setter TargetName="border" Property="BorderBrush" Value="#ccc" /> -->
+                                <Setter TargetName="text" Property="FontSize" Value="24" />
+                                <!-- <Setter TargetName="text" Property="Margin" Value="0,0,0,10" /> -->
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>
