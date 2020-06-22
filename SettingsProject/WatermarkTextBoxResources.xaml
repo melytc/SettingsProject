@@ -23,7 +23,6 @@
                                     Text="{TemplateBinding Watermark}"
                                     Foreground="{TemplateBinding Foreground}"
                                     IsHitTestVisible="False"
-                                    FontStyle="Italic"
                                     Opacity="0.4"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="{TemplateBinding WatermarkVerticalAlignment}"
