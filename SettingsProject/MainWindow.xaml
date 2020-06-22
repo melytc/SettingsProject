@@ -26,13 +26,18 @@
 
         <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search" Margin="8,8,8,8" />
 
-        <ItemsControl Grid.Row="1" Grid.Column="0" Margin="0,24,0,0" ItemsSource="{Binding Path=NavigationViewModel.Pages}">
+        <ItemsControl Grid.Row="1" Grid.Column="0" Margin="16,8,0,0" ItemsSource="{Binding Path=NavigationViewModel.Pages}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="local:NavigationPageViewModel">
                     <DockPanel>
-                        <TextBlock DockPanel.Dock="Top" Text="{Binding Path=Name}" />
-                        <ItemsControl Margin="26,0,0,0" ItemsSource="{Binding Path=Categories}" Visibility="{Binding Path=IsFocused, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                        <TextBlock Name="PageName" DockPanel.Dock="Top" Text="{Binding Path=Name}" Margin="0,6" />
+                        <ItemsControl Margin="16,0,0,8" ItemsSource="{Binding Path=Categories}" Visibility="{Binding Path=IsFocused, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
                     </DockPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsFocused}" Value="True">
+                            <Setter TargetName="PageName" Property="FontWeight" Value="Bold" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
