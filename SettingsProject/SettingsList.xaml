@@ -112,7 +112,7 @@
                                             ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
                                             ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
                                             Name="PART_Header" />
-                                        <ItemsPresenter Name="ItemsPresenter" />
+                                        <ItemsPresenter Name="ItemsPresenter" Margin="0,0,0,24" />
                                     </StackPanel>
                                 </ControlTemplate>
                             </Setter.Value>
