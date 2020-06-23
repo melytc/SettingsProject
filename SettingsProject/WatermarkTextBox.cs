@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
+#nullable enable
+
 namespace SettingsProject
 {
     internal class WatermarkTextBox : TextBox
