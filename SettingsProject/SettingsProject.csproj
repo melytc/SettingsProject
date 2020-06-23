@@ -59,12 +59,16 @@
     <Compile Include="Annotations.cs" />
     <Compile Include="Converters.cs" />
     <Compile Include="HighlightTextBlock.cs" />
+    <Compile Include="NavigationTree.xaml.cs">
+      <DependentUpon>NavigationTree.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setting.cs" />
     <Compile Include="SettingsList.xaml.cs">
       <DependentUpon>SettingsList.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="ViewModels.cs" />
+    <Compile Include="VisualTreeUtil.cs" />
     <Compile Include="WatermarkTextBox.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -78,6 +82,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NavigationTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingsList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -12,15 +12,23 @@ namespace SettingsProject
 {
     internal sealed partial class SettingsList
     {
-        public event Action<Setting>? ScrolledSettingChanged;
-
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
-            "Settings",
+            nameof(Settings),
             typeof(IReadOnlyList<Setting>),
             typeof(SettingsList),
             new PropertyMetadata(default(IReadOnlyList<Setting>)));
 
-        public static readonly DependencyProperty SearchViewModelProperty = DependencyProperty.Register("SearchViewModel", typeof(SearchViewModel), typeof(SettingsList), new PropertyMetadata(default(SearchViewModel)));
+        public static readonly DependencyProperty SearchViewModelProperty = DependencyProperty.Register(
+            nameof(SearchViewModel),
+            typeof(SearchViewModel),
+            typeof(SettingsList),
+            new PropertyMetadata(default(SearchViewModel)));
+        
+        public static readonly DependencyProperty CurrentSectionProperty = DependencyProperty.Register(
+            nameof(CurrentSection),
+            typeof(NavigationSection),
+            typeof(SettingsList),
+            new PropertyMetadata(default(NavigationSection), (d, e) => ((SettingsList)d).OnCurrentSectionChanged()));
 
         public SettingsList()
         {
@@ -39,8 +47,102 @@ namespace SettingsProject
             set => SetValue(SearchViewModelProperty, value);
         }
 
+        public NavigationSection CurrentSection
+        {
+            get => (NavigationSection)GetValue(CurrentSectionProperty);
+            set => SetValue(CurrentSectionProperty, value);
+        }
+
+        private bool _deferNextScrollEvent;
+
+        private void OnCurrentSectionChanged()
+        {
+            var section = CurrentSection;
+
+            var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
+
+            CollectionViewGroup group = viewSource.Groups.Cast<CollectionViewGroup>().FirstOrDefault(g => g.Name.Equals(section.Page));
+
+            _scrollToTopGroup = group;
+            _scrollToSubGroup = null;
+
+            if (group.Items.Count != 0)
+            {
+                var firstSubGroup = (CollectionViewGroup)group.Items[0];
+                if ((string)firstSubGroup.Name != section.Category)
+                {
+                    group = group.Items.Cast<CollectionViewGroup>().FirstOrDefault(g => g.Name.Equals(section.Category));
+                    _scrollToSubGroup = group;
+                }
+            }
+
+            var pageGroupContainer = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(group);
+
+//            _deferNextScrollEvent = true;
+
+            pageGroupContainer.BringIntoView();
+        }
+
+        private CollectionViewGroup? _scrollToTopGroup;
+        private CollectionViewGroup? _scrollToSubGroup;
+        private bool _ignoreNextScrollEvent;
+
         private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
         {
+            if (_ignoreNextScrollEvent)
+            {
+                _ignoreNextScrollEvent = false;
+                return;
+            }
+
+            // TODO before 'scroll to top' logic, ensure we haven't scrolled to this group already anyway (can happen when scrolling up after navigating to a subgroup)
+
+            var topGroup = _scrollToTopGroup;
+            if (topGroup != null)
+            {
+                var subGroup = _scrollToSubGroup;
+                _scrollToTopGroup = null;
+                _scrollToSubGroup = null;
+
+                if (!VisualTreeUtil.TryFindDescendentBreadthFirst(_itemsControl, out ScrollViewer? scrollViewer))
+                {
+                    return;
+                }
+
+                var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
+
+                double offset = 0;
+                foreach (CollectionViewGroup g1 in viewSource.Groups)
+                {
+                    if (ReferenceEquals(g1, topGroup))
+                    {
+                        if (subGroup != null)
+                        {
+                            foreach (CollectionViewGroup g2 in g1.Items)
+                            {
+                                if (ReferenceEquals(g2, subGroup))
+                                {
+                                    break;
+                                }
+
+                                var container = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(g2);
+
+                                offset += container.ActualHeight;
+                            }
+                        }
+
+                        break;
+                    }
+
+                    offset += ((FrameworkElement)_itemsControl.ItemContainerGenerator.ContainerFromItem(g1)).ActualHeight;
+                }
+
+                _ignoreNextScrollEvent = true;
+                scrollViewer.ScrollToVerticalOffset(offset);
+
+                return;
+            }
+
             VisualTreeHelper.HitTest(
                 _itemsControl, 
                 null, 
@@ -50,7 +152,7 @@ namespace SettingsProject
 
                     if (setting != null)
                     {
-                        ScrolledSettingChanged?.Invoke(setting);
+                        CurrentSection = new NavigationSection(setting.Page, setting.Category);
                     }
 
                     return HitTestResultBehavior.Stop;

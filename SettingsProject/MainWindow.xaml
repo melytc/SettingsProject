@@ -24,34 +24,21 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:WatermarkTextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}" Watermark="Search settings" Margin="8,8,8,16" Padding="12,3" />
+        <local:WatermarkTextBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}"
+            Watermark="Search settings"
+            Margin="8,8,8,16"
+            Padding="12,3" />
 
-        <ItemsControl Grid.Row="1" Grid.Column="0" MinWidth="128" Margin="0,0,0,0" ItemsSource="{Binding Path=NavigationViewModel.Pages}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="local:NavigationPageViewModel">
-                    <DockPanel>
-                        <TextBlock Name="PageName" DockPanel.Dock="Top" Text="{Binding Path=Name}" Margin="16,6" />
-                        <ItemsControl Margin="0,0,0,8" ItemsSource="{Binding Path=Categories}" Visibility="{Binding Path=IsFocused, Converter={x:Static local:Converters.CollapsedWhenFalse}}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="local:NavigationCategoryViewModel">
-                                    <TextBlock Name="CategoryName" Text="{Binding Path=Name}" Margin="32,3,0,3" />
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsFocused}" Value="True">
-                                            <Setter TargetName="CategoryName" Property="FontWeight" Value="Bold" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </DockPanel>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsFocused}" Value="True">
-                            <Setter TargetName="PageName" Property="FontWeight" Value="Bold" />
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <local:NavigationTree
+            Grid.Row="1"
+            Grid.Column="0"
+            MinWidth="128"
+            Pages="{Binding NavigationViewModel.Pages}"
+            SelectedSection="{Binding NavigationViewModel.SelectedSection, Mode=TwoWay}" />
 
         <local:SettingsList 
             Grid.Row="1"
@@ -59,7 +46,7 @@
             Margin="24,0,0,0"
             Settings="{Binding SettingsListViewModel.Settings}"
             SearchViewModel="{Binding SearchViewModel}"
-            ScrolledSettingChanged="OnScrolledSettingChanged"/>
+            CurrentSection="{Binding Path=NavigationViewModel.SelectedSection, Mode=TwoWay}" />
 
     </Grid>
 

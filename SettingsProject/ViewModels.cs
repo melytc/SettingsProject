@@ -37,11 +37,31 @@ namespace SettingsProject
         }
     }
 
-    internal sealed class NavigationViewModel
+    internal sealed class NavigationViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         private readonly Dictionary<string, NavigationPageViewModel> _pageByName;
 
+        private NavigationPageViewModel? _focusedPage;
+        private NavigationCategoryViewModel? _focusedCategory;
+        private NavigationSection _selectedSection;
+
         public ImmutableArray<NavigationPageViewModel> Pages { get; }
+
+        public NavigationSection SelectedSection
+        {
+            get => _selectedSection;
+            set
+            {
+                if (_selectedSection != value)
+                {
+                    _selectedSection = value;
+                    ScrollTo(value.Page, value.Category);
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public NavigationViewModel(IReadOnlyList<Setting> settings)
         {
@@ -60,21 +80,13 @@ namespace SettingsProject
             Pages = categoriesByPage.Select(
                 pair => new NavigationPageViewModel(
                     pair.Key,
-                    pair.Value.Select(category => new NavigationCategoryViewModel(category)).ToImmutableArray()))
+                    pair.Value.Select(category => new NavigationCategoryViewModel(pair.Key, category)).ToImmutableArray()))
                 .ToImmutableArray();
 
             _pageByName = Pages.ToDictionary(page => page.Name);
 
-            ScrollTo(Pages[0].Name, Pages[0].Categories[0].Name);
+            ScrollTo(Pages[0].Name, Pages[0].Categories[0].CategoryName);
         }
-
-        public void ScrollTo(Setting setting)
-        {
-            ScrollTo(setting.Page, setting.Category);
-        }
-
-        private NavigationPageViewModel? _focusedPage;
-        private NavigationCategoryViewModel? _focusedCategory;
 
         private void ScrollTo(string page, string category)
         {
@@ -100,7 +112,7 @@ namespace SettingsProject
                 ClearCategory();
             }
 
-            bool categoryChanged = pageChanged || _focusedCategory?.Name != category;
+            bool categoryChanged = pageChanged || _focusedCategory?.CategoryName != category;
 
             if (categoryChanged)
             {
@@ -108,7 +120,7 @@ namespace SettingsProject
 
                 if (_focusedPage != null)
                 {
-                    _focusedCategory = _focusedPage.Categories.FirstOrDefault(c => c.Name == category);
+                    _focusedCategory = _focusedPage.Categories.FirstOrDefault(c => c.CategoryName == category);
 
                     if (_focusedCategory != null)
                     {
@@ -125,6 +137,11 @@ namespace SettingsProject
                     _focusedCategory = null;
                 }
             }
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -169,7 +186,8 @@ namespace SettingsProject
 
         private bool _isFocused;
 
-        public string Name { get; }
+        public string PageName { get; }
+        public string CategoryName { get; }
 
         public bool IsFocused
         {
@@ -184,9 +202,10 @@ namespace SettingsProject
             }
         }
 
-        public NavigationCategoryViewModel(string name)
+        public NavigationCategoryViewModel(string pageName, string categoryName)
         {
-            Name = name;
+            CategoryName = categoryName;
+            PageName = pageName;
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
