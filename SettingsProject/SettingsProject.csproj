@@ -14,7 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-	<LangVersion>8</LangVersion>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,8 +56,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Annotations.cs" />
+    <Compile Include="Converters.cs" />
+    <Compile Include="HighlightTextBlock.cs" />
+    <Compile Include="NavigationTree.xaml.cs">
+      <DependentUpon>NavigationTree.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setting.cs" />
-    <Compile Include="SettingsMenu.cs" />
+    <Compile Include="SettingsList.xaml.cs">
+      <DependentUpon>SettingsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsLoader.cs" />
+    <Compile Include="ViewModels.cs" />
+    <Compile Include="VisualTreeUtil.cs" />
+    <Compile Include="WatermarkTextBox.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -70,6 +82,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NavigationTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WatermarkTextBoxResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -96,6 +120,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="VisualStudio.Preview.ico" />
+    <Resource Include="VisualStudio.Release.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FontAwesome5">
+      <Version>2.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="System.Collections.Immutable">
+      <Version>1.7.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

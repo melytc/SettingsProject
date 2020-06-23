@@ -5,46 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SettingsProject"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        Background="#FBFBFB">
+        Title="Project Properties Spike"
+        Icon="VisualStudio.Preview.ico"
+        Height="800"
+        Width="1000"
+        Background="#FBFBFB"
+        d:DataContext="{d:DesignInstance local:ApplicationViewModel}">
 
-    <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="2" />
-            <Setter Property="MinWidth" Value="300" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="MinWidth" Value="300" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-        <Style x:Key="PropertyHeadingStyle" TargetType="TextBlock">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,0,0,4" />
-        </Style>
-        <DataTemplate DataType="{x:Type local:StringSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:BoolSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding Value}" Padding="4" />
-                    <TextBlock Text="{Binding Description}" />
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:EnumSetting}">
-            <StackPanel Orientation="Vertical" Margin="0, 6">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource PropertyHeadingStyle}" />
-                <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding SelectedValue}" />
-            </StackPanel>
-        </DataTemplate>
-    </Window.Resources>
+    <Grid>
 
-    <ItemsControl ItemsSource="{Binding Settings}" Margin="32, 16">
-    </ItemsControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <local:WatermarkTextBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}"
+            Watermark="Search settings"
+            Margin="8,8,8,16"
+            Padding="12,3" />
+
+        <local:NavigationTree
+            Grid.Row="1"
+            Grid.Column="0"
+            MinWidth="128"
+            Pages="{Binding NavigationViewModel.Pages}"
+            SelectedSection="{Binding NavigationViewModel.SelectedSection, Mode=TwoWay}" />
+
+        <local:SettingsList 
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="24,0,0,0"
+            Settings="{Binding SettingsListViewModel.Settings}"
+            SearchViewModel="{Binding SearchViewModel}"
+            CurrentSection="{Binding Path=NavigationViewModel.SelectedSection, Mode=TwoWay}" />
+
+    </Grid>
+
 </Window>
