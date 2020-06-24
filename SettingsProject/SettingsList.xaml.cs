@@ -54,9 +54,16 @@ namespace SettingsProject
         }
 
         private bool _deferNextScrollEvent;
+        private bool _ignoreNextCurrentSectionChangeEvent;
 
         private void OnCurrentSectionChanged()
         {
+            if (_ignoreNextCurrentSectionChangeEvent)
+            {
+                _ignoreNextCurrentSectionChangeEvent = false;
+                return;
+            }
+
             var section = CurrentSection;
 
             var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
@@ -152,7 +159,13 @@ namespace SettingsProject
 
                     if (setting != null)
                     {
-                        CurrentSection = new NavigationSection(setting.Page, setting.Category);
+                        var section = new NavigationSection(setting.Page, setting.Category);
+
+                        if (section != CurrentSection)
+                        {
+                            _ignoreNextCurrentSectionChangeEvent = true;
+                            CurrentSection = section;
+                        }
                     }
 
                     return HitTestResultBehavior.Stop;
