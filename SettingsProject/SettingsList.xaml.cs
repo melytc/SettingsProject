@@ -75,6 +75,11 @@ namespace SettingsProject
             _scrollToTopGroup = group;
             _scrollToSubGroup = null;
 
+            if (group == null)
+            {
+                return;
+            }
+
             if (group.Items.Count != 0)
             {
                 var firstSubGroup = (CollectionViewGroup)group.Items[0];
@@ -87,7 +92,7 @@ namespace SettingsProject
 
             var pageGroupContainer = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(group);
 
-            pageGroupContainer.BringIntoView();
+            pageGroupContainer?.BringIntoView();
         }
 
         private CollectionViewGroup? _scrollToTopGroup;
