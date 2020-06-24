@@ -17,28 +17,24 @@ namespace SettingsProject
         ModifiedUnsaved
     }
 
-    internal abstract class SettingValue : INotifyPropertyChanged
+    internal interface ISettingValue : INotifyPropertyChanged
+    {
+        // null if this value applies to all configurations
+        public string? Configuration { get; }
+
+        public DataTemplate Template { get; }
+
+        public SettingModificationState ModificationState { get; }
+        
+        public object Value { get; }
+    }
+
+    internal abstract class SettingValue<T> : ISettingValue where T : notnull
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        // null if this value applies to all configurations
-        public abstract string? Configuration { get; }
-
-        public abstract DataTemplate Template { get; }
-
-        public abstract SettingModificationState ModificationState { get; }
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    internal abstract class SettingValue<T> : SettingValue
-    {
         private readonly IEqualityComparer<T> _comparer;
 
-        private SettingModificationState _modificationState = SettingModificationState.Default;
         private T _value;
 
         public T DefaultValue { get; }
@@ -53,7 +49,12 @@ namespace SettingsProject
             UpdateModificationState();
         }
 
-        public override SettingModificationState ModificationState => _modificationState;
+        public SettingModificationState ModificationState { get; private set; } = SettingModificationState.Default;
+
+        object ISettingValue.Value => Value;
+
+        public abstract string? Configuration { get; }
+        public abstract DataTemplate Template { get; }
 
         /// <summary>
         /// Gets and sets the current value of the property.
@@ -88,9 +89,14 @@ namespace SettingsProject
 
             if (state != ModificationState)
             {
-                _modificationState = state;
+                ModificationState = state;
                 OnPropertyChanged(nameof(ModificationState));
             }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -119,7 +125,8 @@ namespace SettingsProject
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly string? _description;
-        private bool _isVisible = true;
+        private bool _isSearchVisible = true;
+        private bool _isConditionalVisible = true;
 
         public string Name { get; }
 
@@ -138,28 +145,20 @@ namespace SettingsProject
 
         public ImmutableArray<SettingCommand> Commands { get; }
 
-        public ImmutableArray<SettingValue> Values { get; }
+        public ImmutableArray<ISettingValue> Values { get; }
 
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set
-            {
-                if (_isVisible == value)
-                    return;
-                _isVisible = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
         public bool HasCommands => !Commands.IsEmpty;
+        
+        public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);
 
-        protected Setting(string name, string? description, string page, string category, int priority, SettingValue value, ImmutableArray<SettingCommand> commands)
+        protected Setting(string name, string? description, string page, string category, int priority, ISettingValue value, ImmutableArray<SettingCommand> commands)
             : this(name, description, page, category, priority, ImmutableArray.Create(value), commands)
         {
         }
 
-        protected Setting(string name, string? description, string page, string category, int priority, ImmutableArray<SettingValue> values, ImmutableArray<SettingCommand> commands)
+        protected Setting(string name, string? description, string page, string category, int priority, ImmutableArray<ISettingValue> values, ImmutableArray<SettingCommand> commands)
         {
             Name = name;
             _description = description;
@@ -168,12 +167,82 @@ namespace SettingsProject
             Priority = priority;
             Values = values;
             Commands = commands;
+
+            foreach (var value in Values)
+            {
+                value.PropertyChanged += OnValueChanged;
+            }
+
+            void OnValueChanged(object _, PropertyChangedEventArgs e)
+            {
+                if (_dependentTargets == null || e.PropertyName != nameof(SettingValue<bool>.Value))
+                {
+                    return;
+                }
+
+                UpdateDependentVisibilities();
+            }
         }
 
-        public virtual bool MatchesSearchText(string searchString)
+        private void UpdateDependentVisibilities()
         {
-            return Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1 
-                || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1);
+            // TODO model this as a graph with edges so that multiple upstream properties may influence a single downstream one
+
+            if (_dependentTargets == null)
+            {
+                return;
+            }
+
+            foreach (var (target, visibleWhenValue) in _dependentTargets)
+            {
+                var wasVisible = target.IsVisible;
+
+                bool isConditionallyVisible = false;
+
+                // Target is visible if any upstream value matches
+                foreach (var value in Values)
+                {
+                    if (Equals(visibleWhenValue, value.Value))
+                    {
+                        isConditionallyVisible = true;
+                        break;
+                    }
+                }
+
+                target._isConditionalVisible = isConditionallyVisible;
+
+                if (wasVisible != target.IsVisible)
+                {
+                    target.OnPropertyChanged(nameof(IsVisible));
+                }
+            }
+        }
+
+        protected virtual bool MatchesSearchText(string searchString) => false;
+
+        private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
+
+        public void AddDependentTarget(Setting target, object visibleWhenValue)
+        {
+            _dependentTargets ??= new List<(Setting target, object visibleWhenValue)>();
+
+            _dependentTargets.Add((target, visibleWhenValue));
+
+            UpdateDependentVisibilities();
+        }
+
+        public void UpdateSearchState(string searchString)
+        {
+            var wasVisible = IsVisible;
+
+            _isSearchVisible = Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1
+                || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                || MatchesSearchText(searchString);
+
+            if (wasVisible != IsVisible)
+            {
+                OnPropertyChanged(nameof(IsVisible));
+            }
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -190,7 +259,7 @@ namespace SettingsProject
         }
 
         public StringSetting(string name, string? description, string page, string category, int priority, params ConfiguredStringSettingValue[] values)
-            : base(name, description, page, category, priority, values.ToImmutableArray<SettingValue>(), ToggleConfigurationCommands)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), ToggleConfigurationCommands)
         {
         }
     }
@@ -266,7 +335,7 @@ namespace SettingsProject
         }
 
         public BoolSetting(string name, string? description, string page, string category, int priority, params ConfiguredBoolSettingValue[] values)
-            : base(name, description, page, category, priority, values.ToImmutableArray<SettingValue>(), ToggleConfigurationCommands)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), ToggleConfigurationCommands)
         {
             foreach (var value in values)
             {
@@ -323,7 +392,7 @@ namespace SettingsProject
         }
 
         public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, IReadOnlyList<ConfiguredEnumSettingValue> values)
-            : base(name, description, page, category, priority, values.ToImmutableArray<SettingValue>(), ToggleConfigurationCommands)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), ToggleConfigurationCommands)
         {
             EnumValues = enumValues;
             
@@ -333,13 +402,8 @@ namespace SettingsProject
             }
         }
 
-        public override bool MatchesSearchText(string searchString)
+        protected override bool MatchesSearchText(string searchString)
         {
-            if (base.MatchesSearchText(searchString))
-            {
-                return true;
-            }
-
             foreach (var enumValue in EnumValues)
             {
                 if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
@@ -384,7 +448,7 @@ namespace SettingsProject
     internal class LinkAction : Setting
     {
         public LinkAction(string name, string? description, string page, string category, int priority)
-            : base(name, description, page, category, priority, ImmutableArray<SettingValue>.Empty, ImmutableArray<SettingCommand>.Empty)
+            : base(name, description, page, category, priority, ImmutableArray<ISettingValue>.Empty, ImmutableArray<SettingCommand>.Empty)
         {
         }
 

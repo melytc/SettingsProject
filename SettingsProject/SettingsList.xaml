@@ -60,7 +60,7 @@
                     <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
                     <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="local:SettingValue">
+                            <DataTemplate DataType="local:ISettingValue">
                                 <Border Name="SettingsBorder" BorderThickness="4,0,0,0" Padding="8,0,0,0" BorderBrush="Transparent">
                                     <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" />
                                 </Border>

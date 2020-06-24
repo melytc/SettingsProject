@@ -1,11 +1,136 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 #nullable enable
 
 namespace SettingsProject
 {
+    internal readonly struct SettingIdentity
+    {
+        public string Page { get; }
+        public string Category { get; }
+        public string Name { get; }
+
+        public SettingIdentity(string page, string category, string name)
+        {
+            Page = page;
+            Category = category;
+            Name = name;
+        }
+
+        public bool Equals(SettingIdentity other) => Page == other.Page && Category == other.Category && Name == other.Name;
+        public override bool Equals(object? obj) => obj is SettingIdentity other && Equals(other);
+        public static bool operator ==(SettingIdentity left, SettingIdentity right) => left.Equals(right);
+        public static bool operator !=(SettingIdentity left, SettingIdentity right) => !left.Equals(right);
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = Page.GetHashCode();
+                hashCode = (hashCode * 397) ^ Category.GetHashCode();
+                hashCode = (hashCode * 397) ^ Name.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public override string ToString() => $"{Page} | {Category} | {Name}";
+    }
+
+    internal readonly struct SettingCondition
+    {
+        public SettingIdentity Source { get; }
+        public object SourceValue { get; }
+        public SettingIdentity Target { get; }
+
+        public SettingCondition(SettingIdentity source, object sourceValue, SettingIdentity target)
+        {
+            Source = source;
+            SourceValue = sourceValue;
+            Target = target;
+        }
+    }
+
     internal static class SettingsLoader
     {
+        static SettingsLoader()
+        {
+            var settingByIdentity = DefaultSettings.ToDictionary(setting => setting.Identity);
+
+            foreach (var condition in DefaultConditions)
+            {
+                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source))
+                    throw new Exception("Unknown source: " + condition.Source);
+                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target))
+                    throw new Exception("Unknown target: " + condition.Target);
+
+                source.AddDependentTarget(target, condition.SourceValue);
+            }
+        }
+
+        public static readonly IReadOnlyList<SettingCondition> DefaultConditions = new[]
+        {
+            // Multi-targeting
+            new SettingCondition(
+                source: new SettingIdentity("Application", "General", "Multi-targeting"),
+                sourceValue: true,
+                target: new SettingIdentity("Application", "General", "Target frameworks")),
+            new SettingCondition(
+                source: new SettingIdentity("Application", "General", "Multi-targeting"),
+                sourceValue: false,
+                target: new SettingIdentity("Application", "General", "Target framework")),
+            // Resources
+            new SettingCondition(
+                source: new SettingIdentity("Application", "Resources", "Resources"),
+                sourceValue: "Icon and manifest",
+                target: new SettingIdentity("Application", "Resources", "Icon path")),
+            new SettingCondition(
+                source: new SettingIdentity("Application", "Resources", "Resources"),
+                sourceValue: "Icon and manifest",
+                target: new SettingIdentity("Application", "Resources", "Manifest path")),
+            new SettingCondition(
+                source: new SettingIdentity("Application", "Resources", "Resources"),
+                sourceValue: "Resource file",
+                target: new SettingIdentity("Application", "Resources", "Resource file path")),
+
+            new SettingCondition(
+                source: new SettingIdentity("Packaging", "General", "License specification"),
+                sourceValue: "Expression",
+                target: new SettingIdentity("Packaging", "General", "License expression")),
+            new SettingCondition(
+                source: new SettingIdentity("Packaging", "General", "License specification"),
+                sourceValue: "Expression",
+                target: new SettingIdentity("Packaging", "General", "Read about SPDX license expressions")),
+            new SettingCondition(
+                source: new SettingIdentity("Packaging", "General", "License specification"),
+                sourceValue: "File",
+                target: new SettingIdentity("Packaging", "General", "License file path")),
+
+            new SettingCondition(
+                source: new SettingIdentity("Debug", "General", "Launch type"),
+                sourceValue: "Executable",
+                target: new SettingIdentity("Debug", "General", "Executable path")),
+
+            new SettingCondition(
+                source: new SettingIdentity("Debug", "General", "Use remote machine"),
+                sourceValue: true,
+                target: new SettingIdentity("Debug", "General", "Remote machine host name")),
+            new SettingCondition(
+                source: new SettingIdentity("Debug", "General", "Use remote machine"),
+                sourceValue: true,
+                target: new SettingIdentity("Debug", "General", "Authentication mode")),
+
+            new SettingCondition(
+                source: new SettingIdentity("Signing", "General", "Signing"),
+                sourceValue: true,
+                target: new SettingIdentity("Signing", "General", "Key file path")),
+            new SettingCondition(
+                source: new SettingIdentity("Signing", "General", "Signing"),
+                sourceValue: true,
+                target: new SettingIdentity("Signing", "General", "Delay signing")),
+        };
+
         public static readonly IReadOnlyList<Setting> DefaultSettings = new Setting[]
         {
             /////////////
@@ -37,40 +162,34 @@ namespace SettingsProject
                 category: "General",
                 priority: 300,
                 new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: null)),
-//                trueSettings: new Setting[]
-//                {
-                    // TODO come up with a better editing experience, perhaps via a FlagsEnumSetting
-                    // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
-                    new StringSetting(
-                        name: "Target frameworks",
-                        description:
-                        "Specifies the semicolon-delimited list of frameworks that this project will target.",
-                        page: "Application",
-                        category: "General",
-                        priority: 310,
-                        new UnconfiguredStringSettingValue(initialValue: "net5", defaultValue: null)),
-//                },
-//                falseSettings: new Setting[]
-//                {
-                    new EnumSetting(
-                        name: "Target framework",
-                        description: "Specifies the framework that this project will target.",
-                        page: "Application",
-                        category: "General",
-                        priority: 320,
-                        enumValues: new[]
-                        {
-                            ".NET 5",
-                            ".NET Core 3.1",
-                            ".NET Core 3.0",
-                            ".NET Core 2.2",
-                            ".NET Core 2.1",
-                            ".NET Core 2.0",
-                            ".NET Core 1.1",
-                            ".NET Core 1.0"
-                        },
-                        new UnconfiguredEnumSettingValue(initialValue: ".NET 5", defaultValue: null)),
-//                }),
+            // TODO come up with a better editing experience, perhaps via a FlagsEnumSetting
+            // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
+            new StringSetting(
+                name: "Target frameworks",
+                description:
+                "Specifies the semicolon-delimited list of frameworks that this project will target.",
+                page: "Application",
+                category: "General",
+                priority: 310,
+                new UnconfiguredStringSettingValue(initialValue: "net5", defaultValue: null)),
+            new EnumSetting(
+                name: "Target framework",
+                description: "Specifies the framework that this project will target.",
+                page: "Application",
+                category: "General",
+                priority: 320,
+                enumValues: new[]
+                {
+                    ".NET 5",
+                    ".NET Core 3.1",
+                    ".NET Core 3.0",
+                    ".NET Core 2.2",
+                    ".NET Core 2.1",
+                    ".NET Core 2.0",
+                    ".NET Core 1.1",
+                    ".NET Core 1.0"
+                },
+                new UnconfiguredEnumSettingValue(initialValue: ".NET 5", defaultValue: null)),
             new LinkAction(
                 name: "Install other frameworks",
                 description: null,
@@ -106,55 +225,40 @@ namespace SettingsProject
                 enumValues: new[] { "(Not set)" },
                 new UnconfiguredEnumSettingValue(initialValue: "(Not set)", defaultValue: "(Not set)")),
 
-//            new RadioSetting(
-//                name: "Resources",
-//                initialValue: "Icon and manifest",
-//                defaultValue: "Icon and manifest",
-//                priority: 800,
-//                description: "Specifies how application resources will be managed.",
-//                page: "Application",
-//                category: "Resources",
-//                options: new[]
-//                {
-//                    new RadioOption(
-//                        name: "Icon and manifest",
-//                        description: null,
-//                        settings: new Setting[]
-//                        {
-                            // TODO make this IconBrowseSetting
-                            new StringSetting(
-                                name: "Icon path",
-                                description: "Path to the icon to embed into the output assembly.",
-                                page: "Application",
-                                category: "Resources",
-                                priority: 710,
-                                new UnconfiguredStringSettingValue(initialValue: "(Default Icon)", defaultValue: "(Default Icon)")),
-                            // TODO make this FileBrowseSetting
-                            // TODO this can appear disabled, find out why
-                            new EnumSetting(
-                                name: "Manifest path",
-                                description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
-                                page: "Application",
-                                category: "Resources",
-                                priority: 720,
-                                enumValues: new[] { "" },
-                                new UnconfiguredEnumSettingValue(initialValue: "", defaultValue: "")),
-//                        }),
-//                    new RadioOption(
-//                        name: "Resource file",
-//                        description: null,
-//                        settings: new Setting[]
-//                        {
-                            // TODO make this FileBrowseSetting
-                            new StringSetting(
-                                name: "Resource file path",
-                                description: "Specifies a Win32 res file to compile into this project.",
-                                page: "Application",
-                                category: "Resources",
-                                priority: 730,
-                                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
-//                        })
-//                }),
+            new EnumSetting(
+                name: "Resources",
+                description: "Specifies how application resources will be managed.",
+                page: "Application",
+                category: "Resources",
+                priority: 800,
+                enumValues: new[] { "Icon and manifest", "Resource file" },
+                new UnconfiguredEnumSettingValue(initialValue: "Icon and manifest", defaultValue: "Icon and manifest")),
+            // TODO make this IconBrowseSetting
+            new StringSetting(
+                name: "Icon path",
+                description: "Path to the icon to embed into the output assembly.",
+                page: "Application",
+                category: "Resources",
+                priority: 810,
+                new UnconfiguredStringSettingValue(initialValue: "(Default Icon)", defaultValue: "(Default Icon)")),
+            // TODO make this FileBrowseSetting
+            // TODO this can appear disabled, find out why
+            new EnumSetting(
+                name: "Manifest path",
+                description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
+                page: "Application",
+                category: "Resources",
+                priority: 820,
+                enumValues: new[] { "" },
+                new UnconfiguredEnumSettingValue(initialValue: "", defaultValue: "")),
+            // TODO make this FileBrowseSetting
+            new StringSetting(
+                name: "Resource file path",
+                description: "Specifies a Win32 res file to compile into this project.",
+                page: "Application",
+                category: "Resources",
+                priority: 830,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
 
             //////
             ///// ASSEMBLY INFORMATION
@@ -485,56 +589,37 @@ namespace SettingsProject
                 category: "General",
                 priority: 900,
                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-//            new RadioSetting(
-//                name: "License specification",
-//                initialValue: "None",
-//                defaultValue: "None",
-//                priority: 1000,
-//                description: "Controls how the package's license is specified.",
-//                page: "Packaging",
-//                category: "General",
-//                options: new[]
-//                {
-//                    new RadioOption(
-//                        name: "None",
-//                        description: "No license is specified for this package.",
-//                        settings: Array.Empty<Setting>()),
-//                    new RadioOption(
-//                        name: "Expression",
-//                        description: "The license is specified using a SPDX expression",
-//                        settings: new Setting[]
-//                        {
-                            // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
-                            new StringSetting(
-                                name: "License expression",
-                                description: "The SPDX expression that specifies the package's license.",
-                                page: "Packaging",
-                                category: "General",
-                                priority: 910,
-                                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                            new LinkAction(
-                                // https://spdx.org/licenses/
-                                name: "Read about SPDX license expressions",
-                                description: null,
-                                page: "Packaging",
-                                category: "General",
-                                priority: 920),
-//                        }),
-//                    new RadioOption(
-//                        name: "File",
-//                        description: "The license is provided in a file which will be included in the package.",
-//                        settings: new Setting[]
-//                        {
-                            // TODO make this FileBrowseSetting
-                            new StringSetting(
-                                name: "License file path",
-                                description: "The path to the license file to include in the package. May be relative to the project directory.",
-                                page: "Packaging",
-                                category: "General",
-                                priority: 930,
-                                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-//                        })
-//                }),
+            new EnumSetting(
+                name: "License specification",
+                description: "Controls how the package's license is specified.",
+                page: "Packaging",
+                category: "General",
+                priority: 1000,
+                enumValues: new[] { "None", "Expression", "File" },
+                new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
+            // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
+            new StringSetting(
+                name: "License expression",
+                description: "The SPDX expression that specifies the package's license.",
+                page: "Packaging",
+                category: "General",
+                priority: 910,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new LinkAction(
+                // https://spdx.org/licenses/
+                name: "Read about SPDX license expressions",
+                description: null,
+                page: "Packaging",
+                category: "General",
+                priority: 920),
+            // TODO make this FileBrowseSetting
+            new StringSetting(
+                name: "License file path",
+                description: "The path to the license file to include in the package. May be relative to the project directory.",
+                page: "Packaging",
+                category: "General",
+                priority: 930,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
                 // TODO make this IconBrowseSetting
                 new StringSetting(
                     name: "Package icon file",
@@ -606,35 +691,22 @@ namespace SettingsProject
                 ///// GENERAL
                 ////
                 
-//                new RadioSetting(
-//                    name: "Launch type",
-//                    description: null,
-//                    initialValue: "Project",
-//                    defaultValue: "Project",
-//                    priority: 100,
-//                    page: "Debug",
-//                    category: "General",
-//                    options: new[]
-//                    {
-//                        new RadioOption(
-//                            name: "Project",
-//                            description: null,
-//                            settings: Array.Empty<Setting>()),
-//                        new RadioOption(
-//                            name: "Executable",
-//                            description: null,
-//                            settings: new Setting[]
-//                            {
-                                // TODO make this FileBrowseSetting
-                                new StringSetting(
-                                    name: "Executable path",
-                                    description: "Path to the executable to debug.",
-                                    page: "Debug",
-                                    category: "General",
-                                    priority: 90,
-                                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-//                            })
-//                    }),
+                new EnumSetting(
+                    name: "Launch type",
+                    description: null,
+                    page: "Debug",
+                    category: "General",
+                    priority: 90,
+                    enumValues: new[] { "Project", "Executable" },
+                    new UnconfiguredEnumSettingValue(initialValue: "Project", defaultValue: "Project")),
+                // TODO make this FileBrowseSetting
+                new StringSetting(
+                    name: "Executable path",
+                    description: "Path to the executable to debug.",
+                    page: "Debug",
+                    category: "General",
+                    priority: 100,
+                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
                 new StringSetting(
                     name: "Application arguments",
                     description: "Arguments to be passed to the launched application.",
@@ -657,25 +729,22 @@ namespace SettingsProject
                     category: "General",
                     priority: 400,
                     new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
-//                    trueSettings: new Setting[]
-//                    {
-                        // TODO make this RemoteMachineSetting, with support for the 'Find' button
-                        new StringSetting(
-                            name: "Remote machine host name",
-                            description: null,
-                            page: "Debug",
-                            category: "General",
-                            priority: 410,
-                            new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                        new EnumSetting(
-                            name: "Authentication mode",
-                            description: null,
-                            page: "Debug",
-                            category: "General",
-                            priority: 420,
-                            enumValues: new[] { "None", "Windows" },
-                            new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
-//                    }),
+                // TODO make this RemoteMachineSetting, with support for the 'Find' button
+                new StringSetting(
+                    name: "Remote machine host name",
+                    description: null,
+                    page: "Debug",
+                    category: "General",
+                    priority: 410,
+                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new EnumSetting(
+                    name: "Authentication mode",
+                    description: null,
+                    page: "Debug",
+                    category: "General",
+                    priority: 420,
+                    enumValues: new[] { "None", "Windows" },
+                    new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
                 // TODO NameValueListSetting
                 new StringSetting(
                     name: "Environment variables",
@@ -715,26 +784,23 @@ namespace SettingsProject
                     priority: 92,
                     new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
                     supportsPerConfigurationValues: true),
-//                    trueSettings: new Setting[]
-//                    {
-                        // TODO StrongNameKeySetting -- with new/add and change password actions
-                        new StringSetting(
-                            name: "Key file path",
-                            description: "Choose a string name key file",
-                            page: "Signing",
-                            category: "General",
-                            priority: 110,
-                            new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null),
-                            supportsPerConfigurationValues: true),
-                        new BoolSetting(
-                            name: "Delay signing",
-                            description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
-                            page: "Signing",
-                            category: "General",
-                            priority: 120,
-                            new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
-                            supportsPerConfigurationValues: true),
-//                    }),
+                // TODO StrongNameKeySetting -- with new/add and change password actions
+                new StringSetting(
+                    name: "Key file path",
+                    description: "Choose a string name key file",
+                    page: "Signing",
+                    category: "General",
+                    priority: 110,
+                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null),
+                    supportsPerConfigurationValues: true),
+                new BoolSetting(
+                    name: "Delay signing",
+                    description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
+                    page: "Signing",
+                    category: "General",
+                    priority: 120,
+                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                    supportsPerConfigurationValues: true),
 
                 /////////////
                 //////////// CODE ANALYSIS
