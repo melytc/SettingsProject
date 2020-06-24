@@ -63,6 +63,7 @@
       <DependentUpon>NavigationTree.xaml</DependentUpon>
     </Compile>
     <Compile Include="Setting.cs" />
+    <Compile Include="SettingDataTemplateSelector.cs" />
     <Compile Include="SettingsList.xaml.cs">
       <DependentUpon>SettingsList.xaml</DependentUpon>
     </Compile>
