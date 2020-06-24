@@ -63,6 +63,9 @@
     <Compile Include="NavigationTree.xaml.cs">
       <DependentUpon>NavigationTree.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SearchBox.xaml.cs">
+      <DependentUpon>SearchBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Setting.cs" />
     <Compile Include="SettingDataTemplateSelector.cs" />
     <Compile Include="SettingsList.xaml.cs">
@@ -71,7 +74,6 @@
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="ViewModels.cs" />
     <Compile Include="VisualTreeUtil.cs" />
-    <Compile Include="WatermarkTextBox.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,11 +90,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsList.xaml">
+    <Page Include="SearchBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WatermarkTextBoxResources.xaml">
+    <Page Include="SettingsList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

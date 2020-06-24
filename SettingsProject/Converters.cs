@@ -13,8 +13,10 @@ namespace SettingsProject
         public static IValueConverter CollapsedWhenFalse { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Visible, falseVisibility: Visibility.Collapsed);
         public static IValueConverter CollapsedWhenTrue  { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Collapsed, falseVisibility: Visibility.Visible);
 
-        public static IValueConverter CollapsedWhenEmptyString   { get; } = new SingleValueVisibilityConverter(value: "", matchValue: Visibility.Collapsed, elseValue: Visibility.Visible);
-        public static IValueConverter CollapsedWhenNull          { get; } = new SingleValueVisibilityConverter(value: null, matchValue: Visibility.Collapsed, elseValue: Visibility.Visible);
+        public static IValueConverter CollapsedWhenEmptyString    { get; } = new LambdaConverter<string, Visibility>(s => string.IsNullOrEmpty(s) ? Visibility.Collapsed : Visibility.Visible);
+        public static IValueConverter CollapsedWhenNotEmptyString { get; } = new LambdaConverter<string, Visibility>(s => string.IsNullOrEmpty(s) ? Visibility.Visible : Visibility.Collapsed);
+
+        public static IValueConverter CollapsedWhenNull           { get; } = new SingleValueVisibilityConverter(value: null, matchValue: Visibility.Collapsed, elseValue: Visibility.Visible);
 
         public static IValueConverter DoubleToBottomThickness { get; } = new LambdaConverter<double, Thickness>(d => new Thickness(0, 0, 0, d));
 
