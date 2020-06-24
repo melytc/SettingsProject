@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -53,7 +52,6 @@ namespace SettingsProject
             set => SetValue(CurrentSectionProperty, value);
         }
 
-        private bool _deferNextScrollEvent;
         private bool _ignoreNextCurrentSectionChangeEvent;
 
         private void OnCurrentSectionChanged()
@@ -84,8 +82,6 @@ namespace SettingsProject
             }
 
             var pageGroupContainer = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(group);
-
-//            _deferNextScrollEvent = true;
 
             pageGroupContainer.BringIntoView();
         }
