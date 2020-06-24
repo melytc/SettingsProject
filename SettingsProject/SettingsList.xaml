@@ -43,7 +43,22 @@
                 <DataTemplate DataType="local:Setting">
                     <DockPanel Margin="0,0,0,24" Background="Transparent">
                         <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
-                            <fa5:ImageAwesome Margin="0,2,0,0" Name="CommandMenuButton" Icon="Solid_Cog" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10" Foreground="#888" Visibility="{Binding HasCommands, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                            <fa5:ImageAwesome Margin="0,2,0,0" Name="CommandMenuButton" Icon="Solid_Cog" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10" Foreground="#888" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.CollapsedWhenFalse}}" ContextMenuService.Placement="Bottom">
+                                <fa5:ImageAwesome.ContextMenu>
+                                    <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4" PlacementTarget="{Binding ElementName=CommandMenuButton}">
+                                        <MenuItem
+                                            Header="Use single value across configurations"
+                                            Command="{Binding ElementName=_settingsListControl, Path=UseSameValueAcrossConfigurationsCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay, Converter={x:Static local:Converters.Negate}}" />
+                                        <MenuItem
+                                            Header="Specify value per configuration"
+                                            Command="{Binding ElementName=_settingsListControl, Path=UseDifferentValuesAcrossConfigurationsCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay}" />
+                                    </ContextMenu>
+                                </fa5:ImageAwesome.ContextMenu>
+                            </fa5:ImageAwesome>
                         </ContentControl>
                         <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
                         <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
@@ -69,6 +84,9 @@
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+                        <DataTrigger Binding="{Binding ElementName=ContextMenu, Path=IsOpen}" Value="True">
+                            <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </local:SettingDataTemplateSelector.SettingTemplate>

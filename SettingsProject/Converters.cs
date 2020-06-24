@@ -18,6 +18,8 @@ namespace SettingsProject
 
         public static IValueConverter DoubleToBottomThickness { get; } = new LambdaConverter<double, Thickness>(d => new Thickness(0, 0, 0, d));
 
+        public static IValueConverter Negate { get; } = new LambdaConverter<bool, bool>(b => !b);
+
         private sealed class LambdaConverter<TFrom, TTo> : IValueConverter
         {
             private readonly Func<TFrom, TTo> _convert;

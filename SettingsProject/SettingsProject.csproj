@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Annotations.cs" />
     <Compile Include="Converters.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="NavigationTree.xaml.cs">
       <DependentUpon>NavigationTree.xaml</DependentUpon>

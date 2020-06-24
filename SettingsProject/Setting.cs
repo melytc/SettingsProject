@@ -100,33 +100,15 @@ namespace SettingsProject
         }
     }
 
-    // For drop-down menu on setting itself
-    internal class SettingCommand
-    {
-        public string Caption { get; }
-
-        // null if this command is not checkable
-        public bool? IsChecked { get; }
-
-        public SettingCommand(string caption)
-        {
-            Caption = caption;
-        }
-
-        public void Invoke(Setting setting)
-        {
-        }
-    }
-
     internal abstract class Setting : INotifyPropertyChanged
     {
-        public static ImmutableArray<SettingCommand> ToggleConfigurationCommands { get; } = ImmutableArray.Create(new SettingCommand("Use single value across configurations"), new SettingCommand("Specify value per configuration"));
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly string? _description;
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
+        private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
+        private ImmutableArray<ISettingValue> _values;
 
         public string Name { get; }
 
@@ -136,6 +118,10 @@ namespace SettingsProject
 
         public virtual bool HasDescription => !string.IsNullOrWhiteSpace(_description);
 
+        public bool HasPerConfigurationValues => Values.Any(value => value.Configuration != null);
+
+        public bool SupportsPerConfigurationValues { get; }
+
         public string Description => _description ?? "";
 
         /// <summary>
@@ -143,30 +129,35 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        public ImmutableArray<SettingCommand> Commands { get; }
-
-        public ImmutableArray<ISettingValue> Values { get; }
+        public ImmutableArray<ISettingValue> Values
+        {
+            get => _values;
+            set
+            {
+                _values = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasPerConfigurationValues));
+            }
+        }
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public bool HasCommands => !Commands.IsEmpty;
-        
         public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);
 
-        protected Setting(string name, string? description, string page, string category, int priority, ISettingValue value, ImmutableArray<SettingCommand> commands)
-            : this(name, description, page, category, priority, ImmutableArray.Create(value), commands)
+        protected Setting(string name, string? description, string page, string category, int priority, ISettingValue value, bool supportsPerConfigurationValues)
+            : this(name, description, page, category, priority, ImmutableArray.Create(value), supportsPerConfigurationValues)
         {
         }
 
-        protected Setting(string name, string? description, string page, string category, int priority, ImmutableArray<ISettingValue> values, ImmutableArray<SettingCommand> commands)
+        protected Setting(string name, string? description, string page, string category, int priority, ImmutableArray<ISettingValue> values, bool supportsPerConfigurationValues)
         {
             Name = name;
             _description = description;
             Page = page;
             Category = category;
             Priority = priority;
-            Values = values;
-            Commands = commands;
+            SupportsPerConfigurationValues = supportsPerConfigurationValues;
+            _values = values;
 
             foreach (var value in Values)
             {
@@ -220,8 +211,6 @@ namespace SettingsProject
 
         protected virtual bool MatchesSearchText(string searchString) => false;
 
-        private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
-
         public void AddDependentTarget(Setting target, object visibleWhenValue)
         {
             _dependentTargets ??= new List<(Setting target, object visibleWhenValue)>();
@@ -254,12 +243,12 @@ namespace SettingsProject
     internal class StringSetting : Setting
     {
         public StringSetting(string name, string? description, string page, string category, int priority, UnconfiguredStringSettingValue value, bool supportsPerConfigurationValues = false)
-            : base(name, description, page, category, priority, value, supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues)
         {
         }
 
         public StringSetting(string name, string? description, string page, string category, int priority, params ConfiguredStringSettingValue[] values)
-            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), ToggleConfigurationCommands)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), supportsPerConfigurationValues: true)
         {
         }
     }
@@ -294,7 +283,7 @@ namespace SettingsProject
     internal class MultiLineStringSetting : Setting
     {
         public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
-            : base(name, description, page, category, priority, new UnconfiguredMultilineStringSettingValue(initialValue, defaultValue ?? "", comparer ?? StringComparer.Ordinal), supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
+            : base(name, description, page, category, priority, new UnconfiguredMultilineStringSettingValue(initialValue, defaultValue ?? "", comparer ?? StringComparer.Ordinal), supportsPerConfigurationValues)
         {
         }
     }
@@ -329,13 +318,13 @@ namespace SettingsProject
     internal class BoolSetting : Setting
     {
         public BoolSetting(string name, string? description, string page, string category, int priority, UnconfiguredBoolSettingValue value, bool supportsPerConfigurationValues = false)
-            : base(name, description, page, category, priority, value, supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues)
         {
             value.Parent = this;
         }
 
         public BoolSetting(string name, string? description, string page, string category, int priority, params ConfiguredBoolSettingValue[] values)
-            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), ToggleConfigurationCommands)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), supportsPerConfigurationValues: true)
         {
             foreach (var value in values)
             {
@@ -385,14 +374,14 @@ namespace SettingsProject
 
         // Note: We might want to use IEnumValue here.
         public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, UnconfiguredEnumSettingValue value, bool supportsPerConfigurationValues = false)
-            : base(name, description, page, category, priority, value, supportsPerConfigurationValues ? ToggleConfigurationCommands : ImmutableArray<SettingCommand>.Empty)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues)
         {
             EnumValues = enumValues;
             value.Parent = this;
         }
 
         public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, IReadOnlyList<ConfiguredEnumSettingValue> values)
-            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), ToggleConfigurationCommands)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), supportsPerConfigurationValues: true)
         {
             EnumValues = enumValues;
             
@@ -448,7 +437,7 @@ namespace SettingsProject
     internal class LinkAction : Setting
     {
         public LinkAction(string name, string? description, string page, string category, int priority)
-            : base(name, description, page, category, priority, ImmutableArray<ISettingValue>.Empty, ImmutableArray<SettingCommand>.Empty)
+            : base(name, description, page, category, priority, ImmutableArray<ISettingValue>.Empty, supportsPerConfigurationValues: false)
         {
         }
 

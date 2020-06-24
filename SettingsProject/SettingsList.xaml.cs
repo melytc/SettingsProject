@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 
 #nullable enable
@@ -51,6 +52,9 @@ namespace SettingsProject
             get => (NavigationSection)GetValue(CurrentSectionProperty);
             set => SetValue(CurrentSectionProperty, value);
         }
+
+        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
+        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 
         private bool _ignoreNextCurrentSectionChangeEvent;
 
