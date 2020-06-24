@@ -299,8 +299,8 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 200,
-                new ConfiguredBoolSettingValue("Debug|AnyCPU", initialValue: true, defaultValue: true),
-                new ConfiguredBoolSettingValue("Release|AnyCPU", initialValue: false, defaultValue: false)),
+                new ConfiguredBoolSettingValue("Debug | AnyCPU", initialValue: true, defaultValue: true),
+                new ConfiguredBoolSettingValue("Release | AnyCPU", initialValue: false, defaultValue: false)),
             new BoolSetting(
                 name: "Define TRACE symbol",
                 description: "Specifies whether to define the TRACE compilation symbol.",
@@ -346,8 +346,8 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 800,
-                new ConfiguredBoolSettingValue("Debug|AnyCPU", initialValue: false, defaultValue: false),
-                new ConfiguredBoolSettingValue("Release|AnyCPU", initialValue: true, defaultValue: true)),
+                new ConfiguredBoolSettingValue("Debug | AnyCPU", initialValue: false, defaultValue: false),
+                new ConfiguredBoolSettingValue("Release | AnyCPU", initialValue: true, defaultValue: true)),
 
             //////
             ///// ERRORS AND WARNINGS
