@@ -22,6 +22,8 @@ namespace SettingsProject
         public override int GetHashCode() => unchecked(Page.GetHashCode() * 397) ^ Category.GetHashCode();
         public static bool operator ==(NavigationSection left, NavigationSection right) => left.Equals(right);
         public static bool operator !=(NavigationSection left, NavigationSection right) => !left.Equals(right);
+
+        public override string ToString() => $"{Page} | {Category}";
     }
 
     internal partial class NavigationTree
