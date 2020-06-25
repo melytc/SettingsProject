@@ -594,7 +594,7 @@ namespace SettingsProject
                 description: "Controls how the package's license is specified.",
                 page: "Packaging",
                 category: "General",
-                priority: 1000,
+                priority: 905,
                 enumValues: new[] { "None", "Expression", "File" },
                 new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
             // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
