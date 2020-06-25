@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 
 #nullable enable
@@ -53,10 +53,19 @@ namespace SettingsProject
             set => SetValue(CurrentSectionProperty, value);
         }
 
-        private bool _deferNextScrollEvent;
+        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
+        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
+
+        private bool _ignoreNextCurrentSectionChangeEvent;
 
         private void OnCurrentSectionChanged()
         {
+            if (_ignoreNextCurrentSectionChangeEvent)
+            {
+                _ignoreNextCurrentSectionChangeEvent = false;
+                return;
+            }
+
             var section = CurrentSection;
 
             var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
@@ -65,6 +74,11 @@ namespace SettingsProject
 
             _scrollToTopGroup = group;
             _scrollToSubGroup = null;
+
+            if (group == null)
+            {
+                return;
+            }
 
             if (group.Items.Count != 0)
             {
@@ -78,9 +92,7 @@ namespace SettingsProject
 
             var pageGroupContainer = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(group);
 
-//            _deferNextScrollEvent = true;
-
-            pageGroupContainer.BringIntoView();
+            pageGroupContainer?.BringIntoView();
         }
 
         private CollectionViewGroup? _scrollToTopGroup;
@@ -152,7 +164,13 @@ namespace SettingsProject
 
                     if (setting != null)
                     {
-                        CurrentSection = new NavigationSection(setting.Page, setting.Category);
+                        var section = new NavigationSection(setting.Page, setting.Category);
+
+                        if (section != CurrentSection)
+                        {
+                            _ignoreNextCurrentSectionChangeEvent = true;
+                            CurrentSection = section;
+                        }
                     }
 
                     return HitTestResultBehavior.Stop;

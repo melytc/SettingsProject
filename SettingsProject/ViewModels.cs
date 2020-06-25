@@ -31,7 +31,7 @@ namespace SettingsProject
             {
                 foreach (var setting in settings)
                 {
-                    setting.IsVisible = setting.MatchesSearchText(searchString);
+                    setting.UpdateSearchState(searchString);
                 }
             };
         }

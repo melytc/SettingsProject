@@ -24,19 +24,19 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <local:WatermarkTextBox
+        <local:SearchBox
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Text="{Binding SearchViewModel.SearchString, UpdateSourceTrigger=PropertyChanged}"
-            Watermark="Search settings"
+            SearchText="{Binding SearchViewModel.SearchString, Mode=TwoWay}"
+            WatermarkText="Search settings"
             Margin="8,8,8,16"
             Padding="12,3" />
 
         <local:NavigationTree
             Grid.Row="1"
             Grid.Column="0"
-            MinWidth="128"
+            MinWidth="160"
             Pages="{Binding NavigationViewModel.Pages}"
             SelectedSection="{Binding NavigationViewModel.SelectedSection, Mode=TwoWay}" />
 

@@ -6,10 +6,6 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="WatermarkTextBoxResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
             <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:UnconfiguredStringSettingValue">
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
             </DataTemplate>

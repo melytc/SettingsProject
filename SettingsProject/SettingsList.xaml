@@ -26,20 +26,71 @@
         <Style TargetType="local:HighlightTextBlock">
             <Setter Property="HighlightBrush" Value="Yellow" />
         </Style>
-<!--
-        <DataTemplate DataType="{x:Type local:LinkAction}">
-            <ContentControl Style="{StaticResource SettingContainer}">
-                <DockPanel LastChildFill="True">
-                    <local:HighlightTextBlock DockPanel.Dock="Top" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding HeadingText}" Style="{StaticResource PropertyHeadingStyle}" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    <TextBlock>
-                        <Hyperlink>
-                            <Run Text="{Binding LinkText, Mode=OneTime}" />
-                        </Hyperlink>
-                    </TextBlock>
-                </DockPanel>
-            </ContentControl>
-        </DataTemplate>
--->
+        <local:SettingDataTemplateSelector x:Key="SettingDataTemplateSelector">
+            <local:SettingDataTemplateSelector.LinkActionTemplate>
+                <DataTemplate DataType="{x:Type local:LinkAction}">
+                    <DockPanel Margin="0,0,0,24" Background="Transparent">
+                        <local:HighlightTextBlock DockPanel.Dock="Top" Margin="28,0,0,4" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding HeadingText}" FontWeight="Bold" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                        <TextBlock Margin="28,0,0,6">
+                            <Hyperlink>
+                                <Run Text="{Binding LinkText, Mode=OneTime}" />
+                            </Hyperlink>
+                        </TextBlock>
+                    </DockPanel>
+                </DataTemplate>
+            </local:SettingDataTemplateSelector.LinkActionTemplate>
+            <local:SettingDataTemplateSelector.SettingTemplate>
+                <DataTemplate DataType="local:Setting">
+                    <DockPanel Margin="0,0,0,24" Background="Transparent">
+                        <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
+                            <fa5:ImageAwesome Margin="0,2,0,0" Name="CommandMenuButton" Icon="Solid_Cog" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10" Foreground="#888" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.CollapsedWhenFalse}}" ContextMenuService.Placement="Bottom">
+                                <fa5:ImageAwesome.ContextMenu>
+                                    <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4" PlacementTarget="{Binding ElementName=CommandMenuButton}">
+                                        <MenuItem
+                                            Header="Use single value across configurations"
+                                            Command="{Binding ElementName=_settingsListControl, Path=UseSameValueAcrossConfigurationsCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay, Converter={x:Static local:Converters.Negate}}" />
+                                        <MenuItem
+                                            Header="Specify value per configuration"
+                                            Command="{Binding ElementName=_settingsListControl, Path=UseDifferentValuesAcrossConfigurationsCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay}" />
+                                    </ContextMenu>
+                                </fa5:ImageAwesome.ContextMenu>
+                            </fa5:ImageAwesome>
+                        </ContentControl>
+                        <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
+                        <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                        <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="local:ISettingValue">
+                                    <Border Name="SettingsBorder" BorderThickness="4,0,0,0" Padding="8,0,0,0" BorderBrush="Transparent">
+                                        <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" />
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.Modified}">
+                                            <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#CDCDCD" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.ModifiedUnsaved}">
+                                            <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#3296D5" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                    <DataTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding ElementName=ContextMenu, Path=IsOpen}" Value="True">
+                            <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </local:SettingDataTemplateSelector.SettingTemplate>
+        </local:SettingDataTemplateSelector>
     </UserControl.Resources>
 
     <ItemsControl
@@ -49,40 +100,8 @@
         VirtualizingStackPanel.ScrollUnit="Pixel"
         VirtualizingStackPanel.VirtualizationMode="Recycling"
         IsTabStop="False"
-        Focusable="False">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate DataType="local:Setting">
-                <DockPanel Margin="0,0,0,24" Background="Transparent">
-                    <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
-                        <fa5:ImageAwesome Margin="0,2,0,0" Name="CommandMenuButton" Icon="Solid_Cog" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10" Foreground="#888" Visibility="{Binding HasCommands, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    </ContentControl>
-                    <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
-                    <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                    <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="local:SettingValue">
-                                <Border Name="SettingsBorder" BorderThickness="4,0,0,0" Padding="8,0,0,0" BorderBrush="Transparent">
-                                    <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" />
-                                </Border>
-                                <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.Modified}">
-                                        <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#CDCDCD" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.ModifiedUnsaved}">
-                                        <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#3296D5" />
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </DockPanel>
-                <DataTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="False">
-                        <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Collapsed" />
-                    </Trigger>
-                </DataTemplate.Triggers>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
+        Focusable="False"
+        ItemTemplateSelector="{StaticResource SettingDataTemplateSelector}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel
@@ -106,13 +125,13 @@
                         <Setter Property="Control.Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type GroupItem}">
-                                    <StackPanel Background="Transparent">
+                                    <StackPanel Background="Transparent" Margin="0,0,0,24">
                                         <ContentPresenter
                                             Content="{TemplateBinding ContentControl.Content}"
                                             ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
                                             ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}"
                                             Name="PART_Header" />
-                                        <ItemsPresenter Name="ItemsPresenter" Margin="0,0,0,24" />
+                                        <ItemsPresenter Name="ItemsPresenter" />
                                     </StackPanel>
                                 </ControlTemplate>
                             </Setter.Value>
