@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace SettingsProject
 {
-    internal struct NavigationSection
+    internal readonly struct NavigationSection
     {
         public string Page { get; }
         public string Category { get; }
