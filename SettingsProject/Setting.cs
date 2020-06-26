@@ -199,8 +199,13 @@ namespace SettingsProject
 
     internal class MultiLineStringSetting : Setting
     {
-        public MultiLineStringSetting(string name, string initialValue, string? defaultValue, string? description, int priority, string page, string category, IEqualityComparer<string>? comparer = null, bool supportsPerConfigurationValues = false)
-            : base(name, description, page, category, priority, new UnconfiguredMultilineStringSettingValue(initialValue, defaultValue ?? "", comparer ?? StringComparer.Ordinal), supportsPerConfigurationValues)
+        public MultiLineStringSetting(string name, string? description, string page, string category, int priority, UnconfiguredMultilineStringSettingValue value, bool supportsPerConfigurationValues = false)
+            : base(name, description, page, category, priority, value, supportsPerConfigurationValues)
+        {
+        }
+
+        public MultiLineStringSetting(string name, string? description, string page, string category, int priority, params ConfiguredMultilineStringSettingValue[] values)
+            : base(name, description, page, category, priority, values.ToImmutableArray<ISettingValue>(), supportsPerConfigurationValues: true)
         {
         }
     }

@@ -439,20 +439,18 @@ namespace SettingsProject
             // TODO both these build events can be edited in a pop-out editor with macro support
             new MultiLineStringSetting(
                 name: "Pre-build event",
-                initialValue: "",
-                defaultValue: "",
-                priority: 70,
                 description: "Commands to execute before a build occurs.",
                 page: "Build Events",
-                category: "General"),
+                category: "General",
+                priority: 70,
+                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
             new MultiLineStringSetting(
                 name: "Post-build event",
-                initialValue: "",
-                defaultValue: "",
-                priority: 200,
                 description: "Commands to execute after a build completes.",
                 page: "Build Events",
-                category: "General"),
+                category: "General",
+                priority: 200,
+                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
             new EnumSetting(
                 name: "Run the post-build event",
                 description: "Controls when any post-build event is executed.",
@@ -530,12 +528,11 @@ namespace SettingsProject
                 new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
             new MultiLineStringSetting(
                 name: "Description",
-                initialValue: "",
-                defaultValue: null,
-                priority: 800,
                 description: null,
                 page: "Packaging",
-                category: "General"),
+                category: "General",
+                priority: 800,
+                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
             new StringSetting(
                 name: "Copyright",
                 description: null,
@@ -606,12 +603,11 @@ namespace SettingsProject
                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
             new MultiLineStringSetting(
                 name: "Release notes",
-                initialValue: "",
-                defaultValue: null,
-                priority: 1500,
                 description: null,
                 page: "Packaging",
-                category: "General"),
+                category: "General",
+                priority: 1500,
+                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
             // TODO this is a combo box with many languages listed
             new StringSetting(
                 name: "Assembly neutral language",
