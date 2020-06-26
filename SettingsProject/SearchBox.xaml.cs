@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+#nullable enable
+
 namespace SettingsProject
 {
     public partial class SearchBox
