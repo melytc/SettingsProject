@@ -574,217 +574,217 @@ namespace SettingsProject
                 category: "General",
                 priority: 930,
                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                // TODO make this IconBrowseSetting
-                new StringSetting(
-                    name: "Package icon file",
-                    description: "Path to the icon to include in and use for the package.",
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1100,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                new StringSetting(
-                    name: "Repository URL",
-                    description: null, // TODO describe what this URL means
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1200,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                // TODO provide feedback about valid URLs here
-                new StringSetting(
-                    name: "Repository type",
-                    description: null,
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1300,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                new StringSetting(
-                    name: "Tags",
-                    description: null, // TODO describe how this is delimited
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1400,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                new MultiLineStringSetting(
-                    name: "Release notes",
-                    initialValue: "",
-                    defaultValue: null,
-                    priority: 1500,
-                    description: null,
-                    page: "Packaging",
-                    category: "General"),
-                // TODO this is a combo box with many languages listed
-                new StringSetting(
-                    name: "Assembly neutral language",
-                    description: null,
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1600,
-                    new UnconfiguredStringSettingValue(initialValue: "(None)", defaultValue: "(None)")),
-                // TODO VersionSetting
-                new StringSetting(
-                    name: "Assembly version",
-                    description: null,
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1700,
-                    new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
-                // TODO VersionSetting
-                new StringSetting(
-                    name: "Assembly file version",
-                    description: null,
-                    page: "Packaging",
-                    category: "General",
-                    priority: 1800,
-                    new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
- 
-                /////////////
-                //////////// PACKAGING
-                ///////////
+            // TODO make this IconBrowseSetting
+            new StringSetting(
+                name: "Package icon file",
+                description: "Path to the icon to include in and use for the package.",
+                page: "Packaging",
+                category: "General",
+                priority: 1100,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new StringSetting(
+                name: "Repository URL",
+                description: null, // TODO describe what this URL means
+                page: "Packaging",
+                category: "General",
+                priority: 1200,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            // TODO provide feedback about valid URLs here
+            new StringSetting(
+                name: "Repository type",
+                description: null,
+                page: "Packaging",
+                category: "General",
+                priority: 1300,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new StringSetting(
+                name: "Tags",
+                description: null, // TODO describe how this is delimited
+                page: "Packaging",
+                category: "General",
+                priority: 1400,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new MultiLineStringSetting(
+                name: "Release notes",
+                initialValue: "",
+                defaultValue: null,
+                priority: 1500,
+                description: null,
+                page: "Packaging",
+                category: "General"),
+            // TODO this is a combo box with many languages listed
+            new StringSetting(
+                name: "Assembly neutral language",
+                description: null,
+                page: "Packaging",
+                category: "General",
+                priority: 1600,
+                new UnconfiguredStringSettingValue(initialValue: "(None)", defaultValue: "(None)")),
+            // TODO VersionSetting
+            new StringSetting(
+                name: "Assembly version",
+                description: null,
+                page: "Packaging",
+                category: "General",
+                priority: 1700,
+                new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
+            // TODO VersionSetting
+            new StringSetting(
+                name: "Assembly file version",
+                description: null,
+                page: "Packaging",
+                category: "General",
+                priority: 1800,
+                new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
 
-                //////
-                ///// GENERAL
-                ////
-                
-                new EnumSetting(
-                    name: "Launch type",
-                    description: null,
-                    page: "Debug",
-                    category: "General",
-                    priority: 90,
-                    enumValues: new[] { "Project", "Executable" },
-                    new UnconfiguredEnumSettingValue(initialValue: "Project", defaultValue: "Project")),
-                // TODO make this FileBrowseSetting
-                new StringSetting(
-                    name: "Executable path",
-                    description: "Path to the executable to debug.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 100,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                new StringSetting(
-                    name: "Application arguments",
-                    description: "Arguments to be passed to the launched application.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 200,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                // TODO make this FileBrowseSetting
-                new StringSetting(
-                    name: "Working directory",
-                    description: "Absolute path to the working directory.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 300,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                new BoolSetting(
-                    name: "Use remote machine",
-                    description: "The debug target is on a remote machine.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 400,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
-                // TODO make this RemoteMachineSetting, with support for the 'Find' button
-                new StringSetting(
-                    name: "Remote machine host name",
-                    description: null,
-                    page: "Debug",
-                    category: "General",
-                    priority: 410,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-                new EnumSetting(
-                    name: "Authentication mode",
-                    description: null,
-                    page: "Debug",
-                    category: "General",
-                    priority: 420,
-                    enumValues: new[] { "None", "Windows" },
-                    new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
-                // TODO NameValueListSetting
-                new StringSetting(
-                    name: "Environment variables",
-                    description: "Specifies environment variables to be set for the launched application.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 500,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
-                new BoolSetting(
-                    name: "Native code debugging",
-                    description: "Enable native code debugging.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 600,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
-                new BoolSetting(
-                    name: "SQL Server debugging",
-                    description: "Enable SQL Server debugging.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 700,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+            /////////////
+            //////////// PACKAGING
+            ///////////
 
-                /////////////
-                //////////// SIGNING
-                ///////////
+            //////
+            ///// GENERAL
+            ////
+            
+            new EnumSetting(
+                name: "Launch type",
+                description: null,
+                page: "Debug",
+                category: "General",
+                priority: 90,
+                enumValues: new[] { "Project", "Executable" },
+                new UnconfiguredEnumSettingValue(initialValue: "Project", defaultValue: "Project")),
+            // TODO make this FileBrowseSetting
+            new StringSetting(
+                name: "Executable path",
+                description: "Path to the executable to debug.",
+                page: "Debug",
+                category: "General",
+                priority: 100,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new StringSetting(
+                name: "Application arguments",
+                description: "Arguments to be passed to the launched application.",
+                page: "Debug",
+                category: "General",
+                priority: 200,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            // TODO make this FileBrowseSetting
+            new StringSetting(
+                name: "Working directory",
+                description: "Absolute path to the working directory.",
+                page: "Debug",
+                category: "General",
+                priority: 300,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new BoolSetting(
+                name: "Use remote machine",
+                description: "The debug target is on a remote machine.",
+                page: "Debug",
+                category: "General",
+                priority: 400,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+            // TODO make this RemoteMachineSetting, with support for the 'Find' button
+            new StringSetting(
+                name: "Remote machine host name",
+                description: null,
+                page: "Debug",
+                category: "General",
+                priority: 410,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new EnumSetting(
+                name: "Authentication mode",
+                description: null,
+                page: "Debug",
+                category: "General",
+                priority: 420,
+                enumValues: new[] { "None", "Windows" },
+                new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
+            // TODO NameValueListSetting
+            new StringSetting(
+                name: "Environment variables",
+                description: "Specifies environment variables to be set for the launched application.",
+                page: "Debug",
+                category: "General",
+                priority: 500,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
+            new BoolSetting(
+                name: "Native code debugging",
+                description: "Enable native code debugging.",
+                page: "Debug",
+                category: "General",
+                priority: 600,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+            new BoolSetting(
+                name: "SQL Server debugging",
+                description: "Enable SQL Server debugging.",
+                page: "Debug",
+                category: "General",
+                priority: 700,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
 
-                //////
-                ///// GENERAL
-                ////
-                
-                new BoolSetting(
-                    name: "Signing",
-                    description: "Sign the project's output assembly.",
-                    page: "Signing",
-                    category: "General",
-                    priority: 92,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
-                    supportsPerConfigurationValues: true),
-                // TODO StrongNameKeySetting -- with new/add and change password actions
-                new StringSetting(
-                    name: "Key file path",
-                    description: "Choose a string name key file",
-                    page: "Signing",
-                    category: "General",
-                    priority: 110,
-                    new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null),
-                    supportsPerConfigurationValues: true),
-                new BoolSetting(
-                    name: "Delay signing",
-                    description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
-                    page: "Signing",
-                    category: "General",
-                    priority: 120,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
-                    supportsPerConfigurationValues: true),
+            /////////////
+            //////////// SIGNING
+            ///////////
 
-                /////////////
-                //////////// CODE ANALYSIS
-                ///////////
+            //////
+            ///// GENERAL
+            ////
+            
+            new BoolSetting(
+                name: "Signing",
+                description: "Sign the project's output assembly.",
+                page: "Signing",
+                category: "General",
+                priority: 92,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                supportsPerConfigurationValues: true),
+            // TODO StrongNameKeySetting -- with new/add and change password actions
+            new StringSetting(
+                name: "Key file path",
+                description: "Choose a string name key file",
+                page: "Signing",
+                category: "General",
+                priority: 110,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null),
+                supportsPerConfigurationValues: true),
+            new BoolSetting(
+                name: "Delay signing",
+                description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
+                page: "Signing",
+                category: "General",
+                priority: 120,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                supportsPerConfigurationValues: true),
 
-                //////
-                ///// ANALYZERS
-                ////
-                
-                new LinkAction(
-                    name: "What are the benefits of source code analyzers?",
-                    description: null,
-                    page: "Code Analysis",
-                    category: "Analyzers",
-                    priority: 94),
-                new BoolSetting(
-                    name: "Run on build",
-                    description: "Run analyzers during build.",
-                    page: "Code Analysis",
-                    category: "Analyzers",
-                    priority: 200,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
-                    supportsPerConfigurationValues: true),
-                new BoolSetting(
-                    name: "Run live analysis",
-                    description: "Run analyzers live in the IDE.",
-                    page: "Code Analysis",
-                    category: "Analyzers",
-                    priority: 300,
-                    new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+            /////////////
+            //////////// CODE ANALYSIS
+            ///////////
+
+            //////
+            ///// ANALYZERS
+            ////
+            
+            new LinkAction(
+                name: "What are the benefits of source code analyzers?",
+                description: null,
+                page: "Code Analysis",
+                category: "Analyzers",
+                priority: 94),
+            new BoolSetting(
+                name: "Run on build",
+                description: "Run analyzers during build.",
+                page: "Code Analysis",
+                category: "Analyzers",
+                priority: 200,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                supportsPerConfigurationValues: true),
+            new BoolSetting(
+                name: "Run live analysis",
+                description: "Run analyzers live in the IDE.",
+                page: "Code Analysis",
+                category: "Analyzers",
+                priority: 300,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
        };
     }
 }
