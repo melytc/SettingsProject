@@ -49,17 +49,17 @@ namespace SettingsProject
                 target: new SettingIdentity("Application", "Resources", "Resource file path")),
 
             new SettingCondition(
-                source: new SettingIdentity("Packaging", "General", "License specification"),
+                source: new SettingIdentity("Packaging", "License", "License specification"),
                 sourceValue: "Expression",
-                target: new SettingIdentity("Packaging", "General", "License expression")),
+                target: new SettingIdentity("Packaging", "License", "License expression")),
             new SettingCondition(
-                source: new SettingIdentity("Packaging", "General", "License specification"),
+                source: new SettingIdentity("Packaging", "License", "License specification"),
                 sourceValue: "Expression",
-                target: new SettingIdentity("Packaging", "General", "Read about SPDX license expressions")),
+                target: new SettingIdentity("Packaging", "License", "Read about SPDX license expressions")),
             new SettingCondition(
-                source: new SettingIdentity("Packaging", "General", "License specification"),
+                source: new SettingIdentity("Packaging", "License", "License specification"),
                 sourceValue: "File",
-                target: new SettingIdentity("Packaging", "General", "License file path")),
+                target: new SettingIdentity("Packaging", "License", "License file path")),
 
             new SettingCondition(
                 source: new SettingIdentity("Debug", "General", "Launch type"),
@@ -483,13 +483,6 @@ namespace SettingsProject
                 priority: 80,
                 new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
                 supportsPerConfigurationValues: true),
-            new BoolSetting(
-                name: "Require license acceptance",
-                description: "Controls whether consumers of the generated package are presented with a license acceptance prompt when adding a reference to this package.",
-                page: "Packaging",
-                category: "General",
-                priority: 200,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
             new StringSetting(
                 name: "Package ID",
                 description: null,
@@ -539,37 +532,6 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 900,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-            new EnumSetting(
-                name: "License specification",
-                description: "Controls how the package's license is specified.",
-                page: "Packaging",
-                category: "General",
-                priority: 905,
-                enumValues: new[] { "None", "Expression", "File" },
-                new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
-            // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
-            new StringSetting(
-                name: "License expression",
-                description: "The SPDX expression that specifies the package's license.",
-                page: "Packaging",
-                category: "General",
-                priority: 910,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-            new LinkAction(
-                // https://spdx.org/licenses/
-                name: "Read about SPDX license expressions",
-                description: null,
-                page: "Packaging",
-                category: "General",
-                priority: 920),
-            // TODO make this FileBrowseSetting
-            new StringSetting(
-                name: "License file path",
-                description: "The path to the license file to include in the package. May be relative to the project directory.",
-                page: "Packaging",
-                category: "General",
-                priority: 930,
                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
             // TODO make this IconBrowseSetting
             new StringSetting(
@@ -632,6 +594,49 @@ namespace SettingsProject
                 category: "General",
                 priority: 1800,
                 new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
+
+            //////
+            ///// LICENSE
+            ////
+            
+            new BoolSetting(
+                name: "Require license acceptance",
+                description: "Controls whether consumers of the generated package are presented with a license acceptance prompt when adding a reference to this package.",
+                page: "Packaging",
+                category: "License",
+                priority: 85,
+                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+            new EnumSetting(
+                name: "License specification",
+                description: "Controls how the package's license is specified.",
+                page: "Packaging",
+                category: "License",
+                priority: 200,
+                enumValues: new[] { "None", "Expression", "File" },
+                new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
+            // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
+            new StringSetting(
+                name: "License expression",
+                description: "The SPDX expression that specifies the package's license.",
+                page: "Packaging",
+                category: "License",
+                priority: 300,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+            new LinkAction(
+                // https://spdx.org/licenses/
+                name: "Read about SPDX license expressions",
+                description: null,
+                page: "Packaging",
+                category: "License",
+                priority: 400),
+            // TODO make this FileBrowseSetting
+            new StringSetting(
+                name: "License file path",
+                description: "The path to the license file to include in the package. May be relative to the project directory.",
+                page: "Packaging",
+                category: "License",
+                priority: 500,
+                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
 
             /////////////
             //////////// PACKAGING
