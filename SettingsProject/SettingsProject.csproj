@@ -60,6 +60,7 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
+    <Compile Include="NavigationSection.cs" />
     <Compile Include="NavigationTree.xaml.cs">
       <DependentUpon>NavigationTree.xaml</DependentUpon>
     </Compile>
@@ -67,11 +68,14 @@
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Setting.cs" />
+    <Compile Include="SettingCondition.cs" />
     <Compile Include="SettingDataTemplateSelector.cs" />
+    <Compile Include="SettingIdentity.cs" />
     <Compile Include="SettingsList.xaml.cs">
       <DependentUpon>SettingsList.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsLoader.cs" />
+    <Compile Include="SettingValue.cs" />
     <Compile Include="ViewModels.cs" />
     <Compile Include="VisualTreeUtil.cs" />
     <Page Include="MainWindow.xaml">
