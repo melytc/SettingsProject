@@ -60,6 +60,7 @@
     <Compile Include="Converters.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
+    <Compile Include="NavigationSection.cs" />
     <Compile Include="NavigationTree.xaml.cs">
       <DependentUpon>NavigationTree.xaml</DependentUpon>
     </Compile>
