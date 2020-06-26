@@ -67,7 +67,9 @@
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Setting.cs" />
+    <Compile Include="SettingCondition.cs" />
     <Compile Include="SettingDataTemplateSelector.cs" />
+    <Compile Include="SettingIdentity.cs" />
     <Compile Include="SettingsList.xaml.cs">
       <DependentUpon>SettingsList.xaml</DependentUpon>
     </Compile>
