@@ -75,6 +75,7 @@
       <DependentUpon>SettingsList.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsLoader.cs" />
+    <Compile Include="SettingValue.cs" />
     <Compile Include="ViewModels.cs" />
     <Compile Include="VisualTreeUtil.cs" />
     <Page Include="MainWindow.xaml">
