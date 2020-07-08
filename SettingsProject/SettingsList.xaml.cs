@@ -53,8 +53,8 @@ namespace SettingsProject
             set => SetValue(CurrentSectionProperty, value);
         }
 
-        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
-        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
+//        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
+//        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 
         private bool _ignoreNextCurrentSectionChangeEvent;
 

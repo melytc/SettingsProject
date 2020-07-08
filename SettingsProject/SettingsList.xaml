@@ -44,15 +44,15 @@
                         <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
                             <TextBlock Margin="0,2,0,0" Name="CommandMenuButton" FontFamily="Segoe MDL2 Assets" FontSize="12" TextAlignment="Left" Text="&#xE713;" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="#888" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.CollapsedWhenFalse}}" ContextMenuService.Placement="Bottom">
                                 <TextBlock.ContextMenu>
-                                    <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4" PlacementTarget="{Binding ElementName=CommandMenuButton}">
+                                    <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4">
+                                        <!-- Command="{Binding ElementName=_settingsListControl, Path=UseSameValueAcrossConfigurationsCommand}" -->
                                         <MenuItem
                                             Header="Use single value across configurations"
-                                            Command="{Binding ElementName=_settingsListControl, Path=UseSameValueAcrossConfigurationsCommand}"
                                             CommandParameter="{Binding}"
                                             IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay, Converter={x:Static local:Converters.Negate}}" />
+                                        <!-- Command="{Binding ElementName=_settingsListControl, Path=UseDifferentValuesAcrossConfigurationsCommand}" -->
                                         <MenuItem
                                             Header="Specify value per configuration"
-                                            Command="{Binding ElementName=_settingsListControl, Path=UseDifferentValuesAcrossConfigurationsCommand}"
                                             CommandParameter="{Binding}"
                                             IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay}" />
                                     </ContextMenu>
