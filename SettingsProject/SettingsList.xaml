@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SettingsProject"
-             xmlns:fa5="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="800"
              d:DesignWidth="600"
@@ -43,22 +42,22 @@
                 <DataTemplate DataType="local:Setting">
                     <DockPanel Margin="0,0,0,24" Background="Transparent">
                         <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
-                            <fa5:ImageAwesome Margin="0,2,0,0" Name="CommandMenuButton" Icon="Solid_Cog" VerticalAlignment="Top" HorizontalAlignment="Left" Width="10" Foreground="#888" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.CollapsedWhenFalse}}" ContextMenuService.Placement="Bottom">
-                                <fa5:ImageAwesome.ContextMenu>
-                                    <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4" PlacementTarget="{Binding ElementName=CommandMenuButton}">
+                            <TextBlock Margin="0,2,0,0" Name="CommandMenuButton" FontFamily="Segoe MDL2 Assets" FontSize="12" TextAlignment="Left" Text="&#xE713;" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="#888" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.CollapsedWhenFalse}}" ContextMenuService.Placement="Bottom">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4">
+                                        <!-- Command="{Binding ElementName=_settingsListControl, Path=UseSameValueAcrossConfigurationsCommand}" -->
                                         <MenuItem
                                             Header="Use single value across configurations"
-                                            Command="{Binding ElementName=_settingsListControl, Path=UseSameValueAcrossConfigurationsCommand}"
                                             CommandParameter="{Binding}"
                                             IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay, Converter={x:Static local:Converters.Negate}}" />
+                                        <!-- Command="{Binding ElementName=_settingsListControl, Path=UseDifferentValuesAcrossConfigurationsCommand}" -->
                                         <MenuItem
                                             Header="Specify value per configuration"
-                                            Command="{Binding ElementName=_settingsListControl, Path=UseDifferentValuesAcrossConfigurationsCommand}"
                                             CommandParameter="{Binding}"
                                             IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay}" />
                                     </ContextMenu>
-                                </fa5:ImageAwesome.ContextMenu>
-                            </fa5:ImageAwesome>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
                         </ContentControl>
                         <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
                         <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />

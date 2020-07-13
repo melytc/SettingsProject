@@ -5,7 +5,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SettingsProject"
-    xmlns:fa5="http://schemas.fontawesome.com/icons/"
     mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -41,10 +40,11 @@
                 <Button.Template>
                     <ControlTemplate>
                         <Border Background="Transparent" Padding="4">
-                            <fa5:ImageAwesome
-                                Icon="Solid_AlignJustify"
+                            <TextBlock
+                                FontFamily="Segoe MDL2 Assets"
+                                Text="&#xE947;"
                                 VerticalAlignment="Center"
-                                Width="14"
+                                FontSize="16"
                                 Foreground="#888"
                                 Visibility="{Binding ElementName=_searchBox, Path=SearchText, Converter={x:Static local:Converters.CollapsedWhenEmptyString}}" />
                         </Border>
