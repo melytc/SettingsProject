@@ -56,9 +56,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Annotations.cs" />
-    <Compile Include="Converters.cs" />
-    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Utils\Annotations.cs" />
+    <Compile Include="Utils\Converters.cs" />
+    <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="NavigationSection.cs" />
     <Compile Include="NavigationTree.xaml.cs">
@@ -77,7 +77,7 @@
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingValue.cs" />
     <Compile Include="ViewModels.cs" />
-    <Compile Include="VisualTreeUtil.cs" />
+    <Compile Include="Utils\VisualTreeUtil.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
