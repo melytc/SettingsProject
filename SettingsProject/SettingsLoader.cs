@@ -639,7 +639,7 @@ namespace SettingsProject
                 new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
 
             /////////////
-            //////////// PACKAGING
+            //////////// DEBUG
             ///////////
 
             //////
