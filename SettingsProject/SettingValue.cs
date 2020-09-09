@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -12,7 +11,7 @@ namespace SettingsProject
         // null if this value applies to all configurations
         string? Configuration { get; }
 
-        DataTemplate Template { get; }
+        DataTemplate? Template { get; }
 
         object Value { get; }
 
@@ -21,33 +20,31 @@ namespace SettingsProject
         ISettingValue Clone();
     }
 
-    internal abstract class SettingValue<T> : ISettingValue where T : notnull
+    internal abstract class SettingValue : ISettingValue
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private T _value;
+        private object _value;
 
-        protected SettingValue(T value)
+        protected SettingValue(object value)
         {
             _value = value;
         }
 
-        object ISettingValue.Value => Value;
-
         public abstract string? Configuration { get; }
-        public abstract DataTemplate Template { get; }
+        public abstract DataTemplate? Template { get; }
 
         public Setting? Parent { get; set; }
 
         /// <summary>
         /// Gets and sets the current value of the property.
         /// </summary>
-        public T Value
+        public object Value
         {
             get => _value;
             set
             {
-                if (!EqualityComparer<T>.Default.Equals(value, Value))
+                if (!Equals(value, Value))
                 {
                     _value = value;
                     OnPropertyChanged(nameof(Value));
@@ -61,5 +58,30 @@ namespace SettingsProject
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    internal sealed class UnconfiguredSettingValue : SettingValue
+    {
+        public UnconfiguredSettingValue(object value)
+            : base(value)
+        {
+        }
+
+        public override DataTemplate? Template => Parent?.Metadata.Editor?.UnconfiguredDataTemplate;
+        public override string? Configuration => null;
+        public override ISettingValue Clone() => new UnconfiguredSettingValue(Value);
+    }
+
+    internal sealed class ConfiguredSettingValue : SettingValue
+    {
+        public ConfiguredSettingValue(string configuration, object value)
+            : base(value)
+        {
+            Configuration = configuration;
+        }
+
+        public override DataTemplate? Template => Parent?.Metadata.Editor?.ConfiguredDataTemplate;
+        public override string Configuration { get; }
+        public override ISettingValue Clone() => new ConfiguredSettingValue(Configuration, Value);
     }
 }

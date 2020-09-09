@@ -28,74 +28,83 @@ namespace SettingsProject
             {
                 // TODO make this FileBrowseSetting
                 kind == LaunchProfileKind.Executable
-                    ? new StringSetting(
+                    ? new Setting(
                         name: "Executable path",
                         description: "Path to the executable to debug.",
                         page: "Debug",
                         category: "General",
                         priority: 100,
-                        new UnconfiguredStringSettingValue("devenv.exe"))
+                        editorType: "String",
+                        new UnconfiguredSettingValue("devenv.exe"))
                     : null,
-                new StringSetting(
+                new Setting(
                     name: "Application arguments",
                     description: "Arguments to be passed to the launched application.",
                     page: "Debug",
                     category: "General",
                     priority: 200,
-                    new UnconfiguredStringSettingValue("/rootSuffix Exp")),
+                    editorType: "String",
+                    new UnconfiguredSettingValue("/rootSuffix Exp")),
                 // TODO make this FileBrowseSetting
-                new StringSetting(
+                new Setting(
                     name: "Working directory",
                     description: "Absolute path to the working directory.",
                     page: "Debug",
                     category: "General",
                     priority: 300,
-                    new UnconfiguredStringSettingValue("")),
-                new BoolSetting(
+                    editorType: "String",
+                    new UnconfiguredSettingValue("")),
+                new Setting(
                     name: "Use remote machine",
                     description: "The debug target is on a remote machine.",
                     page: "Debug",
                     category: "General",
                     priority: 400,
-                    new UnconfiguredBoolSettingValue(false)),
+                    editorType: "Bool",
+                    new UnconfiguredSettingValue(false)),
                 // TODO make this RemoteMachineSetting, with support for the 'Find' button
-                new StringSetting(
+                new Setting(
                     name: "Remote machine host name",
                     description: null,
                     page: "Debug",
                     category: "General",
                     priority: 410,
-                    new UnconfiguredStringSettingValue("")),
-                new EnumSetting(
+                    editorType: "String",
+                    new UnconfiguredSettingValue("")),
+                new Setting(
                     name: "Authentication mode",
                     description: null,
                     page: "Debug",
                     category: "General",
                     priority: 420,
                     enumValues: ImmutableArray.Create("None", "Windows"),
-                    new UnconfiguredEnumSettingValue("None")),
+                    editorType: "Enum",
+                    value: new UnconfiguredSettingValue("None")),
                 // TODO NameValueListSetting
-                new StringSetting(
+                new Setting(
                     name: "Environment variables",
                     description: "Specifies environment variables to be set for the launched application.",
                     page: "Debug",
                     category: "General",
                     priority: 500,
-                    new UnconfiguredStringSettingValue("")),
-                new BoolSetting(
+                    editorType: "String",
+                    new UnconfiguredSettingValue("")),
+                new Setting(
                     name: "Native code debugging",
                     description: "Enable native code debugging.",
                     page: "Debug",
                     category: "General",
                     priority: 600,
-                    new UnconfiguredBoolSettingValue(false)),
-                new BoolSetting(
+                    editorType: "Bool",
+                    new UnconfiguredSettingValue(false)),
+                new Setting(
                     name: "SQL Server debugging",
                     description: "Enable SQL Server debugging.",
                     page: "Debug",
                     category: "General",
                     priority: 700,
-                    new UnconfiguredBoolSettingValue(false)),
+                    editorType: "Bool",
+                    new UnconfiguredSettingValue(false)),
             }.Where(setting => setting != null)!.ToImmutableArray<Setting>();
 
             var settingByIdentity = settings.ToDictionary(setting => setting.Identity);

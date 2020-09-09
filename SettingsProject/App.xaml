@@ -7,45 +7,45 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:UnconfiguredStringSettingValue">
+            <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:UnconfiguredSettingValue">
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
             </DataTemplate>
 
-            <DataTemplate x:Key="ConfiguredStringSettingValueTemplate" DataType="local:ConfiguredStringSettingValue">
+            <DataTemplate x:Key="ConfiguredStringSettingValueTemplate" DataType="local:ConfiguredSettingValue">
                 <DockPanel Margin="0,2">
                     <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
                     <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
                 </DockPanel>
             </DataTemplate>
 
-            <DataTemplate x:Key="UnconfiguredMultilineStringSettingValueTemplate" DataType="local:UnconfiguredMultilineStringSettingValue">
+            <DataTemplate x:Key="UnconfiguredMultilineStringSettingValueTemplate" DataType="local:UnconfiguredSettingValue">
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
             </DataTemplate>
 
-            <DataTemplate x:Key="ConfiguredMultilineStringSettingValueTemplate" DataType="local:ConfiguredMultilineStringSettingValue">
+            <DataTemplate x:Key="ConfiguredMultilineStringSettingValueTemplate" DataType="local:ConfiguredSettingValue">
                 <DockPanel Margin="0,2">
                     <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
                     <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
                 </DockPanel>
             </DataTemplate>
 
-            <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:UnconfiguredBoolSettingValue">
+            <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:UnconfiguredSettingValue">
                 <CheckBox IsChecked="{Binding Value}">
                     <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
                 </CheckBox>
             </DataTemplate>
 
-            <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:ConfiguredBoolSettingValue">
+            <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:ConfiguredSettingValue">
                 <CheckBox Margin="0,2" IsChecked="{Binding Value}">
                     <TextBlock Text="{Binding Configuration}" TextWrapping="Wrap" />
                 </CheckBox>
             </DataTemplate>
 
-            <DataTemplate x:Key="UnconfiguredEnumSettingValueTemplate" DataType="local:UnconfiguredEnumSettingValue">
+            <DataTemplate x:Key="UnconfiguredEnumSettingValueTemplate" DataType="local:UnconfiguredSettingValue">
                 <ComboBox ItemsSource="{Binding Parent.EnumValues}" SelectedItem="{Binding Value}" />
             </DataTemplate>
 
-            <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:ConfiguredEnumSettingValue">
+            <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:ConfiguredSettingValue">
                 <DockPanel Margin="0,2">
                     <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
                     <ComboBox ItemsSource="{Binding Parent.EnumValues}" SelectedItem="{Binding Value}" />
