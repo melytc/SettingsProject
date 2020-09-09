@@ -17,13 +17,15 @@ namespace SettingsProject
         public SettingModificationState ModificationState { get; }
 
         public object Value { get; }
+        
+        ISettingValue Clone();
     }
 
     internal abstract class SettingValue<T> : ISettingValue where T : notnull
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly IEqualityComparer<T> _comparer;
+        protected IEqualityComparer<T> Comparer { get; }
 
         private T _value;
 
@@ -32,7 +34,7 @@ namespace SettingsProject
 
         protected SettingValue(T initialValue, T defaultValue, IEqualityComparer<T>? comparer = null)
         {
-            _comparer = comparer ?? EqualityComparer<T>.Default;
+            Comparer = comparer ?? EqualityComparer<T>.Default;
             InitialValue = initialValue;
             DefaultValue = defaultValue;
             _value = initialValue;
@@ -54,7 +56,7 @@ namespace SettingsProject
             get => _value;
             set
             {
-                if (!_comparer.Equals(value, Value))
+                if (!Comparer.Equals(value, Value))
                 {
                     _value = value;
                     OnPropertyChanged(nameof(Value));
@@ -68,11 +70,11 @@ namespace SettingsProject
             // ModificationState can only change when Value changes
 
             var state = SettingModificationState.Default;
-            if (!_comparer.Equals(_value, InitialValue))
+            if (!Comparer.Equals(_value, InitialValue))
             {
                 state = SettingModificationState.ModifiedUnsaved;
             }
-            else if (!_comparer.Equals(_value, DefaultValue))
+            else if (!Comparer.Equals(_value, DefaultValue))
             {
                 state = SettingModificationState.Modified;
             }
@@ -83,6 +85,8 @@ namespace SettingsProject
                 OnPropertyChanged(nameof(ModificationState));
             }
         }
+
+        public abstract ISettingValue Clone();
 
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
