@@ -101,17 +101,6 @@ namespace SettingsProject
             }
         }
 
-        protected virtual bool MatchesSearchText(string searchString)
-        {
-            foreach (var enumValue in Metadata.EnumValues)
-            {
-                if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
-                    return true;
-            }
-
-            return false;
-        }
-
         public void AddDependentTarget(Setting target, object visibleWhenValue)
         {
             _dependentTargets ??= new List<(Setting target, object visibleWhenValue)>();
@@ -133,9 +122,20 @@ namespace SettingsProject
             {
                 OnPropertyChanged(nameof(IsVisible));
             }
+
+            bool MatchesSearchText(string searchString)
+            {
+                foreach (var enumValue in Metadata.EnumValues)
+                {
+                    if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        return true;
+                }
+
+                return false;
+            }
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -360,6 +360,7 @@ namespace SettingsProject
         private LinkAction(SettingMetadata metadata)
             : base(metadata)
         {
+            Values = ImmutableArray<ISettingValue>.Empty;
         }
 
         public string HeadingText => HasDescription ? Name : "";
