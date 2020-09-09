@@ -82,17 +82,9 @@
                       <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
                         <ItemsControl.ItemTemplate>
                           <DataTemplate DataType="local:ISettingValue">
-                            <Border Name="SettingsBorder" BorderThickness="4,0,0,0" Padding="8,0,0,0" BorderBrush="Transparent">
+                            <Border Padding="12,0,0,0">
                               <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" />
                             </Border>
-                            <DataTemplate.Triggers>
-                              <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.Modified}">
-                                <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#CDCDCD" />
-                              </DataTrigger>
-                              <DataTrigger Binding="{Binding ModificationState}" Value="{x:Static local:SettingModificationState.ModifiedUnsaved}">
-                                <Setter TargetName="SettingsBorder" Property="BorderBrush" Value="#3296D5" />
-                              </DataTrigger>
-                            </DataTemplate.Triggers>
                           </DataTemplate>
                         </ItemsControl.ItemTemplate>
                       </ItemsControl>

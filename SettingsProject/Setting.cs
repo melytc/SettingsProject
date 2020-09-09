@@ -10,13 +10,6 @@ using System.Windows;
 
 namespace SettingsProject
 {
-    internal enum SettingModificationState
-    {
-        Default,
-        Modified,
-        ModifiedUnsaved
-    }
-
     internal abstract class Setting : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -14,8 +14,6 @@ namespace SettingsProject
 
         public DataTemplate Template { get; }
 
-        public SettingModificationState ModificationState { get; }
-
         public object Value { get; }
         
         ISettingValue Clone();
@@ -38,10 +36,7 @@ namespace SettingsProject
             InitialValue = initialValue;
             DefaultValue = defaultValue;
             _value = initialValue;
-            UpdateModificationState();
         }
-
-        public SettingModificationState ModificationState { get; private set; } = SettingModificationState.Default;
 
         object ISettingValue.Value => Value;
 
@@ -60,29 +55,7 @@ namespace SettingsProject
                 {
                     _value = value;
                     OnPropertyChanged(nameof(Value));
-                    UpdateModificationState();
                 }
-            }
-        }
-
-        private void UpdateModificationState()
-        {
-            // ModificationState can only change when Value changes
-
-            var state = SettingModificationState.Default;
-            if (!Comparer.Equals(_value, InitialValue))
-            {
-                state = SettingModificationState.ModifiedUnsaved;
-            }
-            else if (!Comparer.Equals(_value, DefaultValue))
-            {
-                state = SettingModificationState.Modified;
-            }
-
-            if (state != ModificationState)
-            {
-                ModificationState = state;
-                OnPropertyChanged(nameof(ModificationState));
             }
         }
 
