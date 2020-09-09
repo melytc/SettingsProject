@@ -144,7 +144,7 @@ namespace SettingsProject
         public abstract Setting Clone();
     }
 
-    internal class StringSetting : Setting
+    internal sealed class StringSetting : Setting
     {
         public StringSetting(string name, string? description, string page, string category, int priority, UnconfiguredStringSettingValue value, bool supportsPerConfigurationValues = false)
             : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
@@ -195,7 +195,7 @@ namespace SettingsProject
         public override ISettingValue Clone() => new ConfiguredStringSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
     }
 
-    internal class MultiLineStringSetting : Setting
+    internal sealed class MultiLineStringSetting : Setting
     {
         public MultiLineStringSetting(string name, string? description, string page, string category, int priority, UnconfiguredMultilineStringSettingValue value, bool supportsPerConfigurationValues = false)
             : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
@@ -246,7 +246,7 @@ namespace SettingsProject
         public override ISettingValue Clone() => new ConfiguredMultilineStringSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
     }
 
-    internal class BoolSetting : Setting
+    internal sealed class BoolSetting : Setting
     {
         public BoolSetting(string name, string? description, string page, string category, int priority, UnconfiguredBoolSettingValue value, bool supportsPerConfigurationValues = false)
             : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
@@ -322,7 +322,7 @@ namespace SettingsProject
         public override ISettingValue Clone() => new ConfiguredBoolSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
     }
 
-    internal class EnumSetting : Setting
+    internal sealed class EnumSetting : Setting
     {
         public IReadOnlyList<string> EnumValues { get; }
 
@@ -409,7 +409,7 @@ namespace SettingsProject
         public override ISettingValue Clone() => new ConfiguredEnumSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
     }
 
-    internal class LinkAction : Setting
+    internal sealed class LinkAction : Setting
     {
         public LinkAction(string name, string? description, string page, string category, int priority)
             : base(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: false))
