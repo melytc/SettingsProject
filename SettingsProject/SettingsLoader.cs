@@ -23,6 +23,8 @@ namespace SettingsProject
             }
         }
 
+        // TODO control 'Prefer 32-bit' visibility based on target framework(s)
+
         public static readonly IReadOnlyList<SettingCondition> DefaultConditions = new[]
         {
             // Multi-targeting
