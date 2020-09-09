@@ -54,9 +54,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LaunchProfileKind.cs" />
+    <Compile Include="LaunchProfilesWindowViewModel.cs" />
+    <Compile Include="LaunchProfileViewModel.cs" />
     <Compile Include="RenameLabel.cs" />
     <Compile Include="Utils\Annotations.cs" />
     <Compile Include="Utils\Converters.cs" />
+    <Compile Include="LaunchProfilesWindow.xaml.cs">
+      <DependentUpon>LaunchProfilesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="NavigationSection.cs" />
@@ -77,6 +83,10 @@
     <Compile Include="SettingValue.cs" />
     <Compile Include="ViewModels.cs" />
     <Compile Include="Utils\VisualTreeUtil.cs" />
+    <Page Include="LaunchProfilesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

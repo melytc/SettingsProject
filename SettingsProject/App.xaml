@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SettingsProject"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             StartupUri="DebugSettingsWindow.xaml">
+             StartupUri="LaunchProfilesWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
 

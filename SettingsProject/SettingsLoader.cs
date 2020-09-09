@@ -64,20 +64,6 @@ namespace SettingsProject
                 target: new SettingIdentity("Packaging", "License", "License file path")),
 
             new SettingCondition(
-                source: new SettingIdentity("Debug", "General", "Launch type"),
-                sourceValue: "Executable",
-                target: new SettingIdentity("Debug", "General", "Executable path")),
-
-            new SettingCondition(
-                source: new SettingIdentity("Debug", "General", "Use remote machine"),
-                sourceValue: true,
-                target: new SettingIdentity("Debug", "General", "Remote machine host name")),
-            new SettingCondition(
-                source: new SettingIdentity("Debug", "General", "Use remote machine"),
-                sourceValue: true,
-                target: new SettingIdentity("Debug", "General", "Authentication mode")),
-
-            new SettingCondition(
                 source: new SettingIdentity("Signing", "General", "Signing"),
                 sourceValue: true,
                 target: new SettingIdentity("Signing", "General", "Key file path")),
@@ -648,82 +634,13 @@ namespace SettingsProject
             ///// GENERAL
             ////
             
-            new EnumSetting(
-                name: "Launch type",
+            // TODO make this link action show the launch profiles UI
+            new LinkAction(
+                name: "Manage launch profiles",
                 description: null,
                 page: "Debug",
                 category: "General",
-                priority: 90,
-                enumValues: new[] { "Project", "Executable" },
-                new UnconfiguredEnumSettingValue(initialValue: "Project", defaultValue: "Project")),
-            // TODO make this FileBrowseSetting
-            new StringSetting(
-                name: "Executable path",
-                description: "Path to the executable to debug.",
-                page: "Debug",
-                category: "General",
-                priority: 100,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-            new StringSetting(
-                name: "Application arguments",
-                description: "Arguments to be passed to the launched application.",
-                page: "Debug",
-                category: "General",
-                priority: 200,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-            // TODO make this FileBrowseSetting
-            new StringSetting(
-                name: "Working directory",
-                description: "Absolute path to the working directory.",
-                page: "Debug",
-                category: "General",
-                priority: 300,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-            new BoolSetting(
-                name: "Use remote machine",
-                description: "The debug target is on a remote machine.",
-                page: "Debug",
-                category: "General",
-                priority: 400,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
-            // TODO make this RemoteMachineSetting, with support for the 'Find' button
-            new StringSetting(
-                name: "Remote machine host name",
-                description: null,
-                page: "Debug",
-                category: "General",
-                priority: 410,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
-            new EnumSetting(
-                name: "Authentication mode",
-                description: null,
-                page: "Debug",
-                category: "General",
-                priority: 420,
-                enumValues: new[] { "None", "Windows" },
-                new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
-            // TODO NameValueListSetting
-            new StringSetting(
-                name: "Environment variables",
-                description: "Specifies environment variables to be set for the launched application.",
-                page: "Debug",
-                category: "General",
-                priority: 500,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
-            new BoolSetting(
-                name: "Native code debugging",
-                description: "Enable native code debugging.",
-                page: "Debug",
-                category: "General",
-                priority: 600,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
-            new BoolSetting(
-                name: "SQL Server debugging",
-                description: "Enable SQL Server debugging.",
-                page: "Debug",
-                category: "General",
-                priority: 700,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+                priority: 90),
 
             /////////////
             //////////// SIGNING
