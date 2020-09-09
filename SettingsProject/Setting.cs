@@ -26,24 +26,19 @@ namespace SettingsProject
         private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
         private ImmutableArray<ISettingValue> _values;
 
-        public string Name { get; }
+        protected SettingMetadata Metadata { get; }
 
-        public string Page { get; }
+        public string Name => Metadata.Name;
+        public string Page => Metadata.Page;
+        public string Category => Metadata.Category;
+        public string? Description => Metadata.Description;
+        public int Priority => Metadata.Priority;
+        public SettingIdentity Identity => Metadata.Identity;
+        public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
-        public string Category { get; }
-
-        public string? Description { get; }
-
-        public virtual bool HasDescription => !string.IsNullOrWhiteSpace(Description);
+        public virtual bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description);
 
         public bool HasPerConfigurationValues => Values.Any(value => value.Configuration != null);
-
-        public bool SupportsPerConfigurationValues { get; }
-
-        /// <summary>
-        /// Relative priority of the setting, to use when ordering items in the UI.
-        /// </summary>
-        public int Priority { get; }
 
         public ImmutableArray<ISettingValue> Values
         {
@@ -77,16 +72,9 @@ namespace SettingsProject
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);
-
-        protected Setting(string name, string? description, string page, string category, int priority, bool supportsPerConfigurationValues)
+        protected Setting(SettingMetadata metadata)
         {
-            Name = name;
-            Description = description;
-            Page = page;
-            Category = category;
-            Priority = priority;
-            SupportsPerConfigurationValues = supportsPerConfigurationValues;
+            Metadata = metadata;
         }
 
         private void UpdateDependentVisibilities()
@@ -159,23 +147,23 @@ namespace SettingsProject
     internal class StringSetting : Setting
     {
         public StringSetting(string name, string? description, string page, string category, int priority, UnconfiguredStringSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(name, description, page, category, priority, supportsPerConfigurationValues)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public StringSetting(string name, string? description, string page, string category, int priority, params ConfiguredStringSettingValue[] values)
-            : this(name, description, page, category, priority, supportsPerConfigurationValues: true)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
 
-        private StringSetting(string name, string? description, string page, string category, int priority, bool supportsPerConfigurationValues)
-            : base(name, description, page, category, priority, supportsPerConfigurationValues)
+        private StringSetting(SettingMetadata metadata)
+            : base(metadata)
         {
         }
 
-        public override Setting Clone() => new StringSetting(Name, Description, Page, Category, Priority) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
+        public override Setting Clone() => new StringSetting(Metadata) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
     }
 
     internal sealed class UnconfiguredStringSettingValue : SettingValue<string>
@@ -210,23 +198,23 @@ namespace SettingsProject
     internal class MultiLineStringSetting : Setting
     {
         public MultiLineStringSetting(string name, string? description, string page, string category, int priority, UnconfiguredMultilineStringSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(name, description, page, category, priority, supportsPerConfigurationValues)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public MultiLineStringSetting(string name, string? description, string page, string category, int priority, params ConfiguredMultilineStringSettingValue[] values)
-            : this(name, description, page, category, priority, supportsPerConfigurationValues: true)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
 
-        private MultiLineStringSetting(string name, string? description, string page, string category, int priority, bool supportsPerConfigurationValues)
-            : base(name, description, page, category, priority, supportsPerConfigurationValues)
+        private MultiLineStringSetting(SettingMetadata metadata)
+            : base(metadata)
         {
         }
 
-        public override Setting Clone() => new MultiLineStringSetting(Name, Description, Page, Category, Priority, SupportsPerConfigurationValues) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
+        public override Setting Clone() => new MultiLineStringSetting(Metadata) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
     }
 
     internal sealed class UnconfiguredMultilineStringSettingValue : SettingValue<string>
@@ -261,19 +249,19 @@ namespace SettingsProject
     internal class BoolSetting : Setting
     {
         public BoolSetting(string name, string? description, string page, string category, int priority, UnconfiguredBoolSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(name, description, page, category, priority, supportsPerConfigurationValues)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public BoolSetting(string name, string? description, string page, string category, int priority, params ConfiguredBoolSettingValue[] values)
-            : this(name, description, page, category, priority, supportsPerConfigurationValues: true)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
 
-        private BoolSetting(string name, string? description, string page, string category, int priority, bool supportsPerConfigurationValues)
-            : base(name, description, page, category, priority, supportsPerConfigurationValues)
+        private BoolSetting(SettingMetadata metadata)
+            : base(metadata)
         {
         }
 
@@ -296,7 +284,7 @@ namespace SettingsProject
 
         public override bool HasDescription => Values.All(value => value.Configuration != null);
         
-        public override Setting Clone() => new BoolSetting(Name, Description, Page, Category, Priority, SupportsPerConfigurationValues) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
+        public override Setting Clone() => new BoolSetting(Metadata) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
     }
 
     internal sealed class UnconfiguredBoolSettingValue : SettingValue<bool>
@@ -340,19 +328,19 @@ namespace SettingsProject
 
         // Note: We might want to use IEnumValue here.
         public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, UnconfiguredEnumSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(name, description, page, category, priority, enumValues, supportsPerConfigurationValues)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues), enumValues)
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, IReadOnlyList<ConfiguredEnumSettingValue> values)
-            : this(name, description, page, category, priority, enumValues, supportsPerConfigurationValues: true)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true), enumValues)
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
 
-        private EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, bool supportsPerConfigurationValues)
-            : base(name, description, page, category, priority, supportsPerConfigurationValues)
+        private EnumSetting(SettingMetadata metadata, IReadOnlyList<string> enumValues)
+            : base(metadata)
         {
             EnumValues = enumValues;
         }
@@ -385,7 +373,7 @@ namespace SettingsProject
             return false;
         }
 
-        public override Setting Clone() => new EnumSetting(Name, Description, Page, Category, Priority, EnumValues, SupportsPerConfigurationValues) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
+        public override Setting Clone() => new EnumSetting(Metadata, EnumValues) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
     }
 
     internal sealed class UnconfiguredEnumSettingValue : SettingValue<string>
@@ -424,15 +412,20 @@ namespace SettingsProject
     internal class LinkAction : Setting
     {
         public LinkAction(string name, string? description, string page, string category, int priority)
-            : base(name, description, page, category, priority, supportsPerConfigurationValues: false)
+            : base(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: false))
         {
             Values = ImmutableArray<ISettingValue>.Empty;
         }
 
+        private LinkAction(SettingMetadata metadata)
+            : base(metadata)
+        {
+        }
+
         public string HeadingText => HasDescription ? Name : "";
         
-        public string LinkText => HasDescription ? Description : Name;
+        public string LinkText => Description ?? Name;
 
-        public override Setting Clone() => new LinkAction(Name, Description, Page, Category, Priority);
+        public override Setting Clone() => new LinkAction(Metadata);
     }
 }
