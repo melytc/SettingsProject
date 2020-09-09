@@ -90,6 +90,16 @@
                 </DataTemplate>
             </local:SettingDataTemplateSelector.SettingTemplate>
         </local:SettingDataTemplateSelector>
+        <ControlTemplate x:Key="NavigableControlTemplate">
+            <ScrollViewer Focusable="False" ScrollChanged="OnScrollChanged" Name="scroll">
+               <ItemsPresenter SnapsToDevicePixels="true" Margin="{Binding ElementName=scroll, Path=ActualHeight, Converter={x:Static local:Converters.DoubleToBottomThickness}}" />
+            </ScrollViewer>
+        </ControlTemplate>
+        <ControlTemplate x:Key="NonNavigableControlTemplate">
+            <ScrollViewer Focusable="False" Name="scroll">
+               <ItemsPresenter SnapsToDevicePixels="true" Margin="0,16" />
+            </ScrollViewer>
+        </ControlTemplate>
     </UserControl.Resources>
 
     <ItemsControl

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
 
 #nullable enable
@@ -30,6 +29,12 @@ namespace SettingsProject
             typeof(SettingsList),
             new PropertyMetadata(default(NavigationSection), (d, e) => ((SettingsList)d).OnCurrentSectionChanged()));
 
+        public static readonly DependencyProperty IsNavigableProperty = DependencyProperty.Register(
+            nameof(IsNavigable),
+            typeof(bool),
+            typeof(SettingsList),
+            new PropertyMetadata(true, (d, e) => ((SettingsList)d).OnIsNavigableChanged()));
+
         public SettingsList()
         {
             InitializeComponent();
@@ -53,10 +58,23 @@ namespace SettingsProject
             set => SetValue(CurrentSectionProperty, value);
         }
 
+        public bool IsNavigable
+        {
+            get => (bool)GetValue(IsNavigableProperty);
+            set => SetValue(IsNavigableProperty, value);
+        }
+
 //        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 //        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 
         private bool _ignoreNextCurrentSectionChangeEvent;
+
+        private void OnIsNavigableChanged()
+        {
+            _itemsControl.Template = IsNavigable
+                ? (ControlTemplate)FindResource("NavigableControlTemplate")
+                : (ControlTemplate)FindResource("NonNavigableControlTemplate");
+        }
 
         private void OnCurrentSectionChanged()
         {
