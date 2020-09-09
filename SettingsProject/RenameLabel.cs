@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft;
 
 #nullable enable
 
@@ -51,14 +52,15 @@ namespace SettingsProject
             _textBox = (TextBox?)GetTemplateChild("PART_TextBox");
             _textBlock = (TextBlock?)GetTemplateChild("PART_TextBlock");
 
-            Debug.Assert(_textBlock != null && _textBox != null);
+            Assumes.NotNull(_textBlock);
+            Assumes.NotNull(_textBox);
 
             _textBox.LostFocus += delegate { IsRenaming = false; };
             _textBox.KeyUp += (sender, args) =>
             {
                 if (args.Key == Key.Escape)
                 {
-                    Debug.Assert(_previousValue != null);
+                    Assumes.NotNull(_previousValue);
 
                     // roll back to previous value
                     Text = _previousValue;
@@ -77,7 +79,8 @@ namespace SettingsProject
 
         private void OnIsRenamingChanged(bool newValue)
         {
-            Debug.Assert(_textBlock != null && _textBox != null);
+            Assumes.NotNull(_textBlock);
+            Assumes.NotNull(_textBox);
 
             if (newValue)
             {
