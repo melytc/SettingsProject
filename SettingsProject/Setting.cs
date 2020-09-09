@@ -21,7 +21,6 @@ namespace SettingsProject
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly string? _description;
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
         private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
@@ -33,13 +32,13 @@ namespace SettingsProject
 
         public string Category { get; }
 
-        public virtual bool HasDescription => !string.IsNullOrWhiteSpace(_description);
+        public string? Description { get; }
+
+        public virtual bool HasDescription => !string.IsNullOrWhiteSpace(Description);
 
         public bool HasPerConfigurationValues => Values.Any(value => value.Configuration != null);
 
         public bool SupportsPerConfigurationValues { get; }
-
-        public string Description => _description ?? "";
 
         /// <summary>
         /// Relative priority of the setting, to use when ordering items in the UI.
@@ -83,7 +82,7 @@ namespace SettingsProject
         protected Setting(string name, string? description, string page, string category, int priority, bool supportsPerConfigurationValues)
         {
             Name = name;
-            _description = description;
+            Description = description;
             Page = page;
             Category = category;
             Priority = priority;
