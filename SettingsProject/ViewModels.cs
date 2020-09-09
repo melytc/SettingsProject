@@ -21,7 +21,7 @@ namespace SettingsProject
         {
             var settings = SettingsLoader.DefaultSettings;
 
-            SettingsListViewModel = new SettingsListViewModel(settings);
+            SettingsListViewModel = new SettingsListViewModel(settings, useGrouping: true);
 
             NavigationViewModel = new NavigationViewModel(settings);
 
@@ -218,7 +218,7 @@ namespace SettingsProject
     {
         public IReadOnlyList<Setting> Settings { get; }
 
-        public SettingsListViewModel(IReadOnlyList<Setting> settings)
+        public SettingsListViewModel(IReadOnlyList<Setting> settings, bool useGrouping)
         {
             Settings = settings;
 
@@ -242,7 +242,7 @@ namespace SettingsProject
             // Specify the property to sort on, and direction to sort.
             view.SortDescriptions.Add(new SortDescription(nameof(Setting.Priority), ListSortDirection.Ascending));
 
-            if (view.CanGroup)
+            if (useGrouping && view.CanGroup)
             {
                 view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
                 view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
