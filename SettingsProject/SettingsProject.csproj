@@ -37,12 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -56,9 +54,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Annotations.cs" />
-    <Compile Include="Converters.cs" />
-    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="ISettingEditor.cs" />
+    <Compile Include="LaunchProfileKind.cs" />
+    <Compile Include="LaunchProfilesWindowViewModel.cs" />
+    <Compile Include="LaunchProfileViewModel.cs" />
+    <Compile Include="RenameLabel.cs" />
+    <Compile Include="SettingEditorFactory.cs" />
+    <Compile Include="SettingMetadata.cs" />
+    <Compile Include="SettingsList.cs" />
+    <Compile Include="Utils\Annotations.cs" />
+    <Compile Include="Utils\Converters.cs" />
+    <Compile Include="LaunchProfilesWindow.xaml.cs">
+      <DependentUpon>LaunchProfilesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="NavigationSection.cs" />
     <Compile Include="NavigationTree.xaml.cs">
@@ -71,13 +80,14 @@
     <Compile Include="SettingCondition.cs" />
     <Compile Include="SettingDataTemplateSelector.cs" />
     <Compile Include="SettingIdentity.cs" />
-    <Compile Include="SettingsList.xaml.cs">
-      <DependentUpon>SettingsList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingValue.cs" />
     <Compile Include="ViewModels.cs" />
-    <Compile Include="VisualTreeUtil.cs" />
+    <Compile Include="Utils\VisualTreeUtil.cs" />
+    <Page Include="LaunchProfilesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,7 +108,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsList.xaml">
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\RenameLabelStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\SettingsListStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,6 +152,9 @@
     <Resource Include="VisualStudio.Release.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Validation">
+      <Version>15.5.31</Version>
+    </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
       <Version>1.7.1</Version>
     </PackageReference>

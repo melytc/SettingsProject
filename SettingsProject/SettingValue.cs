@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -10,83 +9,79 @@ namespace SettingsProject
     internal interface ISettingValue : INotifyPropertyChanged
     {
         // null if this value applies to all configurations
-        public string? Configuration { get; }
+        string? Configuration { get; }
 
-        public DataTemplate Template { get; }
+        DataTemplate? Template { get; }
 
-        public SettingModificationState ModificationState { get; }
+        object Value { get; }
 
-        public object Value { get; }
+        Setting? Parent { get; set; }
+
+        ISettingValue Clone();
     }
 
-    internal abstract class SettingValue<T> : ISettingValue where T : notnull
+    internal abstract class SettingValue : ISettingValue
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private readonly IEqualityComparer<T> _comparer;
+        private object _value;
 
-        private T _value;
-
-        public T DefaultValue { get; }
-        public T InitialValue { get; }
-
-        protected SettingValue(T initialValue, T defaultValue, IEqualityComparer<T>? comparer = null)
+        protected SettingValue(object value)
         {
-            _comparer = comparer ?? EqualityComparer<T>.Default;
-            InitialValue = initialValue;
-            DefaultValue = defaultValue;
-            _value = initialValue;
-            UpdateModificationState();
+            _value = value;
         }
 
-        public SettingModificationState ModificationState { get; private set; } = SettingModificationState.Default;
-
-        object ISettingValue.Value => Value;
-
         public abstract string? Configuration { get; }
-        public abstract DataTemplate Template { get; }
+        public abstract DataTemplate? Template { get; }
+
+        public Setting? Parent { get; set; }
 
         /// <summary>
         /// Gets and sets the current value of the property.
         /// </summary>
-        public T Value
+        public object Value
         {
             get => _value;
             set
             {
-                if (!_comparer.Equals(value, Value))
+                if (!Equals(value, Value))
                 {
                     _value = value;
                     OnPropertyChanged(nameof(Value));
-                    UpdateModificationState();
                 }
             }
         }
 
-        private void UpdateModificationState()
-        {
-            // ModificationState can only change when Value changes
+        public abstract ISettingValue Clone();
 
-            var state = SettingModificationState.Default;
-            if (!_comparer.Equals(_value, InitialValue))
-            {
-                state = SettingModificationState.ModifiedUnsaved;
-            }
-            else if (!_comparer.Equals(_value, DefaultValue))
-            {
-                state = SettingModificationState.Modified;
-            }
-
-            if (state != ModificationState)
-            {
-                ModificationState = state;
-                OnPropertyChanged(nameof(ModificationState));
-            }
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    internal sealed class UnconfiguredSettingValue : SettingValue
+    {
+        public UnconfiguredSettingValue(object value)
+            : base(value)
+        {
+        }
+
+        public override DataTemplate? Template => Parent?.Metadata.Editor?.UnconfiguredDataTemplate;
+        public override string? Configuration => null;
+        public override ISettingValue Clone() => new UnconfiguredSettingValue(Value);
+    }
+
+    internal sealed class ConfiguredSettingValue : SettingValue
+    {
+        public ConfiguredSettingValue(string configuration, object value)
+            : base(value)
+        {
+            Configuration = configuration;
+        }
+
+        public override DataTemplate? Template => Parent?.Metadata.Editor?.ConfiguredDataTemplate;
+        public override string Configuration { get; }
+        public override ISettingValue Clone() => new ConfiguredSettingValue(Configuration, Value);
     }
 }
