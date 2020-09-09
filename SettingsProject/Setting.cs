@@ -163,29 +163,29 @@ namespace SettingsProject
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredStringSettingValueTemplate");
 
-        public UnconfiguredStringSettingValue(string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
-            : base(initialValue, defaultValue ?? "", comparer)
+        public UnconfiguredStringSettingValue(string value, IEqualityComparer<string>? comparer = null)
+            : base(value, comparer)
         {
         }
 
         public override DataTemplate Template => _template;
         public override string? Configuration => null;
-        public override ISettingValue Clone() => new UnconfiguredStringSettingValue(InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new UnconfiguredStringSettingValue(Value, Comparer);
     }
 
     internal sealed class ConfiguredStringSettingValue : SettingValue<string>
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredStringSettingValueTemplate");
 
-        public ConfiguredStringSettingValue(string configuration, string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
-            : base(initialValue, defaultValue ?? "", comparer)
+        public ConfiguredStringSettingValue(string configuration, string value, IEqualityComparer<string>? comparer = null)
+            : base(value, comparer)
         {
             Configuration = configuration;
         }
 
         public override DataTemplate Template => _template;
         public override string Configuration { get; }
-        public override ISettingValue Clone() => new ConfiguredStringSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new ConfiguredStringSettingValue(Configuration, Value, Comparer);
     }
 
     internal sealed class MultiLineStringSetting : Setting
@@ -214,29 +214,29 @@ namespace SettingsProject
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredMultilineStringSettingValueTemplate");
 
-        public UnconfiguredMultilineStringSettingValue(string initialValue, string defaultValue, IEqualityComparer<string>? comparer = null)
-            : base(initialValue, defaultValue, comparer)
+        public UnconfiguredMultilineStringSettingValue(string value, IEqualityComparer<string>? comparer = null)
+            : base(value, comparer)
         {
         }
 
         public override DataTemplate Template => _template;
         public override string? Configuration => null;
-        public override ISettingValue Clone() => new UnconfiguredMultilineStringSettingValue(InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new UnconfiguredMultilineStringSettingValue(Value, Comparer);
     }
 
     internal sealed class ConfiguredMultilineStringSettingValue : SettingValue<string>
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredMultilineStringSettingValueTemplate");
 
-        public ConfiguredMultilineStringSettingValue(string configuration, string initialValue, string defaultValue, IEqualityComparer<string>? comparer = null)
-            : base(initialValue, defaultValue, comparer)
+        public ConfiguredMultilineStringSettingValue(string configuration, string value, IEqualityComparer<string>? comparer = null)
+            : base(value, comparer)
         {
             Configuration = configuration;
         }
 
         public override DataTemplate Template => _template;
         public override string Configuration { get; }
-        public override ISettingValue Clone() => new ConfiguredMultilineStringSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new ConfiguredMultilineStringSettingValue(Configuration, Value, Comparer);
     }
 
     internal sealed class BoolSetting : Setting
@@ -286,15 +286,14 @@ namespace SettingsProject
 
         public BoolSetting? Parent { get; internal set; }
 
-        // TODO allow a null default value?
-        public UnconfiguredBoolSettingValue(bool initialValue, bool? defaultValue, IEqualityComparer<bool>? comparer = null)
-            : base(initialValue, defaultValue ?? false, comparer)
+        public UnconfiguredBoolSettingValue(bool value, IEqualityComparer<bool>? comparer = null)
+            : base(value, comparer)
         {
         }
 
         public override DataTemplate Template => _template;
         public override string? Configuration => null;
-        public override ISettingValue Clone() => new UnconfiguredBoolSettingValue(InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new UnconfiguredBoolSettingValue(Value, Comparer);
     }
 
     internal sealed class ConfiguredBoolSettingValue : SettingValue<bool>
@@ -303,16 +302,15 @@ namespace SettingsProject
 
         public BoolSetting? Parent { get; internal set; }
 
-        // TODO allow a null default value?
-        public ConfiguredBoolSettingValue(string configuration, bool initialValue, bool? defaultValue, IEqualityComparer<bool>? comparer = null)
-            : base(initialValue, defaultValue ?? false, comparer)
+        public ConfiguredBoolSettingValue(string configuration, bool value, IEqualityComparer<bool>? comparer = null)
+            : base(value, comparer)
         {
             Configuration = configuration;
         }
 
         public override DataTemplate Template => _template;
         public override string Configuration { get; }
-        public override ISettingValue Clone() => new ConfiguredBoolSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new ConfiguredBoolSettingValue(Configuration, Value, Comparer);
     }
 
     internal sealed class EnumSetting : Setting
@@ -375,14 +373,14 @@ namespace SettingsProject
 
         public EnumSetting? Parent { get; internal set; }
 
-        public UnconfiguredEnumSettingValue(string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
-            : base(initialValue, defaultValue ?? "", comparer)
+        public UnconfiguredEnumSettingValue(string value, IEqualityComparer<string>? comparer = null)
+            : base(value, comparer)
         {
         }
 
         public override DataTemplate Template => _template;
         public override string? Configuration => null;
-        public override ISettingValue Clone() => new UnconfiguredEnumSettingValue(InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new UnconfiguredEnumSettingValue(Value, Comparer);
     }
 
     internal sealed class ConfiguredEnumSettingValue : SettingValue<string>
@@ -391,15 +389,15 @@ namespace SettingsProject
 
         public EnumSetting? Parent { get; internal set; }
 
-        public ConfiguredEnumSettingValue(string configuration, string initialValue, string? defaultValue, IEqualityComparer<string>? comparer = null)
-            : base(initialValue, defaultValue ?? "", comparer)
+        public ConfiguredEnumSettingValue(string configuration, string value, IEqualityComparer<string>? comparer = null)
+            : base(value, comparer)
         {
             Configuration = configuration;
         }
 
         public override DataTemplate Template => _template;
         public override string Configuration { get; }
-        public override ISettingValue Clone() => new ConfiguredEnumSettingValue(Configuration, InitialValue, DefaultValue, Comparer);
+        public override ISettingValue Clone() => new ConfiguredEnumSettingValue(Configuration, Value, Comparer);
     }
 
     internal sealed class LinkAction : Setting

@@ -89,21 +89,21 @@ namespace SettingsProject
                 page: "Application",
                 category: "General",
                 priority: 10,
-                new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
+                new UnconfiguredStringSettingValue("ConsoleApp1")),
             new StringSetting(
                 name: "Default namespace",
                 description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
                 page: "Application",
                 category: "General",
                 priority: 200,
-                new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
+                new UnconfiguredStringSettingValue("ConsoleApp1")),
             new BoolSetting(
                 name: "Multi-targeting",
                 description: "Build this project for multiple target frameworks.",
                 page: "Application",
                 category: "General",
                 priority: 300,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: null)),
+                new UnconfiguredBoolSettingValue(false)),
             // TODO come up with a better editing experience, perhaps via a FlagsEnumSetting
             // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
             new StringSetting(
@@ -113,7 +113,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "General",
                 priority: 310,
-                new UnconfiguredStringSettingValue(initialValue: "net5", defaultValue: null)),
+                new UnconfiguredStringSettingValue("net5")),
             new EnumSetting(
                 name: "Target framework",
                 description: "Specifies the framework that this project will target.",
@@ -131,7 +131,7 @@ namespace SettingsProject
                     ".NET Core 1.1",
                     ".NET Core 1.0"
                 },
-                new UnconfiguredEnumSettingValue(initialValue: ".NET 5", defaultValue: null)),
+                new UnconfiguredEnumSettingValue(".NET 5")),
             new LinkAction(
                 name: "Install other frameworks",
                 description: null,
@@ -150,14 +150,14 @@ namespace SettingsProject
                     "Windows Application",
                     "Class Library"
                 },
-                new UnconfiguredEnumSettingValue(initialValue: "Console Application", defaultValue: null)),
+                new UnconfiguredEnumSettingValue("Console Application")),
             new BoolSetting(
                 name: "Binding redirects",
                 description: "Whether to auto-generate binding redirects.",
                 page: "Application",
                 category: "General",
                 priority: 600,
-                new UnconfiguredBoolSettingValue(initialValue: true, defaultValue: true)),
+                new UnconfiguredBoolSettingValue(true)),
             new EnumSetting(
                 name: "Startup object",
                 description: "Specifies the entry point for the executable.",
@@ -165,7 +165,7 @@ namespace SettingsProject
                 category: "General",
                 priority: 700,
                 enumValues: new[] { "(Not set)" },
-                new UnconfiguredEnumSettingValue(initialValue: "(Not set)", defaultValue: "(Not set)")),
+                new UnconfiguredEnumSettingValue("(Not set)")),
 
             new EnumSetting(
                 name: "Resources",
@@ -174,7 +174,7 @@ namespace SettingsProject
                 category: "Resources",
                 priority: 800,
                 enumValues: new[] { "Icon and manifest", "Resource file" },
-                new UnconfiguredEnumSettingValue(initialValue: "Icon and manifest", defaultValue: "Icon and manifest")),
+                new UnconfiguredEnumSettingValue("Icon and manifest")),
             // TODO make this IconBrowseSetting
             new StringSetting(
                 name: "Icon path",
@@ -182,7 +182,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "Resources",
                 priority: 810,
-                new UnconfiguredStringSettingValue(initialValue: "(Default Icon)", defaultValue: "(Default Icon)")),
+                new UnconfiguredStringSettingValue("(Default Icon)")),
             // TODO make this FileBrowseSetting
             // TODO this can appear disabled, find out why
             new EnumSetting(
@@ -192,7 +192,7 @@ namespace SettingsProject
                 category: "Resources",
                 priority: 820,
                 enumValues: new[] { "" },
-                new UnconfiguredEnumSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredEnumSettingValue("")),
             // TODO make this FileBrowseSetting
             new StringSetting(
                 name: "Resource file path",
@@ -200,7 +200,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "Resources",
                 priority: 830,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredStringSettingValue("")),
 
             //////
             ///// ASSEMBLY INFORMATION
@@ -212,7 +212,7 @@ namespace SettingsProject
 //                name: "Assembly name",
 //                initialValue: "ConsoleApp1",
 //                priority: 20,
-//                defaultValue: "ConsoleApp1",
+//              1",
 //                description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
 //                page: "Application",
 //                category: "Assembly Information"),
@@ -233,7 +233,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 30,
-                new UnconfiguredStringSettingValue(initialValue: "TRACE", defaultValue: null),
+                new UnconfiguredStringSettingValue("TRACE"),
                 supportsPerConfigurationValues: true),
             new BoolSetting(
                 name: "Define DEBUG symbol",
@@ -241,15 +241,15 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 200,
-                new ConfiguredBoolSettingValue("Debug | AnyCPU", initialValue: true, defaultValue: true),
-                new ConfiguredBoolSettingValue("Release | AnyCPU", initialValue: false, defaultValue: false)),
+                new ConfiguredBoolSettingValue("Debug | AnyCPU", value: true),
+                new ConfiguredBoolSettingValue("Release | AnyCPU", value: false)),
             new BoolSetting(
                 name: "Define TRACE symbol",
                 description: "Specifies whether to define the TRACE compilation symbol.",
                 page: "Build",
                 category: "General",
                 priority: 300,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                new UnconfiguredBoolSettingValue(false),
                 supportsPerConfigurationValues: true),
             new EnumSetting(
                 name: "Platform target",
@@ -258,7 +258,7 @@ namespace SettingsProject
                 category: "General",
                 priority: 400,
                 enumValues: new[] { "Any CPU", "x86" },
-                new UnconfiguredEnumSettingValue(initialValue: "Any CPU", defaultValue: "Any CPU")),
+                new UnconfiguredEnumSettingValue("Any CPU")),
             new EnumSetting(
                 name: "Nullable reference types",
                 description: "Controls use of nullable annotations and warnings.",
@@ -266,7 +266,7 @@ namespace SettingsProject
                 category: "General",
                 priority: 500,
                 enumValues: new[] { "Disable", "Enable", "Warnings", "Annotations" },
-                new UnconfiguredEnumSettingValue(initialValue: "Enable", defaultValue: "Disable")),
+                new UnconfiguredEnumSettingValue("Enable")),
             // TODO this is disabled in .NET Core -- why?
             new BoolSetting(
                 name: "Prefer 32-bit",
@@ -274,22 +274,22 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 600,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+                new UnconfiguredBoolSettingValue(false)),
             new BoolSetting(
                 name: "Unsafe code",
                 description: "Allow unsafe code in this project.",
                 page: "Build",
                 category: "General",
                 priority: 700,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+                new UnconfiguredBoolSettingValue(false)),
             new BoolSetting(
                 name: "Optimize code",
                 description: "Produce optimized output. Optimized binaries may be harder to debug.",
                 page: "Build",
                 category: "General",
                 priority: 800,
-                new ConfiguredBoolSettingValue("Debug | AnyCPU", initialValue: false, defaultValue: false),
-                new ConfiguredBoolSettingValue("Release | AnyCPU", initialValue: true, defaultValue: true)),
+                new ConfiguredBoolSettingValue("Debug | AnyCPU", value: false),
+                new ConfiguredBoolSettingValue("Release | AnyCPU", value: true)),
 
             //////
             ///// ERRORS AND WARNINGS
@@ -303,14 +303,14 @@ namespace SettingsProject
                 category: "Errors and warnings",
                 priority: 40,
                 enumValues: new[] { "0", "1", "2", "3", "4" },
-                new UnconfiguredEnumSettingValue(initialValue: "4", defaultValue: "4")),
+                new UnconfiguredEnumSettingValue("4")),
             new StringSetting(
                 name: "Suppress specific warnings",
                 description: "A semicolon-delimited list of warning codes to suppress.",
                 page: "Build",
                 category: "Errors and warnings",
                 priority: 200,
-                new UnconfiguredStringSettingValue(initialValue: "1701;1702", defaultValue: "1701;1702")),
+                new UnconfiguredStringSettingValue("1701;1702")),
             new EnumSetting(
                 name: "Warnings as errors",
                 description: "Controls which warnings are treated as errors.",
@@ -318,14 +318,14 @@ namespace SettingsProject
                 category: "Errors and warnings",
                 priority: 300,
                 enumValues: new[] { "None", "All", "Specific warnings" },
-                new UnconfiguredEnumSettingValue(initialValue: "Specific warnings", defaultValue: "Specific warnings")),
+                new UnconfiguredEnumSettingValue("Specific warnings")),
             new StringSetting(
                 name: "Treat specific warnings as errors",
                 description: "A semicolon-delimited list of warning codes to treat as errors.",
                 page: "Build",
                 category: "Errors and warnings",
                 priority: 400,
-                new UnconfiguredStringSettingValue(initialValue: "NU1605", defaultValue: "NU1605")),
+                new UnconfiguredStringSettingValue("NU1605")),
 
             //////
             ///// OUTPUT
@@ -338,7 +338,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Output",
                 priority: 50,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredStringSettingValue("")),
             // TODO make this FileBrowseSetting
             new StringSetting(
                 name: "XML documentation path",
@@ -346,7 +346,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Output",
                 priority: 200,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredStringSettingValue("")),
             // TODO this is disabled in .NET Core -- why?
             new BoolSetting(
                 name: "Register for COM interop",
@@ -354,7 +354,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Output",
                 priority: 300,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+                new UnconfiguredBoolSettingValue(false)),
             new EnumSetting(
                 name: "Generate serialization assembly",
                 description: null,
@@ -362,7 +362,7 @@ namespace SettingsProject
                 category: "Output",
                 priority: 400,
                 enumValues: new[] { "Auto", "On", "Off" },
-                new UnconfiguredEnumSettingValue(initialValue: "Auto", defaultValue: "Auto")),
+                new UnconfiguredEnumSettingValue("Auto")),
 
             //////
             ///// ADVANCED
@@ -382,14 +382,14 @@ namespace SettingsProject
                 category: "Advanced",
                 priority: 200,
                 enumValues: new[] { "None", "Prompt", "Send", "Queue" },
-                new UnconfiguredEnumSettingValue(initialValue: "Prompt", defaultValue: "Prompt")),
+                new UnconfiguredEnumSettingValue("Prompt")),
             new BoolSetting(
                 name: "Overflow checking",
                 description: "Enable arithmetic overflow checking at runtime.",
                 page: "Build",
                 category: "Advanced",
                 priority: 300,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                new UnconfiguredBoolSettingValue(false),
                 supportsPerConfigurationValues: true),
             new EnumSetting(
                 name: "Debugging information",
@@ -398,7 +398,7 @@ namespace SettingsProject
                 category: "Advanced",
                 priority: 400,
                 enumValues: new[] { "None", "Full", "Pdb-only", "Portable", "Embedded" },
-                new UnconfiguredEnumSettingValue(initialValue: "Portable", defaultValue: "Portable"),
+                new UnconfiguredEnumSettingValue("Portable"),
                 supportsPerConfigurationValues: true),
             new EnumSetting(
                 name: "File alignment",
@@ -407,14 +407,14 @@ namespace SettingsProject
                 category: "Advanced",
                 priority: 500,
                 enumValues: new[] { "512", "1024", "2048", "4096", "8192" },
-                new UnconfiguredEnumSettingValue(initialValue: "512", defaultValue: "512")),
+                new UnconfiguredEnumSettingValue("512")),
             new StringSetting(
                 name: "Library base address",
                 description: null,
                 page: "Build",
                 category: "Advanced",
                 priority: 600,
-                new UnconfiguredStringSettingValue(initialValue: "0x11000000", defaultValue: "0x11000000")),
+                new UnconfiguredStringSettingValue("0x11000000")),
 
             /////////////
             //////////// BUILD EVENTS
@@ -431,14 +431,14 @@ namespace SettingsProject
                 page: "Build Events",
                 category: "General",
                 priority: 70,
-                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredMultilineStringSettingValue("")),
             new MultiLineStringSetting(
                 name: "Post-build event",
                 description: "Commands to execute after a build completes.",
                 page: "Build Events",
                 category: "General",
                 priority: 200,
-                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredMultilineStringSettingValue("")),
             new EnumSetting(
                 name: "Run the post-build event",
                 description: "Controls when any post-build event is executed.",
@@ -451,9 +451,7 @@ namespace SettingsProject
                     "On successful build",
                     "When the build updates the project output"
                 },
-                new UnconfiguredEnumSettingValue(
-                    initialValue: "On successful build",
-                    defaultValue: "On successful build")),
+                new UnconfiguredEnumSettingValue("On successful build")),
 
             /////////////
             //////////// PACKAGING
@@ -469,7 +467,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 80,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                new UnconfiguredBoolSettingValue(false),
                 supportsPerConfigurationValues: true),
             new StringSetting(
                 name: "Package ID",
@@ -477,7 +475,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 300,
-                new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
+                new UnconfiguredStringSettingValue("ConsoleApp1")),
             // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
             new StringSetting(
                 name: "Package version",
@@ -485,42 +483,42 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 400,
-                new UnconfiguredStringSettingValue(initialValue: "1.0.0", defaultValue: "1.0.0")),
+                new UnconfiguredStringSettingValue("1.0.0")),
             new StringSetting(
                 name: "Authors",
                 description: null,
                 page: "Packaging",
                 category: "General",
                 priority: 500,
-                new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
+                new UnconfiguredStringSettingValue("ConsoleApp1")),
             new StringSetting(
                 name: "Company",
                 description: null,
                 page: "Packaging",
                 category: "General",
                 priority: 600,
-                new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
+                new UnconfiguredStringSettingValue("ConsoleApp1")),
             new StringSetting(
                 name: "Product",
                 description: null,
                 page: "Packaging",
                 category: "General",
                 priority: 700,
-                new UnconfiguredStringSettingValue(initialValue: "ConsoleApp1", defaultValue: "ConsoleApp1")),
+                new UnconfiguredStringSettingValue("ConsoleApp1")),
             new MultiLineStringSetting(
                 name: "Description",
                 description: null,
                 page: "Packaging",
                 category: "General",
                 priority: 800,
-                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredMultilineStringSettingValue("")),
             new StringSetting(
                 name: "Copyright",
                 description: null,
                 page: "Packaging",
                 category: "General",
                 priority: 900,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
             // TODO make this IconBrowseSetting
             new StringSetting(
                 name: "Package icon file",
@@ -528,14 +526,14 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 1100,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
             new StringSetting(
                 name: "Repository URL",
                 description: null, // TODO describe what this URL means
                 page: "Packaging",
                 category: "General",
                 priority: 1200,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
             // TODO provide feedback about valid URLs here
             new StringSetting(
                 name: "Repository type",
@@ -543,21 +541,21 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 1300,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
             new StringSetting(
                 name: "Tags",
                 description: null, // TODO describe how this is delimited
                 page: "Packaging",
                 category: "General",
                 priority: 1400,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
             new MultiLineStringSetting(
                 name: "Release notes",
                 description: null,
                 page: "Packaging",
                 category: "General",
                 priority: 1500,
-                new UnconfiguredMultilineStringSettingValue(initialValue: "", defaultValue: "")),
+                new UnconfiguredMultilineStringSettingValue("")),
             // TODO this is a combo box with many languages listed
             new StringSetting(
                 name: "Assembly neutral language",
@@ -565,7 +563,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 1600,
-                new UnconfiguredStringSettingValue(initialValue: "(None)", defaultValue: "(None)")),
+                new UnconfiguredStringSettingValue("(None)")),
             // TODO VersionSetting
             new StringSetting(
                 name: "Assembly version",
@@ -573,7 +571,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 1700,
-                new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
+                new UnconfiguredStringSettingValue("1.0.0.0")),
             // TODO VersionSetting
             new StringSetting(
                 name: "Assembly file version",
@@ -581,7 +579,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "General",
                 priority: 1800,
-                new UnconfiguredStringSettingValue(initialValue: "1.0.0.0", defaultValue: "1.0.0.0")),
+                new UnconfiguredStringSettingValue("1.0.0.0")),
 
             //////
             ///// LICENSE
@@ -593,7 +591,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "License",
                 priority: 85,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+                new UnconfiguredBoolSettingValue(false)),
             new EnumSetting(
                 name: "License specification",
                 description: "Controls how the package's license is specified.",
@@ -601,7 +599,7 @@ namespace SettingsProject
                 category: "License",
                 priority: 200,
                 enumValues: new[] { "None", "Expression", "File" },
-                new UnconfiguredEnumSettingValue(initialValue: "None", defaultValue: "None")),
+                new UnconfiguredEnumSettingValue("None")),
             // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
             new StringSetting(
                 name: "License expression",
@@ -609,7 +607,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "License",
                 priority: 300,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
             new LinkAction(
                 // https://spdx.org/licenses/
                 name: "Read about SPDX license expressions",
@@ -624,7 +622,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "License",
                 priority: 500,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null)),
+                new UnconfiguredStringSettingValue("")),
 
             /////////////
             //////////// DEBUG
@@ -656,7 +654,7 @@ namespace SettingsProject
                 page: "Signing",
                 category: "General",
                 priority: 92,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                new UnconfiguredBoolSettingValue(false),
                 supportsPerConfigurationValues: true),
             // TODO StrongNameKeySetting -- with new/add and change password actions
             new StringSetting(
@@ -665,7 +663,7 @@ namespace SettingsProject
                 page: "Signing",
                 category: "General",
                 priority: 110,
-                new UnconfiguredStringSettingValue(initialValue: "", defaultValue: null),
+                new UnconfiguredStringSettingValue(""),
                 supportsPerConfigurationValues: true),
             new BoolSetting(
                 name: "Delay signing",
@@ -673,7 +671,7 @@ namespace SettingsProject
                 page: "Signing",
                 category: "General",
                 priority: 120,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                new UnconfiguredBoolSettingValue(false),
                 supportsPerConfigurationValues: true),
 
             /////////////
@@ -696,7 +694,7 @@ namespace SettingsProject
                 page: "Code Analysis",
                 category: "Analyzers",
                 priority: 200,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false),
+                new UnconfiguredBoolSettingValue(false),
                 supportsPerConfigurationValues: true),
             new BoolSetting(
                 name: "Run live analysis",
@@ -704,7 +702,7 @@ namespace SettingsProject
                 page: "Code Analysis",
                 category: "Analyzers",
                 priority: 300,
-                new UnconfiguredBoolSettingValue(initialValue: false, defaultValue: false)),
+                new UnconfiguredBoolSettingValue(false)),
        };
     }
 }

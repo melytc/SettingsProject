@@ -82,9 +82,7 @@
                       <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
                         <ItemsControl.ItemTemplate>
                           <DataTemplate DataType="local:ISettingValue">
-                            <Border Padding="12,0,0,0">
-                              <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" />
-                            </Border>
+                            <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" Margin="12,0,0,0" />
                           </DataTemplate>
                         </ItemsControl.ItemTemplate>
                       </ItemsControl>

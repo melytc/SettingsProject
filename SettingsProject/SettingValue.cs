@@ -27,15 +27,10 @@ namespace SettingsProject
 
         private T _value;
 
-        public T DefaultValue { get; }
-        public T InitialValue { get; }
-
-        protected SettingValue(T initialValue, T defaultValue, IEqualityComparer<T>? comparer = null)
+        protected SettingValue(T value, IEqualityComparer<T>? comparer = null)
         {
             Comparer = comparer ?? EqualityComparer<T>.Default;
-            InitialValue = initialValue;
-            DefaultValue = defaultValue;
-            _value = initialValue;
+            _value = value;
         }
 
         object ISettingValue.Value => Value;
@@ -61,7 +56,7 @@ namespace SettingsProject
 
         public abstract ISettingValue Clone();
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
