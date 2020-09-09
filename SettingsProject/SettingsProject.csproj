@@ -58,6 +58,7 @@
     <Compile Include="LaunchProfilesWindowViewModel.cs" />
     <Compile Include="LaunchProfileViewModel.cs" />
     <Compile Include="RenameLabel.cs" />
+    <Compile Include="SettingsList.cs" />
     <Compile Include="Utils\Annotations.cs" />
     <Compile Include="Utils\Converters.cs" />
     <Compile Include="LaunchProfilesWindow.xaml.cs">
@@ -76,9 +77,6 @@
     <Compile Include="SettingCondition.cs" />
     <Compile Include="SettingDataTemplateSelector.cs" />
     <Compile Include="SettingIdentity.cs" />
-    <Compile Include="SettingsList.xaml.cs">
-      <DependentUpon>SettingsList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingValue.cs" />
     <Compile Include="ViewModels.cs" />
@@ -107,15 +105,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\RenameLabelStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\SettingsListStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

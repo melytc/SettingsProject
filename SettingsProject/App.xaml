@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SettingsProject"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             StartupUri="LaunchProfilesWindow.xaml">
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -31,7 +31,7 @@
 
             <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:UnconfiguredBoolSettingValue">
                 <CheckBox IsChecked="{Binding Value}">
-                    <local:HighlightTextBlock HighlightText="{Binding ElementName=_settingsListControl, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
+                    <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
                 </CheckBox>
             </DataTemplate>
 

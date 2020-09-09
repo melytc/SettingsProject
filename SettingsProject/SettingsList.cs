@@ -9,7 +9,8 @@ using System.Windows.Media;
 
 namespace SettingsProject
 {
-    internal sealed partial class SettingsList
+    [TemplatePart(Name = "PART_ItemsControl", Type = typeof(ItemsControl))]
+    internal sealed class SettingsList : Control
     {
         public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
             nameof(Settings),
@@ -29,15 +30,9 @@ namespace SettingsProject
             typeof(SettingsList),
             new PropertyMetadata(default(NavigationSection), (d, e) => ((SettingsList)d).OnCurrentSectionChanged()));
 
-        public static readonly DependencyProperty IsNavigableProperty = DependencyProperty.Register(
-            nameof(IsNavigable),
-            typeof(bool),
-            typeof(SettingsList),
-            new PropertyMetadata(true, (d, e) => ((SettingsList)d).OnIsNavigableChanged()));
-
-        public SettingsList()
+        static SettingsList()
         {
-            InitializeComponent();
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SettingsList), new FrameworkPropertyMetadata(typeof(SettingsList)));
         }
 
         public IReadOnlyList<Setting> Settings
@@ -58,23 +53,10 @@ namespace SettingsProject
             set => SetValue(CurrentSectionProperty, value);
         }
 
-        public bool IsNavigable
-        {
-            get => (bool)GetValue(IsNavigableProperty);
-            set => SetValue(IsNavigableProperty, value);
-        }
-
 //        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 //        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 
         private bool _ignoreNextCurrentSectionChangeEvent;
-
-        private void OnIsNavigableChanged()
-        {
-            _itemsControl.Template = IsNavigable
-                ? (ControlTemplate)FindResource("NavigableControlTemplate")
-                : (ControlTemplate)FindResource("NonNavigableControlTemplate");
-        }
 
         private void OnCurrentSectionChanged()
         {
@@ -113,9 +95,23 @@ namespace SettingsProject
             pageGroupContainer?.BringIntoView();
         }
 
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _itemsControl = (ItemsControl)GetTemplateChild("PART_ItemsControl");
+            _itemsControl.ApplyTemplate();
+
+            VisualTreeUtil.TryFindDescendentBreadthFirst(_itemsControl, out _scrollViewer);
+            _scrollViewer.ScrollChanged += OnScrollChanged;
+        }
+
         private CollectionViewGroup? _scrollToTopGroup;
         private CollectionViewGroup? _scrollToSubGroup;
         private bool _ignoreNextScrollEvent;
+
+        private ItemsControl _itemsControl;
+        private ScrollViewer _scrollViewer;
 
         private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
         {

@@ -44,6 +44,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="24,0,0,0"
+            Padding="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={x:Static local:Converters.DoubleToBottomThickness}}"
             Settings="{Binding SettingsListViewModel.Settings}"
             SearchViewModel="{Binding SearchViewModel}"
             CurrentSection="{Binding Path=NavigationViewModel.SelectedSection, Mode=TwoWay}" />

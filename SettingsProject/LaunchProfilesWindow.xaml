@@ -73,7 +73,6 @@
     <!-- Profile Edit -->
     <local:SettingsList
       Grid.Column="2"
-      IsNavigable="false"
       Settings="{Binding Path=SelectedProfile.SettingsListViewModel.Settings}"
       />
 
