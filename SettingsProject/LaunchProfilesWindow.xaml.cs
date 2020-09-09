@@ -72,7 +72,7 @@ namespace SettingsProject
                     page: "Debug",
                     category: "General",
                     priority: 420,
-                    enumValues: new[] {"None", "Windows"},
+                    enumValues: ImmutableArray.Create("None", "Windows"),
                     new UnconfiguredEnumSettingValue("None")),
                 // TODO NameValueListSetting
                 new StringSetting(

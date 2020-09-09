@@ -27,6 +27,7 @@ namespace SettingsProject
         public string? Description => Metadata.Description;
         public int Priority => Metadata.Priority;
         public SettingIdentity Identity => Metadata.Identity;
+        public ImmutableArray<string> EnumValues => Metadata.EnumValues;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
         public virtual bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description);
@@ -42,24 +43,20 @@ namespace SettingsProject
                 
                 foreach (var settingValue in value)
                 {
-                    OnValueAdded(settingValue);
+                    settingValue.Parent = this;
+                    settingValue.PropertyChanged += OnSettingValuePropertyChanged;
+
+                    void OnSettingValuePropertyChanged(object _, PropertyChangedEventArgs e)
+                    {
+                        if (e.PropertyName == nameof(SettingValue<bool>.Value))
+                        {
+                            UpdateDependentVisibilities();
+                        }
+                    }
                 }
 
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasPerConfigurationValues));
-            }
-        }
-
-        protected virtual void OnValueAdded(ISettingValue value)
-        {
-            value.PropertyChanged += OnPropertyChanged;
-
-            void OnPropertyChanged(object _, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName == nameof(SettingValue<bool>.Value))
-                {
-                   UpdateDependentVisibilities();
-                }
             }
         }
 
@@ -104,7 +101,16 @@ namespace SettingsProject
             }
         }
 
-        protected virtual bool MatchesSearchText(string searchString) => false;
+        protected virtual bool MatchesSearchText(string searchString)
+        {
+            foreach (var enumValue in Metadata.EnumValues)
+            {
+                if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+            }
+
+            return false;
+        }
 
         public void AddDependentTarget(Setting target, object visibleWhenValue)
         {
@@ -140,13 +146,13 @@ namespace SettingsProject
     internal sealed class StringSetting : Setting
     {
         public StringSetting(string name, string? description, string page, string category, int priority, UnconfiguredStringSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues, ImmutableArray<string>.Empty))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public StringSetting(string name, string? description, string page, string category, int priority, params ConfiguredStringSettingValue[] values)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true))
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true, ImmutableArray<string>.Empty))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
@@ -191,13 +197,13 @@ namespace SettingsProject
     internal sealed class MultiLineStringSetting : Setting
     {
         public MultiLineStringSetting(string name, string? description, string page, string category, int priority, UnconfiguredMultilineStringSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues, ImmutableArray<string>.Empty))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public MultiLineStringSetting(string name, string? description, string page, string category, int priority, params ConfiguredMultilineStringSettingValue[] values)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true))
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true, ImmutableArray<string>.Empty))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
@@ -242,13 +248,13 @@ namespace SettingsProject
     internal sealed class BoolSetting : Setting
     {
         public BoolSetting(string name, string? description, string page, string category, int priority, UnconfiguredBoolSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues))
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues, ImmutableArray<string>.Empty))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public BoolSetting(string name, string? description, string page, string category, int priority, params ConfiguredBoolSettingValue[] values)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true))
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true, ImmutableArray<string>.Empty))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
@@ -256,23 +262,6 @@ namespace SettingsProject
         private BoolSetting(SettingMetadata metadata)
             : base(metadata)
         {
-        }
-
-        protected override void OnValueAdded(ISettingValue value)
-        {
-            switch (value)
-            {
-                case UnconfiguredBoolSettingValue unconfigured:
-                {
-                    unconfigured.Parent = this;
-                    break;
-                }
-                case ConfiguredBoolSettingValue configured:
-                {
-                    configured.Parent = this;
-                    break;
-                }
-            }
         }
 
         public override bool HasDescription => Values.All(value => value.Configuration != null);
@@ -283,8 +272,6 @@ namespace SettingsProject
     internal sealed class UnconfiguredBoolSettingValue : SettingValue<bool>
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredBoolSettingValueTemplate");
-
-        public BoolSetting? Parent { get; internal set; }
 
         public UnconfiguredBoolSettingValue(bool value, IEqualityComparer<bool>? comparer = null)
             : base(value)
@@ -300,8 +287,6 @@ namespace SettingsProject
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredBoolSettingValueTemplate");
 
-        public BoolSetting? Parent { get; internal set; }
-
         public ConfiguredBoolSettingValue(string configuration, bool value, IEqualityComparer<bool>? comparer = null)
             : base(value)
         {
@@ -315,63 +300,29 @@ namespace SettingsProject
 
     internal sealed class EnumSetting : Setting
     {
-        public IReadOnlyList<string> EnumValues { get; }
-
-        // Note: We might want to use IEnumValue here.
-        public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, UnconfiguredEnumSettingValue value, bool supportsPerConfigurationValues = false)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues), enumValues)
+        public EnumSetting(string name, string? description, string page, string category, int priority, ImmutableArray<string> enumValues, UnconfiguredEnumSettingValue value, bool supportsPerConfigurationValues = false)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues, enumValues))
         {
             Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
-        public EnumSetting(string name, string? description, string page, string category, int priority, IReadOnlyList<string> enumValues, IReadOnlyList<ConfiguredEnumSettingValue> values)
-            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true), enumValues)
+        public EnumSetting(string name, string? description, string page, string category, int priority, ImmutableArray<string> enumValues, IReadOnlyList<ConfiguredEnumSettingValue> values)
+            : this(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: true, enumValues))
         {
             Values = values.ToImmutableArray<ISettingValue>();
         }
 
-        private EnumSetting(SettingMetadata metadata, IReadOnlyList<string> enumValues)
+        private EnumSetting(SettingMetadata metadata)
             : base(metadata)
         {
-            EnumValues = enumValues;
         }
 
-        protected override void OnValueAdded(ISettingValue value)
-        {
-            switch (value)
-            {
-                case UnconfiguredEnumSettingValue unconfigured:
-                {
-                    unconfigured.Parent = this;
-                    break;
-                }
-                case ConfiguredEnumSettingValue configured:
-                {
-                    configured.Parent = this;
-                    break;
-                }
-            }
-        }
-
-        protected override bool MatchesSearchText(string searchString)
-        {
-            foreach (var enumValue in EnumValues)
-            {
-                if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
-                    return true;
-            }
-
-            return false;
-        }
-
-        public override Setting Clone() => new EnumSetting(Metadata, EnumValues) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
+        public override Setting Clone() => new EnumSetting(Metadata) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
     }
 
     internal sealed class UnconfiguredEnumSettingValue : SettingValue<string>
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("UnconfiguredEnumSettingValueTemplate");
-
-        public EnumSetting? Parent { get; internal set; }
 
         public UnconfiguredEnumSettingValue(string value)
             : base(value)
@@ -387,8 +338,6 @@ namespace SettingsProject
     {
         private static readonly DataTemplate _template = (DataTemplate)Application.Current.FindResource("ConfiguredEnumSettingValueTemplate");
 
-        public EnumSetting? Parent { get; internal set; }
-
         public ConfiguredEnumSettingValue(string configuration, string value)
             : base(value)
         {
@@ -403,7 +352,7 @@ namespace SettingsProject
     internal sealed class LinkAction : Setting
     {
         public LinkAction(string name, string? description, string page, string category, int priority)
-            : base(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: false))
+            : base(new SettingMetadata(name, page, category, description, priority, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty))
         {
             Values = ImmutableArray<ISettingValue>.Empty;
         }

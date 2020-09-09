@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 #nullable enable
@@ -120,8 +121,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "General",
                 priority: 320,
-                enumValues: new[]
-                {
+                enumValues: ImmutableArray.Create(
                     ".NET 5",
                     ".NET Core 3.1",
                     ".NET Core 3.0",
@@ -129,8 +129,7 @@ namespace SettingsProject
                     ".NET Core 2.1",
                     ".NET Core 2.0",
                     ".NET Core 1.1",
-                    ".NET Core 1.0"
-                },
+                    ".NET Core 1.0"),
                 new UnconfiguredEnumSettingValue(".NET 5")),
             new LinkAction(
                 name: "Install other frameworks",
@@ -144,12 +143,10 @@ namespace SettingsProject
                 page: "Application",
                 category: "General",
                 priority: 500,
-                enumValues: new[]
-                {
+                enumValues: ImmutableArray.Create(
                     "Console Application",
                     "Windows Application",
-                    "Class Library"
-                },
+                    "Class Library"),
                 new UnconfiguredEnumSettingValue("Console Application")),
             new BoolSetting(
                 name: "Binding redirects",
@@ -164,7 +161,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "General",
                 priority: 700,
-                enumValues: new[] { "(Not set)" },
+                enumValues: ImmutableArray.Create("(Not set)"),
                 new UnconfiguredEnumSettingValue("(Not set)")),
 
             new EnumSetting(
@@ -173,7 +170,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "Resources",
                 priority: 800,
-                enumValues: new[] { "Icon and manifest", "Resource file" },
+                enumValues: ImmutableArray.Create("Icon and manifest", "Resource file"),
                 new UnconfiguredEnumSettingValue("Icon and manifest")),
             // TODO make this IconBrowseSetting
             new StringSetting(
@@ -191,7 +188,7 @@ namespace SettingsProject
                 page: "Application",
                 category: "Resources",
                 priority: 820,
-                enumValues: new[] { "" },
+                enumValues: ImmutableArray.Create(""),
                 new UnconfiguredEnumSettingValue("")),
             // TODO make this FileBrowseSetting
             new StringSetting(
@@ -257,7 +254,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 400,
-                enumValues: new[] { "Any CPU", "x86" },
+                enumValues: ImmutableArray.Create("Any CPU", "x86"),
                 new UnconfiguredEnumSettingValue("Any CPU")),
             new EnumSetting(
                 name: "Nullable reference types",
@@ -265,7 +262,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "General",
                 priority: 500,
-                enumValues: new[] { "Disable", "Enable", "Warnings", "Annotations" },
+                enumValues: ImmutableArray.Create("Disable", "Enable", "Warnings", "Annotations"),
                 new UnconfiguredEnumSettingValue("Enable")),
             // TODO this is disabled in .NET Core -- why?
             new BoolSetting(
@@ -302,7 +299,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Errors and warnings",
                 priority: 40,
-                enumValues: new[] { "0", "1", "2", "3", "4" },
+                enumValues: ImmutableArray.Create("0", "1", "2", "3", "4"),
                 new UnconfiguredEnumSettingValue("4")),
             new StringSetting(
                 name: "Suppress specific warnings",
@@ -317,7 +314,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Errors and warnings",
                 priority: 300,
-                enumValues: new[] { "None", "All", "Specific warnings" },
+                enumValues: ImmutableArray.Create("None", "All", "Specific warnings"),
                 new UnconfiguredEnumSettingValue("Specific warnings")),
             new StringSetting(
                 name: "Treat specific warnings as errors",
@@ -361,7 +358,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Output",
                 priority: 400,
-                enumValues: new[] { "Auto", "On", "Off" },
+                enumValues: ImmutableArray.Create("Auto", "On", "Off"),
                 new UnconfiguredEnumSettingValue("Auto")),
 
             //////
@@ -381,7 +378,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Advanced",
                 priority: 200,
-                enumValues: new[] { "None", "Prompt", "Send", "Queue" },
+                enumValues: ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
                 new UnconfiguredEnumSettingValue("Prompt")),
             new BoolSetting(
                 name: "Overflow checking",
@@ -397,7 +394,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Advanced",
                 priority: 400,
-                enumValues: new[] { "None", "Full", "Pdb-only", "Portable", "Embedded" },
+                enumValues: ImmutableArray.Create("None", "Full", "Pdb-only", "Portable", "Embedded"),
                 new UnconfiguredEnumSettingValue("Portable"),
                 supportsPerConfigurationValues: true),
             new EnumSetting(
@@ -406,7 +403,7 @@ namespace SettingsProject
                 page: "Build",
                 category: "Advanced",
                 priority: 500,
-                enumValues: new[] { "512", "1024", "2048", "4096", "8192" },
+                enumValues: ImmutableArray.Create("512", "1024", "2048", "4096", "8192"),
                 new UnconfiguredEnumSettingValue("512")),
             new StringSetting(
                 name: "Library base address",
@@ -445,12 +442,10 @@ namespace SettingsProject
                 page: "Build Events",
                 category: "General",
                 priority: 300,
-                enumValues: new[]
-                {
+                enumValues: ImmutableArray.Create(
                     "Always",
                     "On successful build",
-                    "When the build updates the project output"
-                },
+                    "When the build updates the project output"),
                 new UnconfiguredEnumSettingValue("On successful build")),
 
             /////////////
@@ -598,7 +593,7 @@ namespace SettingsProject
                 page: "Packaging",
                 category: "License",
                 priority: 200,
-                enumValues: new[] { "None", "Expression", "File" },
+                enumValues: ImmutableArray.Create("None", "Expression", "File"),
                 new UnconfiguredEnumSettingValue("None")),
             // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
             new StringSetting(

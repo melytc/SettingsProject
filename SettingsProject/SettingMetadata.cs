@@ -1,4 +1,6 @@
-﻿#nullable enable
+﻿using System.Collections.Immutable;
+
+#nullable enable
 
 namespace SettingsProject
 {
@@ -22,9 +24,11 @@ namespace SettingsProject
 
         public bool SupportsPerConfigurationValues { get; }
 
+        public ImmutableArray<string> EnumValues { get; }
+
         // TODO Editors
 
-        public SettingMetadata(string name, string page, string category, string? description, int priority, bool supportsPerConfigurationValues)
+        public SettingMetadata(string name, string page, string category, string? description, int priority, bool supportsPerConfigurationValues, ImmutableArray<string> enumValues)
         {
             Name = name;
             Page = page;
@@ -32,6 +36,7 @@ namespace SettingsProject
             Description = description;
             Priority = priority;
             SupportsPerConfigurationValues = supportsPerConfigurationValues;
+            EnumValues = enumValues;
         }
 
         public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);

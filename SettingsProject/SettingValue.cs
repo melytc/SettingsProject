@@ -10,12 +10,14 @@ namespace SettingsProject
     internal interface ISettingValue : INotifyPropertyChanged
     {
         // null if this value applies to all configurations
-        public string? Configuration { get; }
+        string? Configuration { get; }
 
-        public DataTemplate Template { get; }
+        DataTemplate Template { get; }
 
-        public object Value { get; }
-        
+        object Value { get; }
+
+        Setting? Parent { get; set; }
+
         ISettingValue Clone();
     }
 
@@ -34,6 +36,8 @@ namespace SettingsProject
 
         public abstract string? Configuration { get; }
         public abstract DataTemplate Template { get; }
+
+        public Setting? Parent { get; set; }
 
         /// <summary>
         /// Gets and sets the current value of the property.
