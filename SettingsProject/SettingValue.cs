@@ -23,13 +23,10 @@ namespace SettingsProject
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected IEqualityComparer<T> Comparer { get; }
-
         private T _value;
 
-        protected SettingValue(T value, IEqualityComparer<T>? comparer = null)
+        protected SettingValue(T value)
         {
-            Comparer = comparer ?? EqualityComparer<T>.Default;
             _value = value;
         }
 
@@ -46,7 +43,7 @@ namespace SettingsProject
             get => _value;
             set
             {
-                if (!Comparer.Equals(value, Value))
+                if (!EqualityComparer<T>.Default.Equals(value, Value))
                 {
                     _value = value;
                     OnPropertyChanged(nameof(Value));
