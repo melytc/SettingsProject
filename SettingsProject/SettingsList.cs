@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Microsoft;
 
 #nullable enable
 
@@ -90,6 +91,7 @@ namespace SettingsProject
                 }
             }
 
+            Assumes.NotNull(_itemsControl);
             var pageGroupContainer = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(group);
 
             pageGroupContainer?.BringIntoView();
@@ -99,10 +101,12 @@ namespace SettingsProject
         {
             base.OnApplyTemplate();
 
-            _itemsControl = (ItemsControl)GetTemplateChild("PART_ItemsControl");
+            _itemsControl = (ItemsControl?)GetTemplateChild("PART_ItemsControl");
+            Assumes.NotNull(_itemsControl);
             _itemsControl.ApplyTemplate();
 
             VisualTreeUtil.TryFindDescendentBreadthFirst(_itemsControl, out _scrollViewer);
+            Assumes.NotNull(_scrollViewer);
             _scrollViewer.ScrollChanged += OnScrollChanged;
         }
 
@@ -110,8 +114,8 @@ namespace SettingsProject
         private CollectionViewGroup? _scrollToSubGroup;
         private bool _ignoreNextScrollEvent;
 
-        private ItemsControl _itemsControl;
-        private ScrollViewer _scrollViewer;
+        private ItemsControl? _itemsControl;
+        private ScrollViewer? _scrollViewer;
 
         private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
         {
@@ -120,6 +124,8 @@ namespace SettingsProject
                 _ignoreNextScrollEvent = false;
                 return;
             }
+
+            Assumes.NotNull(_itemsControl);
 
             // TODO before 'scroll to top' logic, ensure we haven't scrolled to this group already anyway (can happen when scrolling up after navigating to a subgroup)
 
