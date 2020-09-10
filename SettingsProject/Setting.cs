@@ -9,14 +9,31 @@ using System.Runtime.CompilerServices;
 
 namespace SettingsProject
 {
+    internal sealed class SettingContext
+    {
+        private readonly Dictionary<SettingIdentity, Setting> _settingByIdentity = new Dictionary<SettingIdentity, Setting>();
+
+        public void AddSetting(Setting setting)
+        {
+            _settingByIdentity.Add(setting.Identity, setting);
+        }
+
+        public Setting GetSetting(in SettingIdentity targetIdentity)
+        {
+            return _settingByIdentity[targetIdentity];
+        }
+    }
+
     internal class Setting : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
-        private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
+        private List<(SettingIdentity target, object visibleWhenValue)>? _dependentTargets;
         private ImmutableArray<ISettingValue> _values;
+
+        private readonly SettingContext _context;
 
         protected internal SettingMetadata Metadata { get; }
 
@@ -61,23 +78,26 @@ namespace SettingsProject
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public Setting(string name, string? description, string page, string category, int priority, string editorType, UnconfiguredSettingValue value, ImmutableArray<string>? enumValues = null, bool supportsPerConfigurationValues = false)
-            : this(new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues, enumValues ?? ImmutableArray<string>.Empty), ImmutableArray.Create<ISettingValue>(value))
+        public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, UnconfiguredSettingValue value, ImmutableArray<string>? enumValues = null, bool supportsPerConfigurationValues = false)
+            : this(context, new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues, enumValues ?? ImmutableArray<string>.Empty), ImmutableArray.Create<ISettingValue>(value))
         {
         }
 
-        public Setting(string name, string? description, string page, string category, int priority, string editorType, ImmutableArray<string>? enumValues, ImmutableArray<ConfiguredSettingValue> values)
-            : this(new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues: true, enumValues ?? ImmutableArray<string>.Empty), values.CastArray<ISettingValue>())
+        public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, ImmutableArray<string>? enumValues, ImmutableArray<ConfiguredSettingValue> values)
+            : this(context, new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues: true, enumValues ?? ImmutableArray<string>.Empty), values.CastArray<ISettingValue>())
         {
         }
 
-        public Setting(SettingMetadata metadata, ImmutableArray<ISettingValue> values)
+        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<ISettingValue> values)
         {
+            _context = context;
             Metadata = metadata;
             Values = values;
+
+            _context.AddSetting(this);
         }
 
-        private void UpdateDependentVisibilities()
+        internal void UpdateDependentVisibilities()
         {
             // TODO model this as a graph with edges so that multiple upstream properties may influence a single downstream one
 
@@ -86,8 +106,9 @@ namespace SettingsProject
                 return;
             }
 
-            foreach (var (target, visibleWhenValue) in _dependentTargets)
+            foreach (var (targetIdentity, visibleWhenValue) in _dependentTargets)
             {
+                var target = _context.GetSetting(targetIdentity);
                 var wasVisible = target.IsVisible;
 
                 bool isConditionallyVisible = false;
@@ -111,9 +132,9 @@ namespace SettingsProject
             }
         }
 
-        public void AddDependentTarget(Setting target, object visibleWhenValue)
+        public void AddDependentTarget(SettingIdentity target, object visibleWhenValue)
         {
-            _dependentTargets ??= new List<(Setting target, object visibleWhenValue)>();
+            _dependentTargets ??= new List<(SettingIdentity target, object visibleWhenValue)>();
 
             _dependentTargets.Add((target, visibleWhenValue));
 
@@ -150,18 +171,18 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
+        public virtual Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
     }
 
     internal sealed class LinkAction : Setting
     {
-        public LinkAction(string name, string? description, string page, string category, int priority)
-            : base(new SettingMetadata(name, page, category, description, priority, null, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
+        public LinkAction(SettingContext context, string name, string? description, string page, string category, int priority)
+            : base(context, new SettingMetadata(name, page, category, description, priority, null, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
         {
         }
 
-        private LinkAction(SettingMetadata metadata)
-            : base(metadata, ImmutableArray<ISettingValue>.Empty)
+        private LinkAction(SettingContext context, SettingMetadata metadata)
+            : base(context, metadata, ImmutableArray<ISettingValue>.Empty)
         {
         }
 
@@ -169,6 +190,6 @@ namespace SettingsProject
         
         public string LinkText => Description ?? Name;
 
-        public override Setting Clone() => new LinkAction(Metadata);
+        public override Setting Clone(SettingContext context) => new LinkAction(context, Metadata);
     }
 }

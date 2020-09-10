@@ -323,6 +323,7 @@ namespace SettingsProject
 
             static LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
+                var context = new SettingContext();
                 var settings = kind.Metadata.Select(CreateSetting).ToImmutableArray();
 
                 // TODO revisit how we model conditionality between settings
@@ -336,7 +337,7 @@ namespace SettingsProject
                     if (!settingByIdentity.TryGetValue(condition.Target, out Setting? target))
                         continue; // throw new Exception("Unknown target: " + condition.Target);
 
-                    source.AddDependentTarget(target, condition.SourceValue);
+                    source.AddDependentTarget(target.Identity, condition.SourceValue);
                 }
 
                 return new LaunchProfileViewModel(name, settings, kind);
@@ -349,7 +350,7 @@ namespace SettingsProject
                         value = metadata.Editor.GetDefaultValue(metadata);
                     }
 
-                    return new Setting(metadata, ImmutableArray.Create<ISettingValue>(new UnconfiguredSettingValue(value)));
+                    return new Setting(context, metadata, ImmutableArray.Create<ISettingValue>(new UnconfiguredSettingValue(value)));
                 }
             }
 
