@@ -14,7 +14,9 @@ namespace SettingsProject
         public LaunchProfileViewModel? SelectedProfile { get; set; }
 
         public ICommand CloneCommand { get; }
+
         public ICommand DeleteCommand { get; }
+
         public ICommand RenameCommand { get; }
 
         public ImmutableArray<LaunchProfileKind> ProfileKinds { get; }

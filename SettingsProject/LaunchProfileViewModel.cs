@@ -16,6 +16,7 @@ namespace SettingsProject
         private string _name;
 
         public LaunchProfileKind Kind { get; }
+
         public SettingsListViewModel SettingsListViewModel { get; }
 
         public LaunchProfileViewModel(string name, ImmutableArray<Setting> settings, LaunchProfileKind kind)
