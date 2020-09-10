@@ -12,136 +12,279 @@ namespace SettingsProject
 {
     internal partial class LaunchProfilesWindow
     {
+        #region SettingMetadata
+
+        private static readonly SettingMetadata ExecutablePath = new SettingMetadata(
+            name: "Executable path",
+            description: "Path to the executable to debug.",
+            page: "Debug",
+            category: "General",
+            priority: 100,
+            editorType: "String", // TODO FilePath
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata ApplicationArguments = new SettingMetadata(
+            name: "Application arguments",
+            description: "Arguments to be passed to the launched application.",
+            page: "Debug",
+            category: "General",
+            priority: 200,
+            editorType: "String",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata WorkingDirectory = new SettingMetadata(
+            name: "Working directory",
+            description: "Absolute path to the working directory.",
+            page: "Debug",
+            category: "General",
+            priority: 300,
+            editorType: "String", // TODO FilePath
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata UseRemoteMachine = new SettingMetadata(
+            name: "Use remote machine",
+            description: "The debug target is on a remote machine.",
+            page: "Debug",
+            category: "General",
+            priority: 400,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata RemoteMachineHostName = new SettingMetadata(
+            name: "Remote machine host name",
+            description: null,
+            page: "Debug",
+            category: "General",
+            priority: 410,
+            editorType: "String", // TODO RemoteMachineSetting, with support for the 'Find' button
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata AuthenticationMode = new SettingMetadata(
+            name: "Authentication mode",
+            description: null,
+            page: "Debug",
+            category: "General",
+            priority: 420,
+            editorType: "Enum",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray.Create("None", "Windows"));
+
+        private static readonly SettingMetadata LaunchBrowser = new SettingMetadata(
+            name: "Launch Browser",
+            description: "Whether a browser should be launched when this profile is invoked.",
+            page: "Debug",
+            category: "General",
+            priority: 550,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata LaunchBrowserUrl = new SettingMetadata(
+            name: "Launch Browser URL",
+            description: "Absolute or relative URL to direct the browser to when launched.",
+            page: "Debug",
+            category: "General",
+            priority: 560,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata EnvironmentVariables = new SettingMetadata(
+            name: "Environment variables",
+            description: "Specifies environment variables to be set for the launched application.",
+            page: "Debug",
+            category: "General",
+            priority: 500,
+            editorType: "String", // TODO NameValueList
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata NativeCodeDebugging = new SettingMetadata(
+            name: "Native code debugging",
+            description: "Enable native code debugging.",
+            page: "Debug",
+            category: "General",
+            priority: 600,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata SqlServerDebugging = new SettingMetadata(
+            name: "SQL Server debugging",
+            description: "Enable SQL Server debugging.",
+            page: "Debug",
+            category: "General",
+            priority: 700,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata AzureResource = new SettingMetadata(
+            name: "Azure resource",
+            description: "The Azure resource to use in your snapshot debugging session.",
+            page: "Debug",
+            category: "General",
+            priority: 100,
+            editorType: "Enum", // TODO AzureResource
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata AzureStorageAccount = new SettingMetadata(
+            name: "Azure Storage account",
+            description: "The Azure resource to use in your snapshot debugging session.",
+            page: "Debug",
+            category: "General",
+            priority: 200,
+            editorType: "Enum", // TODO editorType AzureStorage
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata AppUrl = new SettingMetadata(
+            name: "App URL",
+            description: "The URL at which the application will be hosted when running.",
+            page: "Debug",
+            category: "Web Server Settings",
+            priority: 100,
+            editorType: "String",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata IisExpressBitness = new SettingMetadata(
+            name: "IIS Express Bitness",
+            description: "Bitness of the IIS Express process to launch (x86, x64).",
+            page: "Debug",
+            category: "Web Server Settings",
+            priority: 200,
+            editorType: "Enum",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray.Create("Default", "x64", "x86"));
+
+        private static readonly SettingMetadata HostingModel = new SettingMetadata(
+            name: "Hosting Model",
+            description: "The URL at which the application will be hosted when running.",
+            page: "Debug",
+            category: "Web Server Settings",
+            priority: 300,
+            editorType: "Enum",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process"));
+
+        private static readonly SettingMetadata EnableSSL = new SettingMetadata(
+            name: "Enable SSL",
+            description: null,
+            page: "Debug",
+            category: "Web Server Settings",
+            priority: 400,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata EnableAnonymousAuthentication = new SettingMetadata(
+            name: "Enable Anonymous Authentication",
+            description: null,
+            page: "Debug",
+            category: "Web Server Settings",
+            priority: 500,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        private static readonly SettingMetadata EnableWindowsAuthentication = new SettingMetadata(
+            name: "Enable Windows Authentication",
+            description: null,
+            page: "Debug",
+            category: "Web Server Settings",
+            priority: 600,
+            editorType: "Bool",
+            supportsPerConfigurationValues: false,
+            enumValues: ImmutableArray<string>.Empty);
+
+        #endregion
+
         private static readonly IReadOnlyList<SettingCondition> Conditions = new[]
         {
             new SettingCondition(
-                source: new SettingIdentity("Debug", "General", "Use remote machine"),
+                source: UseRemoteMachine.Identity,
                 sourceValue: true,
-                target: new SettingIdentity("Debug", "General", "Remote machine host name")),
+                target: RemoteMachineHostName.Identity),
             new SettingCondition(
-                source: new SettingIdentity("Debug", "General", "Use remote machine"),
+                source: UseRemoteMachine.Identity,
                 sourceValue: true,
-                target: new SettingIdentity("Debug", "General", "Authentication mode")),
+                target: AuthenticationMode.Identity),
         };
 
-        private static readonly ImmutableArray<SettingMetadata> ExecutableKindSettingMetadata = ImmutableArray.Create(
-                // TODO make this FileBrowseSetting
-                new SettingMetadata(
-                    name: "Executable path",
-                    description: "Path to the executable to debug.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 100,
-                    editorType: "String",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                new SettingMetadata(
-                    name: "Application arguments",
-                    description: "Arguments to be passed to the launched application.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 200,
-                    editorType: "String",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                // TODO make this FileBrowseSetting
-                new SettingMetadata(
-                    name: "Working directory",
-                    description: "Absolute path to the working directory.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 300,
-                    editorType: "String",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                new SettingMetadata(
-                    name: "Use remote machine",
-                    description: "The debug target is on a remote machine.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 400,
-                    editorType: "Bool",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                // TODO make this RemoteMachineSetting, with support for the 'Find' button
-                new SettingMetadata(
-                    name: "Remote machine host name",
-                    description: null,
-                    page: "Debug",
-                    category: "General",
-                    priority: 410,
-                    editorType: "String",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                new SettingMetadata(
-                    name: "Authentication mode",
-                    description: null,
-                    page: "Debug",
-                    category: "General",
-                    priority: 420,
-                    editorType: "Enum",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray.Create("None", "Windows")),
-                // TODO NameValueListSetting
-                new SettingMetadata(
-                    name: "Environment variables",
-                    description: "Specifies environment variables to be set for the launched application.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 500,
-                    editorType: "String",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                new SettingMetadata(
-                    name: "Native code debugging",
-                    description: "Enable native code debugging.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 600,
-                    editorType: "Bool",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                new SettingMetadata(
-                    name: "SQL Server debugging",
-                    description: "Enable SQL Server debugging.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 700,
-                    editorType: "Bool",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty));
-
-        private static readonly ImmutableArray<SettingMetadata> ProjectKindSettingMetadata = ExecutableKindSettingMetadata.Skip(1).ToImmutableArray();
-
-        private static readonly ImmutableArray<SettingMetadata> SnapshotDebuggerKindSettingMetadata = ImmutableArray.Create(
-                // TODO editorType AzureResource
-                new SettingMetadata(
-                    name: "Azure resource",
-                    description: "The Azure resource to use in your snapshot debugging session.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 100,
-                    editorType: "Enum",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty),
-                // TODO editorType AzureStorage
-                new SettingMetadata(
-                    name: "Azure Storage account",
-                    description: "The Azure resource to use in your snapshot debugging session.",
-                    page: "Debug",
-                    category: "General",
-                    priority: 200,
-                    editorType: "Enum",
-                    supportsPerConfigurationValues: false,
-                    enumValues: ImmutableArray<string>.Empty));
 
         public LaunchProfilesWindow()
         {
-            var projectKind = new LaunchProfileKind("Project", ProjectKindSettingMetadata, FindDrawing("IconApplicationDrawing"));
-            var executableKind = new LaunchProfileKind("Executable", ExecutableKindSettingMetadata, FindDrawing("IconExecuteDrawing"));
-            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", SnapshotDebuggerKindSettingMetadata, FindDrawing("SnapshotDebuggerDrawing"));
+            var executableKindSettingMetadata = ImmutableArray.Create(
+                ExecutablePath,
+                ApplicationArguments,
+                WorkingDirectory,
+                UseRemoteMachine,
+                RemoteMachineHostName,
+                AuthenticationMode,
+                EnvironmentVariables,
+                NativeCodeDebugging,
+                SqlServerDebugging);
 
-            var profileKinds = ImmutableArray.Create(projectKind, executableKind, snapshotDebuggerKind);
+            var projectKindSettingMetadata = ImmutableArray.Create(
+                ApplicationArguments,
+                WorkingDirectory,
+                UseRemoteMachine,
+                RemoteMachineHostName,
+                AuthenticationMode,
+                EnvironmentVariables,
+                NativeCodeDebugging,
+                SqlServerDebugging);
+
+            var snapshotDebuggerKindSettingMetadata = ImmutableArray.Create(
+                AzureResource,
+                AzureStorageAccount);
+
+            var iisExpressKindSettingMetadata = ImmutableArray.Create(
+                ApplicationArguments,
+                WorkingDirectory,
+                LaunchBrowser,
+                LaunchBrowserUrl,
+                EnvironmentVariables,
+                NativeCodeDebugging,
+                SqlServerDebugging,
+                // Web server settings
+                AppUrl,
+                IisExpressBitness,
+                HostingModel,
+                EnableSSL,
+                EnableAnonymousAuthentication,
+                EnableWindowsAuthentication);
+
+            var iisKindSettingMetadata = ImmutableArray.Create(
+                ApplicationArguments,
+                WorkingDirectory,
+                LaunchBrowser,
+                LaunchBrowserUrl,
+                EnvironmentVariables,
+                NativeCodeDebugging,
+                SqlServerDebugging,
+                // Web server settings
+                AppUrl,
+                IisExpressBitness,
+                HostingModel,
+                EnableSSL,
+                EnableAnonymousAuthentication,
+                EnableWindowsAuthentication);
+
+            var projectKind = new LaunchProfileKind("Project", projectKindSettingMetadata, FindDrawing("IconApplicationDrawing"));
+            var executableKind = new LaunchProfileKind("Executable", executableKindSettingMetadata, FindDrawing("IconExecuteDrawing"));
+            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindSettingMetadata, FindDrawing("SnapshotDebuggerDrawing"));
+            var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, FindDrawing("IISDrawing"));
+            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, FindDrawing("IISExpressDrawing"));
+
+            var profileKinds = ImmutableArray.Create(projectKind, executableKind, snapshotDebuggerKind, iisKind, iisExpressKind);
 
             var profiles = new ObservableCollection<LaunchProfileViewModel>
             {
@@ -157,6 +300,16 @@ namespace SettingsProject
                 CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<string, object>
                 {
                     // TODO
+                }),
+                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<string, object>
+                {
+                    { "App URL", "http://localhost:52531" },
+                    { "Launch Browser", true }
+                }),
+                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<string, object>
+                {
+                    { "App URL", "http://localhost:52531" },
+                    { "Launch Browser", true }
                 })
             };
 
