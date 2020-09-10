@@ -90,7 +90,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 560,
-            editorType: "Bool",
+            editorType: "String",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray<string>.Empty);
 
