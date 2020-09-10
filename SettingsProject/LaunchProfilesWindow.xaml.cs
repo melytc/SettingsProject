@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -138,9 +137,9 @@ namespace SettingsProject
 
         public LaunchProfilesWindow()
         {
-            var projectKind = new LaunchProfileKind("Project", ProjectKindSettingMetadata, FindBrush("IconApplicationBrush"));
-            var executableKind = new LaunchProfileKind("Executable", ExecutableKindSettingMetadata, FindBrush("IconExecuteBrush"));
-            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", SnapshotDebuggerKindSettingMetadata, FindBrush("SnapshotDebuggerBrush"));
+            var projectKind = new LaunchProfileKind("Project", ProjectKindSettingMetadata, FindDrawing("IconApplicationDrawing"));
+            var executableKind = new LaunchProfileKind("Executable", ExecutableKindSettingMetadata, FindDrawing("IconExecuteDrawing"));
+            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", SnapshotDebuggerKindSettingMetadata, FindDrawing("SnapshotDebuggerDrawing"));
 
             var profileKinds = ImmutableArray.Create(projectKind, executableKind, snapshotDebuggerKind);
 
@@ -197,11 +196,11 @@ namespace SettingsProject
                 }
             }
 
-            static DrawingBrush FindBrush(string resourceKey)
+            static Drawing FindDrawing(string resourceKey)
             {
                 var resource = Application.Current.FindResource(resourceKey);
                 Assumes.NotNull(resource);
-                return (DrawingBrush)resource;
+                return (Drawing)resource;
             }
         }
     }

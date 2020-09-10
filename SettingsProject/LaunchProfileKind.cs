@@ -11,13 +11,13 @@ namespace SettingsProject
 
         public ImmutableArray<SettingMetadata> Metadata { get; }
 
-        public DrawingBrush IconBrush { get; }
+        public Drawing IconDrawing { get; }
 
-        public LaunchProfileKind(string name, ImmutableArray<SettingMetadata> metadata, DrawingBrush iconBrush)
+        public LaunchProfileKind(string name, ImmutableArray<SettingMetadata> metadata, Drawing iconDrawing)
         {
             Name = name;
             Metadata = metadata;
-            IconBrush = iconBrush;
+            IconDrawing = iconDrawing;
         }
     }
 }

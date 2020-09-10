@@ -60,60 +60,51 @@
             <SolidColorBrush x:Key="light-red" Color="#c50b17" Opacity="1"/>
             <system:Double x:Key="cls-1">0.75</system:Double>
 
-            <DrawingBrush Stretch="None" x:Key="IconExecuteBrush">
-              <DrawingBrush.Drawing>
-                <DrawingGroup>
-                  <DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
-                  </DrawingGroup>
-                  <DrawingGroup>
-                    <DrawingGroup Opacity="{DynamicResource cls-1}">
-                      <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M16,6v9.5l-.5.5H2.5L2,15.5V8.009l1-.571V15H15V6Z"/>
-                      <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M15,6v9H3V7.438L5.516,6Z"/>
-                    </DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource light-blue}" Geometry="F1M13.354,5.354l-2.5,2.5h-.708l-2.5-2.5.708-.707L10,6.293V1h1V6.293l1.646-1.646Z"/>
-                    <GeometryDrawing Brush="{DynamicResource light-green}" Geometry="F1M7,4,0,8V0Z"/>
-                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M12,12.427v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm-4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm-2-3v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Z"/>
-                  </DrawingGroup>
+            <DrawingGroup x:Key="IconExecuteDrawing">
+              <DrawingGroup>
+                <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
+              </DrawingGroup>
+              <DrawingGroup>
+                <DrawingGroup Opacity="{DynamicResource cls-1}">
+                  <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M16,6v9.5l-.5.5H2.5L2,15.5V8.009l1-.571V15H15V6Z"/>
+                  <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M15,6v9H3V7.438L5.516,6Z"/>
                 </DrawingGroup>
-              </DrawingBrush.Drawing>
-            </DrawingBrush>
+                <GeometryDrawing Brush="{DynamicResource light-blue}" Geometry="F1M13.354,5.354l-2.5,2.5h-.708l-2.5-2.5.708-.707L10,6.293V1h1V6.293l1.646-1.646Z"/>
+                <GeometryDrawing Brush="{DynamicResource light-green}" Geometry="F1M7,4,0,8V0Z"/>
+                <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M12,12.427v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm-4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm-2-3v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Z"/>
+              </DrawingGroup>
+            </DrawingGroup>
+            <DrawingBrush Stretch="None" x:Key="IconExecuteBrush" Drawing="{StaticResource IconExecuteDrawing}" />
 
-            <DrawingBrush Stretch="None" x:Key="IconApplicationBrush">
-              <DrawingBrush.Drawing>
-                <DrawingGroup>
-                  <DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
-                  </DrawingGroup>
-                  <DrawingGroup>
-                    <DrawingGroup Opacity="{DynamicResource cls-1}">
-                      <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M14.5,5.5v8H1.5v-8Z"/>
-                      <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14.5,5H1.5L1,5.5v8l.5.5h13l.5-.5v-8ZM14,13H2V6H14Z"/>
-                    </DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M14.5,2.5v3H1.5v-3Z"/>
-                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14.5,2H1.5L1,2.5v3l.5.5h13l.5-.5v-3ZM14,5H2V3H14Z"/>
-                  </DrawingGroup>
+            <DrawingGroup x:Key="IconApplicationDrawing">
+              <DrawingGroup>
+                <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
+              </DrawingGroup>
+              <DrawingGroup>
+                <DrawingGroup Opacity="{DynamicResource cls-1}">
+                  <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M14.5,5.5v8H1.5v-8Z"/>
+                  <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14.5,5H1.5L1,5.5v8l.5.5h13l.5-.5v-8ZM14,13H2V6H14Z"/>
                 </DrawingGroup>
-              </DrawingBrush.Drawing>
-            </DrawingBrush>
+                <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M14.5,2.5v3H1.5v-3Z"/>
+                <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14.5,2H1.5L1,2.5v3l.5.5h13l.5-.5v-3ZM14,5H2V3H14Z"/>
+              </DrawingGroup>
+            </DrawingGroup>
+            <DrawingBrush Stretch="None" x:Key="IconApplicationBrush" Drawing="{StaticResource IconApplicationDrawing}" />
 
-            <DrawingBrush Stretch="None" x:Key="SnapshotDebuggerBrush">
-              <DrawingBrush.Drawing>
-                <DrawingGroup>
-                  <DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
-                  </DrawingGroup>
-                  <DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M13,3.5V14H7V5.152L9.016,4,7.323,3.033A.5.5,0,0,1,7.5,3h5A.5.5,0,0,1,13,3.5Z"/>
-                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14,3.5v11l-.5.5h-7L6,14.5V5.723l1-.571V14h6V3.5a.5.5,0,0,0-.5-.5h-5a.5.5,0,0,0-.177.033L6.386,2.5A1.494,1.494,0,0,1,7.5,2h5A1.5,1.5,0,0,1,14,3.5Z"/>
-                    <DrawingGroup Opacity="{DynamicResource cls-1}">
-                      <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M8,10h4v1H8Zm0,2h4v1H8ZM8,5h4V6H8Z"/>
-                    </DrawingGroup>
-                    <GeometryDrawing Brush="{DynamicResource light-green}" Geometry="F1M7,4,0,8V0Z"/>
-                  </DrawingGroup>
+            <DrawingGroup x:Key="SnapshotDebuggerDrawing">
+              <DrawingGroup>
+                <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
+              </DrawingGroup>
+              <DrawingGroup>
+                <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M13,3.5V14H7V5.152L9.016,4,7.323,3.033A.5.5,0,0,1,7.5,3h5A.5.5,0,0,1,13,3.5Z"/>
+                <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14,3.5v11l-.5.5h-7L6,14.5V5.723l1-.571V14h6V3.5a.5.5,0,0,0-.5-.5h-5a.5.5,0,0,0-.177.033L6.386,2.5A1.494,1.494,0,0,1,7.5,2h5A1.5,1.5,0,0,1,14,3.5Z"/>
+                <DrawingGroup Opacity="{DynamicResource cls-1}">
+                  <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M8,10h4v1H8Zm0,2h4v1H8ZM8,5h4V6H8Z"/>
                 </DrawingGroup>
-              </DrawingBrush.Drawing>
-            </DrawingBrush>
+                <GeometryDrawing Brush="{DynamicResource light-green}" Geometry="F1M7,4,0,8V0Z"/>
+              </DrawingGroup>
+            </DrawingGroup>
+            <DrawingBrush Stretch="None" x:Key="SnapshotDebuggerBrush" Drawing="{StaticResource SnapshotDebuggerDrawing}" />
 
             <DrawingBrush Stretch="None" x:Key="DeleteIconBrush">
               <DrawingBrush.Drawing>

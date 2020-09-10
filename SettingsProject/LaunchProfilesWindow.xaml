@@ -38,15 +38,23 @@
 
       <ToolBar DockPanel.Dock="Top" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never" >
         <Menu VerticalAlignment="Center">
-          <MenuItem Header="New ▼" ToolTip="Create a new profile" ItemsSource="{Binding Path=ProfileKinds}">
-            <MenuItem.ItemTemplate>
-              <DataTemplate DataType="local:LaunchProfileKind">
-                <DockPanel>
-                  <Rectangle DockPanel.Dock="Left" Width="16" Height="16" Fill="{Binding IconBrush}" />
-                  <TextBlock Text="{Binding Name}" />
-                </DockPanel>
-              </DataTemplate>
-            </MenuItem.ItemTemplate>
+          <MenuItem Header="New ▼" ToolTip="Create a new profile" ItemsSource="{Binding Path=ProfileKinds}" UsesItemContainerTemplate="False">
+            <MenuItem.ItemContainerStyle>
+              <Style>
+                <Setter Property="MenuItem.Header" Value="{Binding Name}" />
+                <Setter Property="MenuItem.Icon">
+                  <Setter.Value>
+                    <Image Width="16" Height="16">
+                      <Image.Source>
+                        <DrawingImage Drawing="{Binding IconDrawing}" />
+                      </Image.Source>
+                    </Image>
+                  </Setter.Value>
+                </Setter>
+                <Setter Property="MenuItem.Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LaunchProfilesWindow}, Path=DataContext.NewCommand}" />
+                <Setter Property="MenuItem.CommandParameter" Value="{Binding}" />
+              </Style>
+            </MenuItem.ItemContainerStyle>
           </MenuItem>
         </Menu>
         <Button Style="{StaticResource ToolbarButton}" ToolTip="Duplicate selected profile" Command="{Binding CloneCommand}" CommandParameter="{Binding SelectedProfile}">
@@ -71,7 +79,11 @@
         <ListBox.ItemTemplate>
           <DataTemplate DataType="local:LaunchProfileViewModel">
             <DockPanel Margin="8">
-              <Rectangle DockPanel.Dock="Left" Width="16" Height="16" Fill="{Binding Path=Kind.IconBrush}" />
+              <Image DockPanel.Dock="Left" Width="16" Height="16">
+                <Image.Source>
+                  <DrawingImage Drawing="{Binding Kind.IconDrawing}" />
+                </Image.Source>
+              </Image>
               <local:RenameLabel Margin="8,0,0,0" Text="{Binding Path=Name, Mode=TwoWay}" IsRenaming="{Binding Path=IsRenaming, Mode=TwoWay}" />
             </DockPanel>
           </DataTemplate>
