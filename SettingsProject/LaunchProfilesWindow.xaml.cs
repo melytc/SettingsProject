@@ -149,7 +149,7 @@ namespace SettingsProject
             description: "The URL at which the application will be hosted when running.",
             page: "Debug",
             category: "Web Server Settings",
-            priority: 100,
+            priority: 1100,
             editorType: "String",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray<string>.Empty);
@@ -159,7 +159,7 @@ namespace SettingsProject
             description: "Bitness of the IIS Express process to launch (x86, x64).",
             page: "Debug",
             category: "Web Server Settings",
-            priority: 200,
+            priority: 1200,
             editorType: "Enum",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray.Create("Default", "x64", "x86"));
@@ -169,7 +169,7 @@ namespace SettingsProject
             description: "The URL at which the application will be hosted when running.",
             page: "Debug",
             category: "Web Server Settings",
-            priority: 300,
+            priority: 1300,
             editorType: "Enum",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process"));
@@ -179,7 +179,7 @@ namespace SettingsProject
             description: null,
             page: "Debug",
             category: "Web Server Settings",
-            priority: 400,
+            priority: 1400,
             editorType: "Bool",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray<string>.Empty);
@@ -189,7 +189,7 @@ namespace SettingsProject
             description: null,
             page: "Debug",
             category: "Web Server Settings",
-            priority: 500,
+            priority: 1500,
             editorType: "Bool",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray<string>.Empty);
@@ -199,7 +199,7 @@ namespace SettingsProject
             description: null,
             page: "Debug",
             category: "Web Server Settings",
-            priority: 600,
+            priority: 1600,
             editorType: "Bool",
             supportsPerConfigurationValues: false,
             enumValues: ImmutableArray<string>.Empty);
