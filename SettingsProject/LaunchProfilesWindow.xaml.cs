@@ -216,6 +216,10 @@ namespace SettingsProject
                 source: UseRemoteMachine.Identity,
                 sourceValue: true,
                 target: AuthenticationMode.Identity),
+            new SettingCondition(
+                source: LaunchBrowser.Identity,
+                sourceValue: true,
+                target: LaunchBrowserUrl.Identity),
         };
 
 
