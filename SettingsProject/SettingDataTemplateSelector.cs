@@ -9,13 +9,10 @@ namespace SettingsProject
     {
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            if (item is LinkAction)
-                return LinkActionTemplate;
+            if (item is Setting setting)
+                return setting.Metadata.Editor?.SettingDataTemplate;
 
-            return SettingTemplate;
+            return null;
         }
-
-        public DataTemplate? SettingTemplate { get; set; }
-        public DataTemplate? LinkActionTemplate { get; set; }
     }
 }

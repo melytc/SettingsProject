@@ -7,8 +7,9 @@ namespace SettingsProject
     internal interface ISettingEditor
     {
         string TypeName { get; }
-        DataTemplate UnconfiguredDataTemplate { get; }
-        DataTemplate ConfiguredDataTemplate { get; }
+        DataTemplate SettingDataTemplate { get; }
+        DataTemplate? UnconfiguredDataTemplate { get; }
+        DataTemplate? ConfiguredDataTemplate { get; }
         object GetDefaultValue(SettingMetadata metadata);
     }
 }
