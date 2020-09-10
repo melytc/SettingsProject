@@ -292,28 +292,28 @@ namespace SettingsProject
 
             var profiles = new ObservableCollection<LaunchProfileViewModel>
             {
-                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<string, object>
+                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<SettingIdentity, object>
                 {
-                    { "Application arguments", "/foo /bar" }
+                    { ApplicationArguments.Identity, "/foo /bar" }
                 }),
-                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<string, object>
+                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<SettingIdentity, object>
                 {
-                    { "Executable path", "devenv.exe" },
-                    { "Application arguments", "/rootSuffix Exp" }
+                    { ExecutablePath.Identity, "devenv.exe" },
+                    { ApplicationArguments.Identity, "/rootSuffix Exp" }
                 }),
-                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<string, object>
+                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<SettingIdentity, object>
                 {
                     // TODO
                 }),
-                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<string, object>
+                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<SettingIdentity, object>
                 {
-                    { "App URL", "http://localhost:52531" },
-                    { "Launch Browser", true }
+                    { AppUrl.Identity, "http://localhost:52531" },
+                    { LaunchBrowser.Identity, true }
                 }),
-                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<string, object>
+                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<SettingIdentity, object>
                 {
-                    { "App URL", "http://localhost:52531" },
-                    { "Launch Browser", true }
+                    { AppUrl.Identity, "http://localhost:52531" },
+                    { LaunchBrowser.Identity, true }
                 })
             };
 
@@ -321,7 +321,7 @@ namespace SettingsProject
 
             InitializeComponent();
 
-            static LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<string, object> initialValues)
+            static LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
                 var settings = kind.Metadata.Select(CreateSetting).ToImmutableArray();
 
@@ -343,7 +343,7 @@ namespace SettingsProject
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
-                    if (!initialValues.TryGetValue(metadata.Name, out object value))
+                    if (!initialValues.TryGetValue(metadata.Identity, out object value))
                     {
                         Assumes.NotNull(metadata.Editor);
                         value = metadata.Editor.GetDefaultValue(metadata);
