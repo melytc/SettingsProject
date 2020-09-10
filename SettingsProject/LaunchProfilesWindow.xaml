@@ -49,13 +49,13 @@
             </MenuItem.ItemTemplate>
           </MenuItem>
         </Menu>
-        <Button Style="{StaticResource ToolbarButton}" ToolTip="Duplicate selected profile" Command="{Binding CloneCommand}">
+        <Button Style="{StaticResource ToolbarButton}" ToolTip="Duplicate selected profile" Command="{Binding CloneCommand}" CommandParameter="{Binding SelectedProfile}">
           <Rectangle Width="16" Height="16" Fill="{StaticResource CloneIconBrush}" />
         </Button>
-        <Button Style="{StaticResource ToolbarButton}" ToolTip="Delete selected profile" Command="{Binding DeleteCommand}">
+        <Button Style="{StaticResource ToolbarButton}" ToolTip="Delete selected profile" Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedProfile}">
           <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteIconBrush}" />
         </Button>
-        <Button Style="{StaticResource ToolbarButton}" ToolTip="Rename selected profile" Command="{Binding RenameCommand}">
+        <Button Style="{StaticResource ToolbarButton}" ToolTip="Rename selected profile" Command="{Binding RenameCommand}" CommandParameter="{Binding SelectedProfile}">
           <Rectangle Width="16" Height="16" Fill="{StaticResource RenameIconBrush}" />
         </Button>
       </ToolBar>

@@ -27,25 +27,18 @@ namespace SettingsProject
             ProfileKinds = profileKinds;
             SelectedProfile = profiles.First();
 
-            CloneCommand = new DelegateCommand(() =>
+            CloneCommand = new DelegateCommand<LaunchProfileViewModel>(profile =>
             {
-                var index = Profiles.IndexOf(SelectedProfile);
+                var index = Profiles.IndexOf(profile);
 
-                var clone = SelectedProfile.Clone();
+                var clone = profile.Clone();
 
                 Profiles.Insert(index + 1, clone);
             });
 
-            DeleteCommand = new DelegateCommand(() => Profiles.Remove(SelectedProfile));
+            DeleteCommand = new DelegateCommand<LaunchProfileViewModel>(profile => Profiles.Remove(profile));
             
-            RenameCommand = new DelegateCommand(
-                () =>
-                {
-                    if (SelectedProfile != null)
-                    {
-                        SelectedProfile.IsRenaming = true;
-                    }
-                });
+            RenameCommand = new DelegateCommand<LaunchProfileViewModel>(profile => profile.IsRenaming = true);
         }
     }
 }
