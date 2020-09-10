@@ -36,8 +36,19 @@
     <!-- Profile List and Management -->
     <DockPanel>
 
-      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="#eeeeee">
-        <Button Style="{StaticResource ToolbarButton}" ToolTip="Create a new profile">New ▼</Button>
+      <ToolBar DockPanel.Dock="Top" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never" >
+        <Menu VerticalAlignment="Center">
+          <MenuItem Header="New ▼" ToolTip="Create a new profile" ItemsSource="{Binding Path=ProfileKinds}">
+            <MenuItem.ItemTemplate>
+              <DataTemplate DataType="local:LaunchProfileKind">
+                <DockPanel>
+                  <Rectangle DockPanel.Dock="Left" Width="16" Height="16" Fill="{Binding IconBrush}" />
+                  <TextBlock Text="{Binding Name}" />
+                </DockPanel>
+              </DataTemplate>
+            </MenuItem.ItemTemplate>
+          </MenuItem>
+        </Menu>
         <Button Style="{StaticResource ToolbarButton}" ToolTip="Duplicate selected profile" Command="{Binding CloneCommand}">
           <Rectangle Width="16" Height="16" Fill="{StaticResource CloneIconBrush}" />
         </Button>
@@ -47,7 +58,7 @@
         <Button Style="{StaticResource ToolbarButton}" ToolTip="Rename selected profile" Command="{Binding RenameCommand}">
           <Rectangle Width="16" Height="16" Fill="{StaticResource RenameIconBrush}" />
         </Button>
-      </StackPanel>
+      </ToolBar>
 
       <ListBox ItemsSource="{Binding Profiles}"
                SelectedItem="{Binding SelectedProfile}"
