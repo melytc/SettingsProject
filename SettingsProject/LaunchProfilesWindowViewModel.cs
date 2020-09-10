@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 #nullable enable
@@ -18,6 +19,8 @@ namespace SettingsProject
         public ICommand DeleteCommand { get; }
 
         public ICommand RenameCommand { get; }
+
+        public ICommand NewCommand { get; }
 
         public ImmutableArray<LaunchProfileKind> ProfileKinds { get; }
 
@@ -39,6 +42,8 @@ namespace SettingsProject
             DeleteCommand = new DelegateCommand<LaunchProfileViewModel>(profile => Profiles.Remove(profile));
             
             RenameCommand = new DelegateCommand<LaunchProfileViewModel>(profile => profile.IsRenaming = true);
+
+            NewCommand = new DelegateCommand<LaunchProfileKind>(kind => MessageBox.Show($"New {kind.Name}"));
         }
     }
 }
