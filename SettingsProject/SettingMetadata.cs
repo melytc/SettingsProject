@@ -23,10 +23,12 @@ namespace SettingsProject
         public int Priority { get; }
 
         // TODO don't allow this to be null -- it's currently null only for LinkAction, which could have its own editor type if that specified the top-level template too
+        // TODO will probably be an array in precedence order
         public string? EditorType { get; }
 
         public bool SupportsPerConfigurationValues { get; }
 
+        // TODO this will move to the SettingValue type probably
         public ImmutableArray<string> EnumValues { get; }
 
         public ISettingEditor? Editor { get; }

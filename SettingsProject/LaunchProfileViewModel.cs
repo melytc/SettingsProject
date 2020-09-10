@@ -16,6 +16,7 @@ namespace SettingsProject
         private string _name;
 
         public LaunchProfileKind Kind { get; }
+
         public SettingsListViewModel SettingsListViewModel { get; }
 
         public LaunchProfileViewModel(string name, ImmutableArray<Setting> settings, LaunchProfileKind kind)
@@ -54,7 +55,15 @@ namespace SettingsProject
 
         public LaunchProfileViewModel Clone()
         {
-            return new LaunchProfileViewModel($"{Name} (2)", SettingsListViewModel.Settings.Select(setting => setting.Clone()).ToImmutableArray(), Kind);
+            var context = new SettingContext();
+            var settings = SettingsListViewModel.Settings.Select(setting => setting.Clone(context)).ToImmutableArray();
+
+            foreach (var setting in settings)
+            {
+                setting.UpdateDependentVisibilities();
+            }
+
+            return new LaunchProfileViewModel($"{Name} (2)", settings, Kind);
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

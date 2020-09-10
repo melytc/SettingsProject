@@ -46,11 +46,11 @@ namespace SettingsProject
         private bool _hasHighlights;
         private bool _isUpdating;
 
-        private object OnCoerceTextPropertyValue(object baseValue)
+        private object OnCoerceTextPropertyValue(object? baseValue)
         {
             if (_isUpdating)
             {
-                return baseValue;
+                return baseValue ?? "";
             }
 
             var highlightText = HighlightText;
@@ -117,7 +117,7 @@ namespace SettingsProject
                 }
             }
 
-            return baseValue;
+            return baseValue ?? "";
         }
 
         private void OnHighlightTextChanged(object newValue)

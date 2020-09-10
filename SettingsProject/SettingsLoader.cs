@@ -20,7 +20,7 @@ namespace SettingsProject
                 if (!settingByIdentity.TryGetValue(condition.Target, out Setting target))
                     throw new Exception("Unknown target: " + condition.Target);
 
-                source.AddDependentTarget(target, condition.SourceValue);
+                source.AddDependentTarget(target.Identity, condition.SourceValue);
             }
         }
 
@@ -74,6 +74,8 @@ namespace SettingsProject
                 target: new SettingIdentity("Signing", "General", "Delay signing")),
         };
 
+        public static readonly SettingContext DefaultContext = new SettingContext();
+
         public static readonly IReadOnlyList<Setting> DefaultSettings = new Setting[]
         {
             /////////////
@@ -85,6 +87,7 @@ namespace SettingsProject
             ////
 
             new Setting(
+                context: DefaultContext,
                 name: "Assembly name",
                 description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
                 page: "Application",
@@ -93,6 +96,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("ConsoleApp1")),
             new Setting(
+                context: DefaultContext,
                 name: "Default namespace",
                 description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
                 page: "Application",
@@ -101,6 +105,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("ConsoleApp1")),
             new Setting(
+                context: DefaultContext,
                 name: "Multi-targeting",
                 description: "Build this project for multiple target frameworks.",
                 page: "Application",
@@ -111,6 +116,7 @@ namespace SettingsProject
             // TODO come up with a better editing experience, perhaps via a FlagsSetting
             // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
             new Setting(
+                context: DefaultContext,
                 name: "Target frameworks",
                 description:
                 "Specifies the semicolon-delimited list of frameworks that this project will target.",
@@ -120,6 +126,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("net5")),
             new Setting(
+                context: DefaultContext,
                 name: "Target framework",
                 description: "Specifies the framework that this project will target.",
                 page: "Application",
@@ -137,12 +144,14 @@ namespace SettingsProject
                 editorType: "Enum",
                 value: new UnconfiguredSettingValue(".NET 5")),
             new LinkAction(
+                context: DefaultContext,
                 name: "Install other frameworks",
                 description: null,
                 page: "Application",
                 category: "General",
                 priority: 400),
             new Setting(
+                context: DefaultContext,
                 name: "Output type",
                 description: "Specifies whether the output is executable, and whether it runs in a console or as a desktop application.",
                 page: "Application",
@@ -155,6 +164,7 @@ namespace SettingsProject
                 editorType: "Enum",
                 value: new UnconfiguredSettingValue("Console Application")),
             new Setting(
+                context: DefaultContext,
                 name: "Binding redirects",
                 description: "Whether to auto-generate binding redirects.",
                 page: "Application",
@@ -163,6 +173,7 @@ namespace SettingsProject
                 editorType: "Bool",
                 new UnconfiguredSettingValue(true)),
             new Setting(
+                context: DefaultContext,
                 name: "Startup object",
                 description: "Specifies the entry point for the executable.",
                 page: "Application",
@@ -173,6 +184,7 @@ namespace SettingsProject
                 value: new UnconfiguredSettingValue("(Not set)")),
 
             new Setting(
+                context: DefaultContext,
                 name: "Resources",
                 description: "Specifies how application resources will be managed.",
                 page: "Application",
@@ -183,6 +195,7 @@ namespace SettingsProject
                 value: new UnconfiguredSettingValue("Icon and manifest")),
             // TODO make this IconBrowseSetting
             new Setting(
+                context: DefaultContext,
                 name: "Icon path",
                 description: "Path to the icon to embed into the output assembly.",
                 page: "Application",
@@ -193,6 +206,7 @@ namespace SettingsProject
             // TODO make this FileBrowseSetting
             // TODO this can appear disabled, find out why
             new Setting(
+                context: DefaultContext,
                 name: "Manifest path",
                 description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
                 page: "Application",
@@ -203,6 +217,7 @@ namespace SettingsProject
                 value: new UnconfiguredSettingValue("")),
             // TODO make this FileBrowseSetting
             new Setting(
+                context: DefaultContext,
                 name: "Resource file path",
                 description: "Specifies a Win32 res file to compile into this project.",
                 page: "Application",
@@ -218,10 +233,10 @@ namespace SettingsProject
             // TODO this section is disabled for .NET Core projects -- if we have time, determine whether there's anything in here we couldn't add later
 
 //            new Setting(
+//                context: DefaultContext,
 //                name: "Assembly name",
 //                initialValue: "ConsoleApp1",
 //                priority: 20,
-//              1",
 //                description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
 //                page: "Application",
 //                category: "Assembly Information"),
@@ -237,6 +252,7 @@ namespace SettingsProject
             ////
 
             new Setting(
+                context: DefaultContext,
                 name: "Conditional compilation symbols",
                 description: "A semicolon-delimited list of symbols to define for the compilation.",
                 page: "Build",
@@ -246,6 +262,7 @@ namespace SettingsProject
                 value: new UnconfiguredSettingValue("TRACE"),
                 supportsPerConfigurationValues: true),
             new Setting(
+                context: DefaultContext,
                 name: "Define DEBUG symbol",
                 description: "Specifies whether to define the DEBUG compilation symbol.",
                 page: "Build",
@@ -257,6 +274,7 @@ namespace SettingsProject
                     new ConfiguredSettingValue("Debug | AnyCPU", value: true),
                     new ConfiguredSettingValue("Release | AnyCPU", value: false))),
             new Setting(
+                context: DefaultContext,
                 name: "Define TRACE symbol",
                 description: "Specifies whether to define the TRACE compilation symbol.",
                 page: "Build",
@@ -266,6 +284,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue(false),
                 supportsPerConfigurationValues: true),
             new Setting(
+                context: DefaultContext,
                 name: "Platform target",
                 description: "The platform to target in this project configuration.",
                 page: "Build",
@@ -275,6 +294,7 @@ namespace SettingsProject
                 enumValues: ImmutableArray.Create("Any CPU", "x86"),
                 value: new UnconfiguredSettingValue("Any CPU")),
             new Setting(
+                context: DefaultContext,
                 name: "Nullable reference types",
                 description: "Controls use of nullable annotations and warnings.",
                 page: "Build",
@@ -285,6 +305,7 @@ namespace SettingsProject
                 value: new UnconfiguredSettingValue("Enable")),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
+                context: DefaultContext,
                 name: "Prefer 32-bit",
                 description: "Specifies whether to prefer 32-bit when available.",
                 page: "Build",
@@ -293,6 +314,7 @@ namespace SettingsProject
                 editorType: "Bool",
                 new UnconfiguredSettingValue(false)),
             new Setting(
+                context: DefaultContext,
                 name: "Unsafe code",
                 description: "Allow unsafe code in this project.",
                 page: "Build",
@@ -301,6 +323,7 @@ namespace SettingsProject
                 editorType: "Bool",
                 new UnconfiguredSettingValue(false)),
             new Setting(
+                context: DefaultContext,
                 name: "Optimize code",
                 description: "Produce optimized output. Optimized binaries may be harder to debug.",
                 page: "Build",
@@ -317,6 +340,7 @@ namespace SettingsProject
             ////
             
             new Setting(
+                context: DefaultContext,
                 name: "Warning level",
                 description: "Sets the warning level, where higher levels produce more warnings.",
 //              readMore: "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/warn-compiler-option",
@@ -327,6 +351,7 @@ namespace SettingsProject
                 enumValues: ImmutableArray.Create("0", "1", "2", "3", "4"),
                 value: new UnconfiguredSettingValue("4")),
             new Setting(
+                context: DefaultContext,
                 name: "Suppress specific warnings",
                 description: "A semicolon-delimited list of warning codes to suppress.",
                 page: "Build",
@@ -335,6 +360,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("1701;1702")),
             new Setting(
+                context: DefaultContext,
                 name: "Warnings as errors",
                 description: "Controls which warnings are treated as errors.",
                 page: "Build",
@@ -344,6 +370,7 @@ namespace SettingsProject
                 enumValues: ImmutableArray.Create("None", "All", "Specific warnings"),
                 value: new UnconfiguredSettingValue("Specific warnings")),
             new Setting(
+                context: DefaultContext,
                 name: "Treat specific warnings as errors",
                 description: "A semicolon-delimited list of warning codes to treat as errors.",
                 page: "Build",
@@ -358,6 +385,7 @@ namespace SettingsProject
             
             // TODO make this FileBrowseSetting
             new Setting(
+                context: DefaultContext,
                 name: "Output path",
                 description: "Relative destination path for build output.",
                 page: "Build",
@@ -367,6 +395,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("")),
             // TODO make this FileBrowseSetting
             new Setting(
+                context: DefaultContext,
                 name: "XML documentation path",
                 description: "Relative path to the output XML documentation. Clear to disable generation.",
                 page: "Build",
@@ -376,6 +405,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("")),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
+                context: DefaultContext,
                 name: "Register for COM interop",
                 description: "Add metadata from the output assembly to the registry, allowing COM clients to create .NET classes.",
                 page: "Build",
@@ -384,6 +414,7 @@ namespace SettingsProject
                 editorType: "Bool",
                 new UnconfiguredSettingValue(false)),
             new Setting(
+                context: DefaultContext,
                 name: "Generate serialization assembly",
                 description: null,
                 page: "Build",
@@ -398,6 +429,7 @@ namespace SettingsProject
             ////
             
             new LinkAction(
+                context: DefaultContext,
                 name: "Language version",
                 description: "Why can't I select the C# language version?",
                 page: "Build",
@@ -405,6 +437,7 @@ namespace SettingsProject
                 priority: 60),
 
             new Setting(
+                context: DefaultContext,
                 name: "Internal compiler error reporting",
                 description: null,
                 page: "Build",
@@ -414,6 +447,7 @@ namespace SettingsProject
                 enumValues: ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
                 value: new UnconfiguredSettingValue("Prompt")),
             new Setting(
+                context: DefaultContext,
                 name: "Overflow checking",
                 description: "Enable arithmetic overflow checking at runtime.",
                 page: "Build",
@@ -423,6 +457,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue(false),
                 supportsPerConfigurationValues: true),
             new Setting(
+                context: DefaultContext,
                 name: "Debugging information",
                 description: null,
                 page: "Build",
@@ -433,6 +468,7 @@ namespace SettingsProject
                 enumValues: ImmutableArray.Create("None", "Full", "Pdb-only", "Portable", "Embedded"),
                 value: new UnconfiguredSettingValue("Portable")),
             new Setting(
+                context: DefaultContext,
                 name: "File alignment",
                 description: null,
                 page: "Build",
@@ -442,6 +478,7 @@ namespace SettingsProject
                 enumValues: ImmutableArray.Create("512", "1024", "2048", "4096", "8192"),
                 value: new UnconfiguredSettingValue("512")),
             new Setting(
+                context: DefaultContext,
                 name: "Library base address",
                 description: null,
                 page: "Build",
@@ -460,6 +497,7 @@ namespace SettingsProject
 
             // TODO both these build events can be edited in a pop-out editor with macro support
             new Setting(
+                context: DefaultContext,
                 name: "Pre-build event",
                 description: "Commands to execute before a build occurs.",
                 page: "Build Events",
@@ -468,6 +506,7 @@ namespace SettingsProject
                 editorType: "MultiLineString",
                 value: new UnconfiguredSettingValue("")),
             new Setting(
+                context: DefaultContext,
                 name: "Post-build event",
                 description: "Commands to execute after a build completes.",
                 page: "Build Events",
@@ -476,6 +515,7 @@ namespace SettingsProject
                 editorType: "MultiLineString",
                 value: new UnconfiguredSettingValue("")),
             new Setting(
+                context: DefaultContext,
                 name: "Run the post-build event",
                 description: "Controls when any post-build event is executed.",
                 page: "Build Events",
@@ -497,6 +537,7 @@ namespace SettingsProject
             ////
 
             new Setting(
+                context: DefaultContext,
                 name: "Generate NuGet package on build",
                 description: "Specifies whether a NuGet package should be produced in the output directory when the project is build.",
                 page: "Packaging",
@@ -506,6 +547,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue(false),
                 supportsPerConfigurationValues: true),
             new Setting(
+                context: DefaultContext,
                 name: "Package ID",
                 description: null,
                 page: "Packaging",
@@ -515,6 +557,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("ConsoleApp1")),
             // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
             new Setting(
+                context: DefaultContext,
                 name: "Package version",
                 description: null,
                 page: "Packaging",
@@ -523,6 +566,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("1.0.0")),
             new Setting(
+                context: DefaultContext,
                 name: "Authors",
                 description: null,
                 page: "Packaging",
@@ -531,6 +575,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("ConsoleApp1")),
             new Setting(
+                context: DefaultContext,
                 name: "Company",
                 description: null,
                 page: "Packaging",
@@ -539,6 +584,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("ConsoleApp1")),
             new Setting(
+                context: DefaultContext,
                 name: "Product",
                 description: null,
                 page: "Packaging",
@@ -547,6 +593,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("ConsoleApp1")),
             new Setting(
+                context: DefaultContext,
                 name: "Description",
                 description: null,
                 page: "Packaging",
@@ -555,6 +602,7 @@ namespace SettingsProject
                 editorType: "MultiLineString",
                 new UnconfiguredSettingValue("")),
             new Setting(
+                context: DefaultContext,
                 name: "Copyright",
                 description: null,
                 page: "Packaging",
@@ -564,6 +612,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("")),
             // TODO make this IconBrowseSetting
             new Setting(
+                context: DefaultContext,
                 name: "Package icon file",
                 description: "Path to the icon to include in and use for the package.",
                 page: "Packaging",
@@ -572,6 +621,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("")),
             new Setting(
+                context: DefaultContext,
                 name: "Repository URL",
                 description: null, // TODO describe what this URL means
                 page: "Packaging",
@@ -581,6 +631,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("")),
             // TODO provide feedback about valid URLs here
             new Setting(
+                context: DefaultContext,
                 name: "Repository type",
                 description: null,
                 page: "Packaging",
@@ -589,6 +640,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("")),
             new Setting(
+                context: DefaultContext,
                 name: "Tags",
                 description: null, // TODO describe how this is delimited
                 page: "Packaging",
@@ -597,6 +649,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("")),
             new Setting(
+                context: DefaultContext,
                 name: "Release notes",
                 description: null,
                 page: "Packaging",
@@ -606,6 +659,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("")),
             // TODO this is a combo box with many languages listed
             new Setting(
+                context: DefaultContext,
                 name: "Assembly neutral language",
                 description: null,
                 page: "Packaging",
@@ -615,6 +669,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("(None)")),
             // TODO VersionSetting
             new Setting(
+                context: DefaultContext,
                 name: "Assembly version",
                 description: null,
                 page: "Packaging",
@@ -624,6 +679,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue("1.0.0.0")),
             // TODO VersionSetting
             new Setting(
+                context: DefaultContext,
                 name: "Assembly file version",
                 description: null,
                 page: "Packaging",
@@ -637,6 +693,7 @@ namespace SettingsProject
             ////
             
             new Setting(
+                context: DefaultContext,
                 name: "Require license acceptance",
                 description: "Controls whether consumers of the generated package are presented with a license acceptance prompt when adding a reference to this package.",
                 page: "Packaging",
@@ -645,6 +702,7 @@ namespace SettingsProject
                 editorType: "Bool",
                 new UnconfiguredSettingValue(false)),
             new Setting(
+                context: DefaultContext,
                 name: "License specification",
                 description: "Controls how the package's license is specified.",
                 page: "Packaging",
@@ -655,6 +713,7 @@ namespace SettingsProject
                 value: new UnconfiguredSettingValue("None")),
             // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
             new Setting(
+                context: DefaultContext,
                 name: "License expression",
                 description: "The SPDX expression that specifies the package's license.",
                 page: "Packaging",
@@ -663,6 +722,7 @@ namespace SettingsProject
                 editorType: "String",
                 new UnconfiguredSettingValue("")),
             new LinkAction(
+                context: DefaultContext,
                 // https://spdx.org/licenses/
                 name: "Read about SPDX license expressions",
                 description: null,
@@ -671,6 +731,7 @@ namespace SettingsProject
                 priority: 400),
             // TODO make this FileBrowseSetting
             new Setting(
+                context: DefaultContext,
                 name: "License file path",
                 description: "The path to the license file to include in the package. May be relative to the project directory.",
                 page: "Packaging",
@@ -689,6 +750,7 @@ namespace SettingsProject
             
             // TODO make this link action show the launch profiles UI
             new LinkAction(
+                context: DefaultContext,
                 name: "Manage launch profiles",
                 description: null,
                 page: "Debug",
@@ -704,6 +766,7 @@ namespace SettingsProject
             ////
             
             new Setting(
+                context: DefaultContext,
                 name: "Signing",
                 description: "Sign the project's output assembly.",
                 page: "Signing",
@@ -714,6 +777,7 @@ namespace SettingsProject
                 supportsPerConfigurationValues: true),
             // TODO StrongNameKeySetting -- with new/add and change password actions
             new Setting(
+                context: DefaultContext,
                 name: "Key file path",
                 description: "Choose a string name key file",
                 page: "Signing",
@@ -723,6 +787,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue(""),
                 supportsPerConfigurationValues: true),
             new Setting(
+                context: DefaultContext,
                 name: "Delay signing",
                 description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
                 page: "Signing",
@@ -741,12 +806,14 @@ namespace SettingsProject
             ////
             
             new LinkAction(
+                context: DefaultContext,
                 name: "What are the benefits of source code analyzers?",
                 description: null,
                 page: "Code Analysis",
                 category: "Analyzers",
                 priority: 94),
             new Setting(
+                context: DefaultContext,
                 name: "Run on build",
                 description: "Run analyzers during build.",
                 page: "Code Analysis",
@@ -756,6 +823,7 @@ namespace SettingsProject
                 new UnconfiguredSettingValue(false),
                 supportsPerConfigurationValues: true),
             new Setting(
+                context: DefaultContext,
                 name: "Run live analysis",
                 description: "Run analyzers live in the IDE.",
                 page: "Code Analysis",

@@ -37,67 +37,7 @@
               </Style>
             </ItemsControl.Resources>
             <ItemsControl.ItemTemplateSelector>
-              <local:SettingDataTemplateSelector>
-                <local:SettingDataTemplateSelector.LinkActionTemplate>
-                  <DataTemplate DataType="{x:Type local:LinkAction}">
-                    <DockPanel Margin="0,0,0,24" Background="Transparent">
-                      <local:HighlightTextBlock
-                        DockPanel.Dock="Top"
-                        Margin="28,0,0,4"
-                        HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}"
-                        Text="{Binding HeadingText}"
-                        FontWeight="Bold"
-                        Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                      <TextBlock Margin="28,0,0,6">
-                        <Hyperlink>
-                          <Run Text="{Binding LinkText, Mode=OneTime}" />
-                        </Hyperlink>
-                      </TextBlock>
-                    </DockPanel>
-                  </DataTemplate>
-                </local:SettingDataTemplateSelector.LinkActionTemplate>
-                <local:SettingDataTemplateSelector.SettingTemplate>
-                  <DataTemplate DataType="local:Setting">
-                    <DockPanel Margin="0,0,0,24" Background="Transparent">
-                      <ContentControl DockPanel.Dock="Left" Width="16" IsTabStop="False" Focusable="False">
-                        <TextBlock Margin="0,2,0,0" Name="CommandMenuButton" FontFamily="Segoe MDL2 Assets" FontSize="12" TextAlignment="Left" Text="&#xE713;" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="#888" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.CollapsedWhenFalse}}" ContextMenuService.Placement="Bottom">
-                          <TextBlock.ContextMenu>
-                            <ContextMenu Name="ContextMenu" Placement="Bottom" VerticalOffset="4">
-                              <!-- Command="{Binding ElementName=PART_ItemsControl, Path=UseSameValueAcrossConfigurationsCommand}" -->
-                              <MenuItem
-                                  Header="Use single value across configurations"
-                                  CommandParameter="{Binding}"
-                                  IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay, Converter={x:Static local:Converters.Negate}}" />
-                              <!-- Command="{Binding ElementName=PART_ItemsControl, Path=UseDifferentValuesAcrossConfigurationsCommand}" -->
-                              <MenuItem
-                                  Header="Specify value per configuration"
-                                  CommandParameter="{Binding}"
-                                  IsChecked="{Binding Path=HasPerConfigurationValues, Mode=OneWay}" />
-                            </ContextMenu>
-                          </TextBlock.ContextMenu>
-                        </TextBlock>
-                      </ContentControl>
-                      <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
-                      <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
-                      <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
-                        <ItemsControl.ItemTemplate>
-                          <DataTemplate DataType="local:ISettingValue">
-                            <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" Margin="12,0,0,0" />
-                          </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                      </ItemsControl>
-                    </DockPanel>
-                    <DataTemplate.Triggers>
-                      <Trigger Property="IsMouseOver" Value="False">
-                        <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Collapsed" />
-                      </Trigger>
-                      <DataTrigger Binding="{Binding ElementName=ContextMenu, Path=IsOpen}" Value="True">
-                        <Setter TargetName="CommandMenuButton" Property="Visibility" Value="Visible" />
-                      </DataTrigger>
-                    </DataTemplate.Triggers>
-                  </DataTemplate>
-                </local:SettingDataTemplateSelector.SettingTemplate>
-              </local:SettingDataTemplateSelector>
+              <local:SettingDataTemplateSelector />
             </ItemsControl.ItemTemplateSelector>
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>

@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
 #nullable enable
 
@@ -22,15 +21,6 @@ namespace SettingsProject
         public static IValueConverter DoubleToBottomThickness { get; } = new LambdaConverter<double, Thickness>(d => new Thickness(0, 0, 0, d));
 
         public static IValueConverter Negate { get; } = new LambdaConverter<bool, bool>(b => !b);
-
-        public static IValueConverter DebugProfileKindToBrush { get; } = new LambdaConverter<LaunchProfileKind, Brush?>(
-            kind => kind switch
-            {
-                LaunchProfileKind.Executable => (Brush?)Application.Current.FindResource("IconExecuteBrush"),
-                LaunchProfileKind.Project => (Brush?)Application.Current.FindResource("IconApplicationBrush"),
-                LaunchProfileKind.SnapshotDebugger => null,
-                _ => null
-            });
 
         private sealed class LambdaConverter<TFrom, TTo> : IValueConverter
         {
