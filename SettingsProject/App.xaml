@@ -135,7 +135,6 @@
                 <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M12,12.427v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm-4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm-2-3v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Zm4,0v1l-.5.5h-1l-.5-.5v-1l.5-.5h1Z"/>
               </DrawingGroup>
             </DrawingGroup>
-            <DrawingBrush Stretch="None" x:Key="IconExecuteBrush" Drawing="{StaticResource IconExecuteDrawing}" />
 
             <DrawingGroup x:Key="IconApplicationDrawing">
               <DrawingGroup>
@@ -150,7 +149,6 @@
                 <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14.5,2H1.5L1,2.5v3l.5.5h13l.5-.5v-3ZM14,5H2V3H14Z"/>
               </DrawingGroup>
             </DrawingGroup>
-            <DrawingBrush Stretch="None" x:Key="IconApplicationBrush" Drawing="{StaticResource IconApplicationDrawing}" />
 
             <DrawingGroup x:Key="SnapshotDebuggerDrawing">
               <DrawingGroup>
@@ -165,7 +163,6 @@
                 <GeometryDrawing Brush="{DynamicResource light-green}" Geometry="F1M7,4,0,8V0Z"/>
               </DrawingGroup>
             </DrawingGroup>
-            <DrawingBrush Stretch="None" x:Key="SnapshotDebuggerBrush" Drawing="{StaticResource SnapshotDebuggerDrawing}" />
 
             <DrawingBrush Stretch="None" x:Key="DeleteIconBrush">
               <DrawingBrush.Drawing>
