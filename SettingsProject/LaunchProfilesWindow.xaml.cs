@@ -148,7 +148,7 @@ namespace SettingsProject
             {
                 CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<string, object>
                 {
-                    { "Executable path", "devenv.exe" }
+                    { "Application arguments", "/foo /bar" }
                 }),
                 CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<string, object>
                 {
