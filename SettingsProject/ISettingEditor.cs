@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Immutable;
+using System.Windows;
 
 #nullable enable
 
@@ -11,5 +12,6 @@ namespace SettingsProject
         DataTemplate? UnconfiguredDataTemplate { get; }
         DataTemplate? ConfiguredDataTemplate { get; }
         object GetDefaultValue(SettingMetadata metadata);
+        bool ShouldShowDescription(ImmutableArray<ISettingValue> values);
     }
 }

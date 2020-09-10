@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Windows;
 using Microsoft;
@@ -11,11 +11,11 @@ namespace SettingsProject
     internal sealed class SettingEditorFactory
     {
         public static SettingEditorFactory Default { get; } = new SettingEditorFactory(
-            new SettingsEditor("String", "GenericSettingTemplate", "UnconfiguredStringSettingValueTemplate", "ConfiguredStringSettingValueTemplate", _ => ""),
-            new SettingsEditor("MultiLineString", "GenericSettingTemplate", "UnconfiguredMultilineStringSettingValueTemplate", "ConfiguredMultilineStringSettingValueTemplate", _ => ""),
-            new SettingsEditor("Bool", "GenericSettingTemplate", "UnconfiguredBoolSettingValueTemplate", "ConfiguredBoolSettingValueTemplate", _ => false), // TODO box once
-            new SettingsEditor("Enum", "GenericSettingTemplate", "UnconfiguredEnumSettingValueTemplate", "ConfiguredEnumSettingValueTemplate", metadata => metadata.EnumValues.FirstOrDefault() ?? ""),
-            new SettingsEditor("LinkAction", "LinkActionTemplate", null, null, metadata => metadata.EnumValues.FirstOrDefault() ?? "")
+            new StringSettingEditor(),
+            new MultiLineStringSettingEditor(),
+            new BoolSettingEditor(),
+            new EnumSettingEditor(),
+            new LinkActionEditor()
         );
 
         private readonly Dictionary<string, ISettingEditor> _editorByTypeName;
@@ -30,23 +30,16 @@ namespace SettingsProject
             return _editorByTypeName[typeName];
         }
 
-        private sealed class SettingsEditor : ISettingEditor
+        private abstract class SettingEditorBase : ISettingEditor
         {
-            private readonly Func<SettingMetadata, object> _defaultValue;
             public string TypeName { get; }
             public DataTemplate SettingDataTemplate { get; }
             public DataTemplate? UnconfiguredDataTemplate { get; }
             public DataTemplate? ConfiguredDataTemplate { get; }
 
-            public object GetDefaultValue(SettingMetadata metadata)
-            {
-                return _defaultValue(metadata);
-            }
-
-            public SettingsEditor(string typeName, string settingDataTemplateName, string? unconfiguredDataTemplateName, string? configuredDataTemplateName, Func<SettingMetadata, object> defaultValue)
+            protected SettingEditorBase(string typeName, string settingDataTemplateName, string? unconfiguredDataTemplateName, string? configuredDataTemplateName)
             {
                 TypeName = typeName;
-                _defaultValue = defaultValue;
 
                 var settingDataTemplate = (DataTemplate?)Application.Current.FindResource(settingDataTemplateName);
 
@@ -64,6 +57,42 @@ namespace SettingsProject
                     ConfiguredDataTemplate = (DataTemplate?)Application.Current.FindResource(configuredDataTemplateName);
                 }
             }
+
+            public abstract object GetDefaultValue(SettingMetadata metadata);
+
+            public virtual bool ShouldShowDescription(ImmutableArray<ISettingValue> values) => true;
+        }
+
+        private sealed class StringSettingEditor : SettingEditorBase
+        {
+            public StringSettingEditor() : base("String", "GenericSettingTemplate", "UnconfiguredStringSettingValueTemplate", "ConfiguredStringSettingValueTemplate") {}
+            public override object GetDefaultValue(SettingMetadata metadata) => "";
+        }
+
+        private sealed class MultiLineStringSettingEditor : SettingEditorBase
+        {
+            public MultiLineStringSettingEditor() : base("MultiLineString", "GenericSettingTemplate", "UnconfiguredMultilineStringSettingValueTemplate", "ConfiguredMultilineStringSettingValueTemplate") {}
+            public override object GetDefaultValue(SettingMetadata metadata) => "";
+        }
+
+        private sealed class BoolSettingEditor : SettingEditorBase
+        {
+            private static readonly object BoxedFalse = false;
+            public BoolSettingEditor() : base("Bool", "GenericSettingTemplate", "UnconfiguredBoolSettingValueTemplate", "ConfiguredBoolSettingValueTemplate") {}
+            public override object GetDefaultValue(SettingMetadata metadata) => BoxedFalse;
+            public override bool ShouldShowDescription(ImmutableArray<ISettingValue> values) => values.All(value => value.Configuration != null);
+        }
+
+        private sealed class EnumSettingEditor : SettingEditorBase
+        {
+            public EnumSettingEditor() : base("Enum", "GenericSettingTemplate", "UnconfiguredEnumSettingValueTemplate", "ConfiguredEnumSettingValueTemplate") {}
+            public override object GetDefaultValue(SettingMetadata metadata) => metadata.EnumValues.FirstOrDefault() ?? "";
+        }
+
+        private sealed class LinkActionEditor : SettingEditorBase
+        {
+            public LinkActionEditor() : base("LinkAction", "LinkActionTemplate", null, null) {}
+            public override object GetDefaultValue(SettingMetadata metadata) => "";
         }
     }
 }

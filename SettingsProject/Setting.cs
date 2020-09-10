@@ -29,8 +29,7 @@ namespace SettingsProject
         public ImmutableArray<string> EnumValues => Metadata.EnumValues;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
-        // TODO need to sort out something in the bool/checkbox template
-        public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description);
+        public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description) && Metadata.Editor?.ShouldShowDescription(Values) != false;
 
         public bool HasPerConfigurationValues => Values.Any(value => value.Configuration != null);
 
@@ -166,7 +165,7 @@ namespace SettingsProject
         {
         }
 
-        public string HeadingText => HasDescription ? Name : "";
+        public string HeadingText => Description != null ? Name : "";
         
         public string LinkText => Description ?? Name;
 
