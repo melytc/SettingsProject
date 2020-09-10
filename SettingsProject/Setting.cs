@@ -63,20 +63,19 @@ namespace SettingsProject
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
         public Setting(string name, string? description, string page, string category, int priority, string editorType, UnconfiguredSettingValue value, ImmutableArray<string>? enumValues = null, bool supportsPerConfigurationValues = false)
-            : this(new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues, enumValues ?? ImmutableArray<string>.Empty))
+            : this(new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues, enumValues ?? ImmutableArray<string>.Empty), ImmutableArray.Create<ISettingValue>(value))
         {
-            Values = ImmutableArray.Create<ISettingValue>(value);
         }
 
         public Setting(string name, string? description, string page, string category, int priority, string editorType, ImmutableArray<string>? enumValues, ImmutableArray<ConfiguredSettingValue> values)
-            : this(new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues: true, enumValues ?? ImmutableArray<string>.Empty))
+            : this(new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues: true, enumValues ?? ImmutableArray<string>.Empty), values.CastArray<ISettingValue>())
         {
-            Values = values.CastArray<ISettingValue>();
         }
 
-        protected Setting(SettingMetadata metadata)
+        public Setting(SettingMetadata metadata, ImmutableArray<ISettingValue> values)
         {
             Metadata = metadata;
+            Values = values;
         }
 
         private void UpdateDependentVisibilities()
@@ -152,21 +151,19 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual Setting Clone() => new Setting(Metadata) { Values = Values.Select(value => value.Clone()).ToImmutableArray() };
+        public virtual Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
     }
 
     internal sealed class LinkAction : Setting
     {
         public LinkAction(string name, string? description, string page, string category, int priority)
-            : base(new SettingMetadata(name, page, category, description, priority, null, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty))
+            : base(new SettingMetadata(name, page, category, description, priority, null, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
         {
-            Values = ImmutableArray<ISettingValue>.Empty;
         }
 
         private LinkAction(SettingMetadata metadata)
-            : base(metadata)
+            : base(metadata, ImmutableArray<ISettingValue>.Empty)
         {
-            Values = ImmutableArray<ISettingValue>.Empty;
         }
 
         public string HeadingText => HasDescription ? Name : "";

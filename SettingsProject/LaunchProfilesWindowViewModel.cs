@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -16,9 +17,12 @@ namespace SettingsProject
         public ICommand DeleteCommand { get; }
         public ICommand RenameCommand { get; }
 
-        public LaunchProfilesWindowViewModel(ObservableCollection<LaunchProfileViewModel> profiles)
+        public ImmutableArray<LaunchProfileKind> ProfileKinds { get; }
+
+        public LaunchProfilesWindowViewModel(ObservableCollection<LaunchProfileViewModel> profiles, ImmutableArray<LaunchProfileKind> profileKinds)
         {
             Profiles = profiles;
+            ProfileKinds = profileKinds;
             SelectedProfile = profiles.First();
 
             CloneCommand = new DelegateCommand(() =>

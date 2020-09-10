@@ -9,5 +9,6 @@ namespace SettingsProject
         string TypeName { get; }
         DataTemplate UnconfiguredDataTemplate { get; }
         DataTemplate ConfiguredDataTemplate { get; }
+        object GetDefaultValue(SettingMetadata metadata);
     }
 }

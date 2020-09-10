@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SettingsProject"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             StartupUri="MainWindow.xaml">
+             StartupUri="LaunchProfilesWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -57,6 +57,7 @@
             <SolidColorBrush x:Key="light-defaultgrey-10" Color="#212121" Opacity="0.1"/>
             <SolidColorBrush x:Key="light-blue" Color="#005dba" Opacity="1"/>
             <SolidColorBrush x:Key="light-green" Color="#1f801f" Opacity="1"/>
+            <SolidColorBrush x:Key="light-red" Color="#c50b17" Opacity="1"/>
             <system:Double x:Key="cls-1">0.75</system:Double>
 
             <DrawingBrush Stretch="None" x:Key="IconExecuteBrush">
@@ -96,7 +97,23 @@
               </DrawingBrush.Drawing>
             </DrawingBrush>
 
-            <SolidColorBrush x:Key="light-red" Color="#c50b17" Opacity="1"/>
+            <DrawingBrush Stretch="None" x:Key="SnapshotDebuggerBrush">
+              <DrawingBrush.Drawing>
+                <DrawingGroup>
+                  <DrawingGroup>
+                    <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
+                  </DrawingGroup>
+                  <DrawingGroup>
+                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M13,3.5V14H7V5.152L9.016,4,7.323,3.033A.5.5,0,0,1,7.5,3h5A.5.5,0,0,1,13,3.5Z"/>
+                    <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M14,3.5v11l-.5.5h-7L6,14.5V5.723l1-.571V14h6V3.5a.5.5,0,0,0-.5-.5h-5a.5.5,0,0,0-.177.033L6.386,2.5A1.494,1.494,0,0,1,7.5,2h5A1.5,1.5,0,0,1,14,3.5Z"/>
+                    <DrawingGroup Opacity="{DynamicResource cls-1}">
+                      <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M8,10h4v1H8Zm0,2h4v1H8ZM8,5h4V6H8Z"/>
+                    </DrawingGroup>
+                    <GeometryDrawing Brush="{DynamicResource light-green}" Geometry="F1M7,4,0,8V0Z"/>
+                  </DrawingGroup>
+                </DrawingGroup>
+              </DrawingBrush.Drawing>
+            </DrawingBrush>
 
             <DrawingBrush Stretch="None" x:Key="DeleteIconBrush">
               <DrawingBrush.Drawing>
@@ -132,10 +149,10 @@
             <DrawingBrush Stretch="None" x:Key="RenameIconBrush">
               <DrawingBrush.Drawing>
                 <DrawingGroup>
-                  <DrawingGroup x:Name="canvas">
+                  <DrawingGroup>
                     <GeometryDrawing Brush="{DynamicResource canvas}" Geometry="F1M16,16H0V0H16Z"/>
                   </DrawingGroup>
-                  <DrawingGroup x:Name="level_1">
+                  <DrawingGroup>
                     <GeometryDrawing Brush="{DynamicResource light-defaultgrey}" Geometry="F1M12,3.765v8.467L13.152,13H14v1H13l-.277-.084L11.5,13.1l-1.194.811L10.027,14H9V13h.874L11,12.235V3.768L9.848,3H9V2h1l.277.084L11.5,2.9l1.194-.811L12.973,2H14V3h-.874Z"/>
                     <DrawingGroup Opacity="{DynamicResource cls-1}">
                       <GeometryDrawing Brush="{DynamicResource light-defaultgrey-10}" Geometry="F1M10,10.5H1.5v-5H9.971Z"/>

@@ -60,7 +60,7 @@
         <ListBox.ItemTemplate>
           <DataTemplate DataType="local:LaunchProfileViewModel">
             <DockPanel Margin="8">
-              <Rectangle DockPanel.Dock="Left" Width="16" Height="16" Fill="{Binding Path=Kind, Converter={x:Static local:Converters.DebugProfileKindToBrush}}" />
+              <Rectangle DockPanel.Dock="Left" Width="16" Height="16" Fill="{Binding Path=Kind.IconBrush}" />
               <local:RenameLabel Margin="8,0,0,0" Text="{Binding Path=Name, Mode=TwoWay}" IsRenaming="{Binding Path=IsRenaming, Mode=TwoWay}" />
             </DockPanel>
           </DataTemplate>

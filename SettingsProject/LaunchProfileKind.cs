@@ -1,12 +1,23 @@
-﻿#nullable enable
+﻿using System.Collections.Immutable;
+using System.Windows.Media;
+
+#nullable enable
 
 namespace SettingsProject
 {
-    internal enum LaunchProfileKind
+    internal sealed class LaunchProfileKind
     {
-        Project,
-        Executable,
-        SnapshotDebugger
-        // TODO is this an open or closed set?
+        public string Name { get; }
+
+        public ImmutableArray<SettingMetadata> Metadata { get; }
+
+        public DrawingBrush IconBrush { get; }
+
+        public LaunchProfileKind(string name, ImmutableArray<SettingMetadata> metadata, DrawingBrush iconBrush)
+        {
+            Name = name;
+            Metadata = metadata;
+            IconBrush = iconBrush;
+        }
     }
 }
