@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace SettingsProject
 {
-    internal class Setting : INotifyPropertyChanged
+    internal sealed class Setting : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -20,7 +20,7 @@ namespace SettingsProject
 
         private readonly SettingContext _context;
 
-        protected internal SettingMetadata Metadata { get; }
+        internal SettingMetadata Metadata { get; }
 
         public string Name => Metadata.Name;
         public string Page => Metadata.Page;
@@ -151,25 +151,6 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
-    }
-
-    internal sealed class LinkAction : Setting
-    {
-        public LinkAction(SettingContext context, string name, string? description, string page, string category, int priority)
-            : base(context, new SettingMetadata(name, description, page, category, priority, "LinkAction"), ImmutableArray<ISettingValue>.Empty)
-        {
-        }
-
-        private LinkAction(SettingContext context, SettingMetadata metadata)
-            : base(context, metadata, ImmutableArray<ISettingValue>.Empty)
-        {
-        }
-
-        public string HeadingText => Description != null ? Name : "";
-        
-        public string LinkText => Description ?? Name;
-
-        public override Setting Clone(SettingContext context) => new LinkAction(context, Metadata);
+        public Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
     }
 }

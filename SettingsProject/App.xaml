@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SettingsProject"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             StartupUri="LaunchProfilesWindow.xaml">
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -54,18 +54,18 @@
 
             <!-- Setting data templates -->
 
-            <DataTemplate x:Key="LinkActionTemplate" DataType="{x:Type local:LinkAction}">
+            <DataTemplate x:Key="LinkActionTemplate" DataType="{x:Type local:Setting}">
               <DockPanel Margin="0,0,0,24" Background="Transparent">
                 <local:HighlightTextBlock
                   DockPanel.Dock="Top"
                   Margin="28,0,0,4"
                   HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}"
-                  Text="{Binding HeadingText}"
+                  Text="{Binding Converter={x:Static local:Converters.LinkActionHeading}}"
                   FontWeight="Bold"
                   Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
                 <TextBlock Margin="28,0,0,6">
                   <Hyperlink>
-                    <Run Text="{Binding LinkText, Mode=OneTime}" />
+                    <Run Text="{Binding Converter={x:Static local:Converters.LinkActionLinkText}, Mode=OneTime}" />
                   </Hyperlink>
                 </TextBlock>
               </DockPanel>

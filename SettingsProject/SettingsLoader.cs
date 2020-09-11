@@ -149,13 +149,16 @@ namespace SettingsProject
                         ".NET Core 1.0")
                 },
                 new UnconfiguredSettingValue(".NET 5")),
-            new LinkAction(
+            new Setting(
                 context: DefaultContext,
-                name: "Install other frameworks",
-                description: null,
-                page: "Application",
-                category: "General",
-                priority: 400),
+                new SettingMetadata(
+                    name: "Install other frameworks",
+                    description: null,
+                    page: "Application",
+                    category: "General",
+                    priority: 400,
+                    editorType: "LinkAction"),
+                values: ImmutableArray<ISettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -477,13 +480,16 @@ namespace SettingsProject
             ///// ADVANCED
             ////
             
-            new LinkAction(
+            new Setting(
                 context: DefaultContext,
-                name: "Language version",
-                description: "Why can't I select the C# language version?",
-                page: "Build",
-                category: "Advanced",
-                priority: 60),
+                new SettingMetadata(
+                    name: "Language version",
+                    description: "Why can't I select the C# language version?",
+                    page: "Build",
+                    category: "Advanced",
+                    priority: 60,
+                    editorType: "LinkAction"),
+                values: ImmutableArray<ISettingValue>.Empty),
 
             new Setting(
                 context: DefaultContext,
@@ -811,14 +817,17 @@ namespace SettingsProject
                     priority: 300,
                     editorType: "String"),
                 new UnconfiguredSettingValue("")),
-            new LinkAction(
+            new Setting(
                 context: DefaultContext,
-                // https://spdx.org/licenses/
-                name: "Read about SPDX license expressions",
-                description: null,
-                page: "Packaging",
-                category: "License",
-                priority: 400),
+                new SettingMetadata(
+                    // https://spdx.org/licenses/
+                    name: "Read about SPDX license expressions",
+                    description: null,
+                    page: "Packaging",
+                    category: "License",
+                    priority: 400,
+                    editorType: "LinkAction"),
+                values: ImmutableArray<ISettingValue>.Empty),
             // TODO make this FileBrowseSetting
             new Setting(
                 context: DefaultContext,
@@ -840,13 +849,16 @@ namespace SettingsProject
             ////
             
             // TODO make this link action show the launch profiles UI
-            new LinkAction(
+            new Setting(
                 context: DefaultContext,
-                name: "Manage launch profiles",
-                description: null,
-                page: "Debug",
-                category: "General",
-                priority: 90),
+                new SettingMetadata(
+                    name: "Manage launch profiles",
+                    description: null,
+                    page: "Debug",
+                    category: "General",
+                    priority: 90,
+                    editorType: "LinkAction"),
+                values: ImmutableArray<ISettingValue>.Empty),
 
             /////////////
             //////////// SIGNING
@@ -905,13 +917,16 @@ namespace SettingsProject
             ///// ANALYZERS
             ////
             
-            new LinkAction(
+            new Setting(
                 context: DefaultContext,
-                name: "What are the benefits of source code analyzers?",
-                description: null,
-                page: "Code Analysis",
-                category: "Analyzers",
-                priority: 94),
+                new SettingMetadata(
+                    name: "What are the benefits of source code analyzers?",
+                    description: null,
+                    page: "Code Analysis",
+                    category: "Analyzers",
+                    priority: 94,
+                    editorType: "LinkAction"),
+                values: ImmutableArray<ISettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(

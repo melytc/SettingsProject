@@ -22,6 +22,9 @@ namespace SettingsProject
 
         public static IValueConverter Negate { get; } = new LambdaConverter<bool, bool>(b => !b);
 
+        public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Setting, string>(setting => setting.Description != null ? setting.Name : "");
+        public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Setting, string>(setting => setting.Description ?? setting.Name);
+
         private sealed class LambdaConverter<TFrom, TTo> : IValueConverter
         {
             private readonly Func<TFrom, TTo> _convert;
