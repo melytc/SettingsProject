@@ -15,6 +15,7 @@ namespace SettingsProject
             new MultiLineStringSettingEditor(),
             new BoolSettingEditor(),
             new EnumSettingEditor(),
+            new FileBrowseEditor(),
             new LinkActionEditor()
         );
 
@@ -87,6 +88,12 @@ namespace SettingsProject
         {
             public EnumSettingEditor() : base("Enum", "GenericSettingTemplate", "UnconfiguredEnumSettingValueTemplate", "ConfiguredEnumSettingValueTemplate") {}
             public override object GetDefaultValue(SettingMetadata metadata) => metadata.EnumValues.FirstOrDefault() ?? "";
+        }
+
+        private sealed class FileBrowseEditor : SettingEditorBase
+        {
+            public FileBrowseEditor() : base("FileBrowse", "GenericSettingTemplate", "UnconfiguredFileBrowseSettingValueTemplate", "ConfiguredFileBrowseSettingValueTemplate") {}
+            public override object GetDefaultValue(SettingMetadata metadata) => "";
         }
 
         private sealed class LinkActionEditor : SettingEditorBase

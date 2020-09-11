@@ -52,6 +52,21 @@
                 </DockPanel>
             </DataTemplate>
 
+            <DataTemplate x:Key="UnconfiguredFileBrowseSettingValueTemplate" DataType="local:UnconfiguredSettingValue">
+              <DockPanel HorizontalAlignment="Left">
+                <Button DockPanel.Dock="Right" Content="Browse..." Margin="8,0,0,0" Padding="6,0" />
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+              </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ConfiguredFileBrowseSettingValueTemplate" DataType="local:ConfiguredSettingValue">
+              <DockPanel Margin="0,2" HorizontalAlignment="Left">
+                <TextBlock DockPanel.Dock="Top" Text="{Binding Configuration}" TextWrapping="Wrap" />
+                <Button DockPanel.Dock="Right" Content="Browse" />
+                <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+              </DockPanel>
+            </DataTemplate>
+
             <!-- Setting data templates -->
 
             <DataTemplate x:Key="LinkActionTemplate" DataType="{x:Type local:Setting}">
