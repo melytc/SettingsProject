@@ -59,6 +59,7 @@
     <Compile Include="LaunchProfilesWindowViewModel.cs" />
     <Compile Include="LaunchProfileViewModel.cs" />
     <Compile Include="RenameLabel.cs" />
+    <Compile Include="SettingContext.cs" />
     <Compile Include="SettingEditorFactory.cs" />
     <Compile Include="SettingMetadata.cs" />
     <Compile Include="SettingsList.cs" />
