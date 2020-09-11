@@ -63,13 +63,8 @@ namespace SettingsProject
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, UnconfiguredSettingValue value, ImmutableArray<string>? enumValues = null, bool supportsPerConfigurationValues = false)
-            : this(context, new SettingMetadata(name, description, page, category, priority, editorType) { SupportsPerConfigurationValues = supportsPerConfigurationValues, EnumValues = enumValues ?? ImmutableArray<string>.Empty }, ImmutableArray.Create<ISettingValue>(value))
-        {
-        }
-
-        public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, ImmutableArray<string>? enumValues, ImmutableArray<ConfiguredSettingValue> values)
-            : this(context, new SettingMetadata(name, description, page, category, priority, editorType) { SupportsPerConfigurationValues = true, EnumValues = enumValues ?? ImmutableArray<string>.Empty }, values.CastArray<ISettingValue>())
+        public Setting(SettingContext context, SettingMetadata metadata, ISettingValue value)
+            : this(context, metadata, ImmutableArray.Create(value))
         {
         }
 
