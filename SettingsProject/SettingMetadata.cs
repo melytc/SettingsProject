@@ -2,6 +2,13 @@
 
 #nullable enable
 
+namespace System.Runtime.CompilerServices
+{
+    internal class IsExternalInit
+    {
+    }
+}
+
 namespace SettingsProject
 {
     /// <summary>
@@ -25,14 +32,14 @@ namespace SettingsProject
         // TODO will probably be an array in precedence order
         public string EditorType { get; }
 
-        public bool SupportsPerConfigurationValues { get; }
+        public bool SupportsPerConfigurationValues { get; init; } = false;
 
         // TODO this will move to the SettingValue type probably
-        public ImmutableArray<string> EnumValues { get; }
+        public ImmutableArray<string> EnumValues { get; init; } = ImmutableArray<string>.Empty;
 
         public ISettingEditor? Editor { get; }
 
-        public SettingMetadata(string name, string page, string category, string? description, int priority, string editorType, bool supportsPerConfigurationValues, ImmutableArray<string> enumValues)
+        public SettingMetadata(string name, string page, string category, string? description, int priority, string editorType)
         {
             Name = name;
             Page = page;
@@ -40,8 +47,6 @@ namespace SettingsProject
             Description = description;
             Priority = priority;
             EditorType = editorType;
-            SupportsPerConfigurationValues = supportsPerConfigurationValues;
-            EnumValues = enumValues;
 
             Editor = SettingEditorFactory.Default.GetEditor(EditorType);
         }

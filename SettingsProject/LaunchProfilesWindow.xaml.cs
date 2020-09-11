@@ -20,9 +20,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 100,
-            editorType: "String", // TODO FilePath
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String"); // TODO FilePath
 
         private static readonly SettingMetadata ApplicationArguments = new SettingMetadata(
             name: "Application arguments",
@@ -30,9 +28,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 200,
-            editorType: "String",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String");
 
         private static readonly SettingMetadata WorkingDirectory = new SettingMetadata(
             name: "Working directory",
@@ -40,9 +36,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 300,
-            editorType: "String", // TODO FilePath
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String"); // TODO FilePath
 
         private static readonly SettingMetadata UseRemoteMachine = new SettingMetadata(
             name: "Use remote machine",
@@ -50,9 +44,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 400,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         private static readonly SettingMetadata RemoteMachineHostName = new SettingMetadata(
             name: "Remote machine host name",
@@ -60,9 +52,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 410,
-            editorType: "String", // TODO RemoteMachineSetting, with support for the 'Find' button
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String"); // TODO RemoteMachineSetting, with support for the 'Find' button
 
         private static readonly SettingMetadata AuthenticationMode = new SettingMetadata(
             name: "Authentication mode",
@@ -70,9 +60,10 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 420,
-            editorType: "Enum",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray.Create("None", "Windows"));
+            editorType: "Enum")
+        {
+            EnumValues = ImmutableArray.Create("None", "Windows")
+        };
 
         private static readonly SettingMetadata LaunchBrowser = new SettingMetadata(
             name: "Launch Browser",
@@ -80,9 +71,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 550,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         private static readonly SettingMetadata LaunchBrowserUrl = new SettingMetadata(
             name: "Launch Browser URL",
@@ -90,9 +79,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 560,
-            editorType: "String",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String");
 
         private static readonly SettingMetadata EnvironmentVariables = new SettingMetadata(
             name: "Environment variables",
@@ -100,9 +87,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 500,
-            editorType: "String", // TODO NameValueList
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String"); // TODO NameValueList
 
         private static readonly SettingMetadata NativeCodeDebugging = new SettingMetadata(
             name: "Native code debugging",
@@ -110,9 +95,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 600,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         private static readonly SettingMetadata SqlServerDebugging = new SettingMetadata(
             name: "SQL Server debugging",
@@ -120,9 +103,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 700,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         private static readonly SettingMetadata AzureResource = new SettingMetadata(
             name: "Azure resource",
@@ -130,9 +111,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 100,
-            editorType: "Enum", // TODO AzureResource
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Enum"); // TODO AzureResource
 
         private static readonly SettingMetadata AzureStorageAccount = new SettingMetadata(
             name: "Azure Storage account",
@@ -140,9 +119,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 200,
-            editorType: "Enum", // TODO editorType AzureStorage
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Enum"); // TODO editorType AzureStorage
 
         private static readonly SettingMetadata AppUrl = new SettingMetadata(
             name: "App URL",
@@ -150,9 +127,7 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1100,
-            editorType: "String",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "String");
 
         private static readonly SettingMetadata IisExpressBitness = new SettingMetadata(
             name: "IIS Express Bitness",
@@ -160,9 +135,10 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1200,
-            editorType: "Enum",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray.Create("Default", "x64", "x86"));
+            editorType: "Enum")
+        {
+            EnumValues = ImmutableArray.Create("Default", "x64", "x86")
+        };
 
         private static readonly SettingMetadata HostingModel = new SettingMetadata(
             name: "Hosting Model",
@@ -170,9 +146,10 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1300,
-            editorType: "Enum",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process"));
+            editorType: "Enum")
+        {
+            EnumValues = ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process")
+        };
 
         private static readonly SettingMetadata EnableSSL = new SettingMetadata(
             name: "Enable SSL",
@@ -180,9 +157,7 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1400,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         private static readonly SettingMetadata EnableAnonymousAuthentication = new SettingMetadata(
             name: "Enable Anonymous Authentication",
@@ -190,9 +165,7 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1500,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         private static readonly SettingMetadata EnableWindowsAuthentication = new SettingMetadata(
             name: "Enable Windows Authentication",
@@ -200,9 +173,7 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1600,
-            editorType: "Bool",
-            supportsPerConfigurationValues: false,
-            enumValues: ImmutableArray<string>.Empty);
+            editorType: "Bool");
 
         #endregion
 

@@ -79,12 +79,12 @@ namespace SettingsProject
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
         public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, UnconfiguredSettingValue value, ImmutableArray<string>? enumValues = null, bool supportsPerConfigurationValues = false)
-            : this(context, new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues, enumValues ?? ImmutableArray<string>.Empty), ImmutableArray.Create<ISettingValue>(value))
+            : this(context, new SettingMetadata(name, page, category, description, priority, editorType) { SupportsPerConfigurationValues = supportsPerConfigurationValues, EnumValues = enumValues ?? ImmutableArray<string>.Empty }, ImmutableArray.Create<ISettingValue>(value))
         {
         }
 
         public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, ImmutableArray<string>? enumValues, ImmutableArray<ConfiguredSettingValue> values)
-            : this(context, new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues: true, enumValues ?? ImmutableArray<string>.Empty), values.CastArray<ISettingValue>())
+            : this(context, new SettingMetadata(name, page, category, description, priority, editorType) { SupportsPerConfigurationValues = true, EnumValues = enumValues ?? ImmutableArray<string>.Empty }, values.CastArray<ISettingValue>())
         {
         }
 
@@ -177,7 +177,7 @@ namespace SettingsProject
     internal sealed class LinkAction : Setting
     {
         public LinkAction(SettingContext context, string name, string? description, string page, string category, int priority)
-            : base(context, new SettingMetadata(name, page, category, description, priority, "LinkAction", supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
+            : base(context, new SettingMetadata(name, page, category, description, priority, "LinkAction"), ImmutableArray<ISettingValue>.Empty)
         {
         }
 
