@@ -177,7 +177,7 @@ namespace SettingsProject
     internal sealed class LinkAction : Setting
     {
         public LinkAction(SettingContext context, string name, string? description, string page, string category, int priority)
-            : base(context, new SettingMetadata(name, page, category, description, priority, null, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
+            : base(context, new SettingMetadata(name, page, category, description, priority, "LinkAction", supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
         {
         }
 
