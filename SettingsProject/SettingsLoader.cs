@@ -238,7 +238,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create(""),
                 },
                 value: new UnconfiguredSettingValue("")),
-            // TODO make this FileBrowseSetting
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -247,7 +246,7 @@ namespace SettingsProject
                     page: "Application",
                     category: "Resources",
                     priority: 830,
-                    editorType: "String"),
+                    editorType: "FileBrowse"),
                 value: new UnconfiguredSettingValue("")),
 
             //////
@@ -429,7 +428,6 @@ namespace SettingsProject
             ///// OUTPUT
             ////
             
-            // TODO make this FileBrowseSetting
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -438,9 +436,8 @@ namespace SettingsProject
                     page: "Build",
                     category: "Output",
                     priority: 50,
-                    editorType: "String"),
+                    editorType: "FileBrowse"),
                 new UnconfiguredSettingValue("")),
-            // TODO make this FileBrowseSetting
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -828,7 +825,6 @@ namespace SettingsProject
                     priority: 400,
                     editorType: "LinkAction"),
                 values: ImmutableArray<ISettingValue>.Empty),
-            // TODO make this FileBrowseSetting
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -837,7 +833,7 @@ namespace SettingsProject
                     page: "Packaging",
                     category: "License",
                     priority: 500,
-                    editorType: "String"),
+                    editorType: "FileBrowse"),
                 new UnconfiguredSettingValue("")),
 
             /////////////

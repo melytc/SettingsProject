@@ -20,7 +20,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 100,
-            editorType: "String"); // TODO FilePath
+            editorType: "FileBrowse");
 
         private static readonly SettingMetadata ApplicationArguments = new SettingMetadata(
             name: "Application arguments",
@@ -36,7 +36,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 300,
-            editorType: "String"); // TODO FilePath
+            editorType: "FileBrowse");
 
         private static readonly SettingMetadata UseRemoteMachine = new SettingMetadata(
             name: "Use remote machine",
