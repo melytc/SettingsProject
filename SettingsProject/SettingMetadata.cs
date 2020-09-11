@@ -22,9 +22,8 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        // TODO don't allow this to be null -- it's currently null only for LinkAction, which could have its own editor type if that specified the top-level template too
         // TODO will probably be an array in precedence order
-        public string? EditorType { get; }
+        public string EditorType { get; }
 
         public bool SupportsPerConfigurationValues { get; }
 
@@ -33,7 +32,7 @@ namespace SettingsProject
 
         public ISettingEditor? Editor { get; }
 
-        public SettingMetadata(string name, string page, string category, string? description, int priority, string? editorType, bool supportsPerConfigurationValues, ImmutableArray<string> enumValues)
+        public SettingMetadata(string name, string page, string category, string? description, int priority, string editorType, bool supportsPerConfigurationValues, ImmutableArray<string> enumValues)
         {
             Name = name;
             Page = page;
@@ -44,10 +43,7 @@ namespace SettingsProject
             SupportsPerConfigurationValues = supportsPerConfigurationValues;
             EnumValues = enumValues;
 
-            if (EditorType != null)
-            {
-                Editor = SettingEditorFactory.Default.GetEditor(EditorType);
-            }
+            Editor = SettingEditorFactory.Default.GetEditor(EditorType);
         }
 
         public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);
