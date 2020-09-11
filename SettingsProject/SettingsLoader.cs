@@ -853,7 +853,14 @@ namespace SettingsProject
                     page: "Debug",
                     category: "General",
                     priority: 90,
-                    editorType: "LinkAction"),
+                    editorType: "LinkAction")
+                {
+                    EditorMetadata = new Dictionary<string, string>
+                    {
+                        { "Action", "Command" },
+                        { "Command", "ManageLaunchProfiles" }
+                    }
+                },
                 values: ImmutableArray<ISettingValue>.Empty),
 
             /////////////

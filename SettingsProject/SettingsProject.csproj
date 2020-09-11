@@ -58,6 +58,7 @@
     <Compile Include="LaunchProfileKind.cs" />
     <Compile Include="LaunchProfilesWindowViewModel.cs" />
     <Compile Include="LaunchProfileViewModel.cs" />
+    <Compile Include="LinkActionCommandHandler.cs" />
     <Compile Include="RenameLabel.cs" />
     <Compile Include="SettingContext.cs" />
     <Compile Include="SettingEditorFactory.cs" />
