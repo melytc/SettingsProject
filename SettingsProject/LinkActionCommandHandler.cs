@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Input;
 
 #nullable enable
@@ -31,7 +32,9 @@ namespace SettingsProject
                     break;
 
                 case "URL":
-                    // TODO launch browser
+                    var url = editorMetadata["URL"];
+                    // TODO sanitize URL for security
+                    Process.Start(url);
                     break;
             }
         }

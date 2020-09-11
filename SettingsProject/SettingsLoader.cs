@@ -157,7 +157,14 @@ namespace SettingsProject
                     page: "Application",
                     category: "General",
                     priority: 400,
-                    editorType: "LinkAction"),
+                    editorType: "LinkAction")
+                {
+                    EditorMetadata = new Dictionary<string, string>
+                    {
+                        { "Action", "URL" },
+                        { "URL", "http://go.microsoft.com/fwlink/?LinkID=287120" }
+                    }
+                },
                 values: ImmutableArray<ISettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
@@ -485,7 +492,14 @@ namespace SettingsProject
                     page: "Build",
                     category: "Advanced",
                     priority: 60,
-                    editorType: "LinkAction"),
+                    editorType: "LinkAction")
+                {
+                    EditorMetadata = new Dictionary<string, string>
+                    {
+                        { "Action", "URL" },
+                        { "URL", "https://aka.ms/csharp-versions" }
+                    }
+                },
                 values: ImmutableArray<ISettingValue>.Empty),
 
             new Setting(
@@ -817,13 +831,19 @@ namespace SettingsProject
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
-                    // https://spdx.org/licenses/
                     name: "Read about SPDX license expressions",
                     description: null,
                     page: "Packaging",
                     category: "License",
                     priority: 400,
-                    editorType: "LinkAction"),
+                    editorType: "LinkAction")
+                {
+                    EditorMetadata = new Dictionary<string, string>
+                    {
+                        { "Action", "URL" },
+                        { "URL", "https://spdx.org/licenses/" }
+                    }
+                },
                 values: ImmutableArray<ISettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
@@ -928,7 +948,14 @@ namespace SettingsProject
                     page: "Code Analysis",
                     category: "Analyzers",
                     priority: 94,
-                    editorType: "LinkAction"),
+                    editorType: "LinkAction")
+                {
+                    EditorMetadata = new Dictionary<string, string>
+                    {
+                        { "Action", "URL" },
+                        { "URL", "https://docs.microsoft.com/visualstudio/code-quality/roslyn-analyzers-overview" }
+                    }
+                },
                 values: ImmutableArray<ISettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
