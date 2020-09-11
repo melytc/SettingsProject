@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 #nullable enable
 
@@ -31,6 +32,8 @@ namespace SettingsProject
 
         // TODO will probably be an array in precedence order
         public string EditorType { get; }
+
+        public IReadOnlyDictionary<string, string> EditorMetadata { get; init; } = ImmutableDictionary<string, string>.Empty;
 
         public bool SupportsPerConfigurationValues { get; init; } = false;
 
