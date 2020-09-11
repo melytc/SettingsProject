@@ -14,7 +14,7 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <LangVersion>8</LangVersion>
+    <LangVersion>Preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -152,6 +152,11 @@
     <Resource Include="VisualStudio.Release.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset">
+      <Version>3.8.0-2.final</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Validation">
       <Version>15.5.31</Version>
     </PackageReference>
