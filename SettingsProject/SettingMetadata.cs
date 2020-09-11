@@ -39,7 +39,7 @@ namespace SettingsProject
 
         public ISettingEditor? Editor { get; }
 
-        public SettingMetadata(string name, string page, string category, string? description, int priority, string editorType)
+        public SettingMetadata(string name, string? description, string page, string category, int priority, string editorType)
         {
             Name = name;
             Page = page;
