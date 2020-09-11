@@ -118,8 +118,7 @@ namespace SettingsProject
             new Setting(
                 context: DefaultContext,
                 name: "Target frameworks",
-                description:
-                "Specifies the semicolon-delimited list of frameworks that this project will target.",
+                description: "Specifies the semicolon-delimited list of frameworks that this project will target.",
                 page: "Application",
                 category: "General",
                 priority: 310,
