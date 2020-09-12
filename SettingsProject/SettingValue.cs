@@ -47,7 +47,7 @@ namespace SettingsProject
                 if (!Equals(value, Value))
                 {
                     _value = value;
-                    OnPropertyChanged(nameof(Value));
+                    OnPropertyChanged();
                 }
             }
         }
