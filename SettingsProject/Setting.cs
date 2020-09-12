@@ -16,7 +16,7 @@ namespace SettingsProject
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
         private List<(SettingIdentity target, object visibleWhenValue)>? _dependentTargets;
-        private ImmutableArray<ISettingValue> _values;
+        private ImmutableArray<SettingValue> _values;
 
         private readonly SettingContext _context;
 
@@ -33,9 +33,9 @@ namespace SettingsProject
 
         public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description) && Metadata.Editor?.ShouldShowDescription(Values) != false;
 
-        public bool HasPerConfigurationValues => Values.Any(value => value.Configuration != null);
+        public bool HasPerConfigurationValues => Values.Any(value => !value.ConfigurationDimensions.IsEmpty);
 
-        public ImmutableArray<ISettingValue> Values
+        public ImmutableArray<SettingValue> Values
         {
             get => _values;
             set
@@ -63,12 +63,12 @@ namespace SettingsProject
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public Setting(SettingContext context, SettingMetadata metadata, ISettingValue value)
+        public Setting(SettingContext context, SettingMetadata metadata, SettingValue value)
             : this(context, metadata, ImmutableArray.Create(value))
         {
         }
 
-        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<ISettingValue> values)
+        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<SettingValue> values)
         {
             _context = context;
             Metadata = metadata;

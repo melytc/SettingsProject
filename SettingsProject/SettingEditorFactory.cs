@@ -61,7 +61,7 @@ namespace SettingsProject
 
             public abstract object GetDefaultValue(SettingMetadata metadata);
 
-            public virtual bool ShouldShowDescription(ImmutableArray<ISettingValue> values) => true;
+            public virtual bool ShouldShowDescription(ImmutableArray<SettingValue> values) => true;
         }
 
         private sealed class StringSettingEditor : SettingEditorBase
@@ -81,7 +81,7 @@ namespace SettingsProject
             private static readonly object BoxedFalse = false;
             public BoolSettingEditor() : base("Bool", "GenericSettingTemplate", "UnconfiguredBoolSettingValueTemplate", "ConfiguredBoolSettingValueTemplate") {}
             public override object GetDefaultValue(SettingMetadata metadata) => BoxedFalse;
-            public override bool ShouldShowDescription(ImmutableArray<ISettingValue> values) => values.All(value => value.Configuration != null);
+            public override bool ShouldShowDescription(ImmutableArray<SettingValue> values) => values.Length > 1;
         }
 
         private sealed class EnumSettingEditor : SettingEditorBase

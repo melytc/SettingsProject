@@ -95,7 +95,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 10,
                     editorType: "String"),
-                new UnconfiguredSettingValue("ConsoleApp1")),
+                new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -105,7 +105,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 200,
                     editorType: "String"),
-                new UnconfiguredSettingValue("ConsoleApp1")),
+                new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -115,7 +115,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 300,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             // TODO come up with a better editing experience, perhaps via a FlagsSetting
             // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
             new Setting(
@@ -127,7 +127,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 310,
                     editorType: "String"),
-                new UnconfiguredSettingValue("net5")),
+                new SettingValue(ImmutableArray<string>.Empty, "net5")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -148,7 +148,7 @@ namespace SettingsProject
                         ".NET Core 1.1",
                         ".NET Core 1.0")
                 },
-                new UnconfiguredSettingValue(".NET 5")),
+                new SettingValue(ImmutableArray<string>.Empty, ".NET 5")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -165,7 +165,7 @@ namespace SettingsProject
                         { "URL", "http://go.microsoft.com/fwlink/?LinkID=287120" }
                     }
                 },
-                values: ImmutableArray<ISettingValue>.Empty),
+                values: ImmutableArray<SettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -181,7 +181,7 @@ namespace SettingsProject
                         "Windows Application",
                         "Class Library")
                 },
-                new UnconfiguredSettingValue("Console Application")),
+                new SettingValue(ImmutableArray<string>.Empty, "Console Application")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -191,7 +191,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 600,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(true)),
+                new SettingValue(ImmutableArray<string>.Empty, true)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -204,7 +204,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("(Not set)"),
                 },
-                value: new UnconfiguredSettingValue("(Not set)")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "(Not set)")),
 
             new Setting(
                 context: DefaultContext,
@@ -218,7 +218,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("Icon and manifest", "Resource file"),
                 },
-                value: new UnconfiguredSettingValue("Icon and manifest")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Icon and manifest")),
             // TODO make this IconBrowseSetting
             new Setting(
                 context: DefaultContext,
@@ -229,7 +229,7 @@ namespace SettingsProject
                     category: "Resources",
                     priority: 810,
                     editorType: "String"),
-                new UnconfiguredSettingValue("(Default Icon)")),
+                new SettingValue(ImmutableArray<string>.Empty, "(Default Icon)")),
             // TODO make this FileBrowseSetting
             // TODO this can appear disabled, find out why
             new Setting(
@@ -244,7 +244,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create(""),
                 },
-                value: new UnconfiguredSettingValue("")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -254,7 +254,7 @@ namespace SettingsProject
                     category: "Resources",
                     priority: 830,
                     editorType: "FileBrowse"),
-                value: new UnconfiguredSettingValue("")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "")),
 
             //////
             ///// ASSEMBLY INFORMATION
@@ -293,7 +293,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                value: new UnconfiguredSettingValue("TRACE")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "TRACE")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -303,9 +303,9 @@ namespace SettingsProject
                     category: "General",
                     priority: 200,
                     editorType: "Bool"),
-                values: ImmutableArray.Create<ISettingValue>(
-                    new ConfiguredSettingValue("Debug | AnyCPU", value: true),
-                    new ConfiguredSettingValue("Release | AnyCPU", value: false))),
+                values: ImmutableArray.Create(
+                    new SettingValue(ImmutableArray.Create("Debug"), value: true),
+                    new SettingValue(ImmutableArray.Create("Release"), value: false))),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -318,7 +318,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -331,7 +331,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("Any CPU", "x86")
                 },
-                value: new UnconfiguredSettingValue("Any CPU")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Any CPU")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -344,7 +344,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("Disable", "Enable", "Warnings", "Annotations")
                 },
-                value: new UnconfiguredSettingValue("Enable")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Enable")),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
                 context: DefaultContext,
@@ -355,7 +355,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 600,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -365,7 +365,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 700,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -375,9 +375,9 @@ namespace SettingsProject
                     category: "General",
                     priority: 800,
                     editorType: "Bool"),
-                values: ImmutableArray.Create<ISettingValue>(
-                    new ConfiguredSettingValue("Debug | AnyCPU", value: false),
-                    new ConfiguredSettingValue("Release | AnyCPU", value: true))),
+                values: ImmutableArray.Create(
+                    new SettingValue(ImmutableArray.Create("Debug"), value: false),
+                    new SettingValue(ImmutableArray.Create("Release"), value: true))),
 
             //////
             ///// ERRORS AND WARNINGS
@@ -396,7 +396,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("0", "1", "2", "3", "4")
                 },
-                value: new UnconfiguredSettingValue("4")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "4")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -406,7 +406,7 @@ namespace SettingsProject
                     category: "Errors and warnings",
                     priority: 200,
                     editorType: "String"),
-                new UnconfiguredSettingValue("1701;1702")),
+                new SettingValue(ImmutableArray<string>.Empty, "1701;1702")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -419,7 +419,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("None", "All", "Specific warnings"),
                 },
-                value: new UnconfiguredSettingValue("Specific warnings")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Specific warnings")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -429,7 +429,7 @@ namespace SettingsProject
                     category: "Errors and warnings",
                     priority: 400,
                     editorType: "String"),
-                new UnconfiguredSettingValue("NU1605")),
+                new SettingValue(ImmutableArray<string>.Empty, "NU1605")),
 
             //////
             ///// OUTPUT
@@ -444,7 +444,7 @@ namespace SettingsProject
                     category: "Output",
                     priority: 50,
                     editorType: "FileBrowse"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -454,7 +454,7 @@ namespace SettingsProject
                     category: "Output",
                     priority: 200,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
                 context: DefaultContext,
@@ -465,7 +465,7 @@ namespace SettingsProject
                     category: "Output",
                     priority: 300,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -478,7 +478,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("Auto", "On", "Off")
                 },
-                value: new UnconfiguredSettingValue("Auto")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Auto")),
 
             //////
             ///// ADVANCED
@@ -500,7 +500,7 @@ namespace SettingsProject
                         { "URL", "https://aka.ms/csharp-versions" }
                     }
                 },
-                values: ImmutableArray<ISettingValue>.Empty),
+                values: ImmutableArray<SettingValue>.Empty),
 
             new Setting(
                 context: DefaultContext,
@@ -514,7 +514,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
                 },
-                value: new UnconfiguredSettingValue("Prompt")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Prompt")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -527,7 +527,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -541,7 +541,7 @@ namespace SettingsProject
                     SupportsPerConfigurationValues = true,
                     EnumValues = ImmutableArray.Create("None", "Full", "Pdb-only", "Portable", "Embedded")
                 },
-                value: new UnconfiguredSettingValue("Portable")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "Portable")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -554,7 +554,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("512", "1024", "2048", "4096", "8192")
                 },
-                value: new UnconfiguredSettingValue("512")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "512")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -564,7 +564,7 @@ namespace SettingsProject
                     category: "Advanced",
                     priority: 600,
                     editorType: "String"),
-                new UnconfiguredSettingValue("0x11000000")),
+                new SettingValue(ImmutableArray<string>.Empty, "0x11000000")),
 
             /////////////
             //////////// BUILD EVENTS
@@ -584,7 +584,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 70,
                     editorType: "MultiLineString"),
-                value: new UnconfiguredSettingValue("")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -594,7 +594,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 200,
                     editorType: "MultiLineString"),
-                value: new UnconfiguredSettingValue("")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -610,7 +610,7 @@ namespace SettingsProject
                         "On successful build",
                         "When the build updates the project output")
                 },
-                value: new UnconfiguredSettingValue("On successful build")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "On successful build")),
 
             /////////////
             //////////// PACKAGING
@@ -632,7 +632,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -642,7 +642,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 300,
                     editorType: "String"),
-                new UnconfiguredSettingValue("ConsoleApp1")),
+                new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
             new Setting(
                 context: DefaultContext,
@@ -653,7 +653,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 400,
                     editorType: "String"),
-                new UnconfiguredSettingValue("1.0.0")),
+                new SettingValue(ImmutableArray<string>.Empty, "1.0.0")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -663,7 +663,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 500,
                     editorType: "String"),
-                new UnconfiguredSettingValue("ConsoleApp1")),
+                new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -673,7 +673,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 600,
                     editorType: "String"),
-                new UnconfiguredSettingValue("ConsoleApp1")),
+                new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -683,7 +683,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 700,
                     editorType: "String"),
-                new UnconfiguredSettingValue("ConsoleApp1")),
+                new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -693,7 +693,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 800,
                     editorType: "MultiLineString"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -703,7 +703,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 900,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO make this IconBrowseSetting
             new Setting(
                 context: DefaultContext,
@@ -714,7 +714,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1100,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -724,7 +724,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1200,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO provide feedback about valid URLs here
             new Setting(
                 context: DefaultContext,
@@ -735,7 +735,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1300,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -745,7 +745,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1400,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -755,7 +755,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1500,
                     editorType: "MultiLineString"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO this is a combo box with many languages listed
             new Setting(
                 context: DefaultContext,
@@ -766,7 +766,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1600,
                     editorType: "String"),
-                new UnconfiguredSettingValue("(None)")),
+                new SettingValue(ImmutableArray<string>.Empty, "(None)")),
             // TODO VersionSetting
             new Setting(
                 context: DefaultContext,
@@ -777,7 +777,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1700,
                     editorType: "String"),
-                new UnconfiguredSettingValue("1.0.0.0")),
+                new SettingValue(ImmutableArray<string>.Empty, "1.0.0.0")),
             // TODO VersionSetting
             new Setting(
                 context: DefaultContext,
@@ -788,7 +788,7 @@ namespace SettingsProject
                     category: "General",
                     priority: 1800,
                     editorType: "String"),
-                new UnconfiguredSettingValue("1.0.0.0")),
+                new SettingValue(ImmutableArray<string>.Empty, "1.0.0.0")),
 
             //////
             ///// LICENSE
@@ -803,7 +803,7 @@ namespace SettingsProject
                     category: "License",
                     priority: 85,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -816,7 +816,7 @@ namespace SettingsProject
                 {
                     EnumValues = ImmutableArray.Create("None", "Expression", "File")
                 },
-                value: new UnconfiguredSettingValue("None")),
+                value: new SettingValue(ImmutableArray<string>.Empty, "None")),
             // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
             new Setting(
                 context: DefaultContext,
@@ -827,7 +827,7 @@ namespace SettingsProject
                     category: "License",
                     priority: 300,
                     editorType: "String"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -844,7 +844,7 @@ namespace SettingsProject
                         { "URL", "https://spdx.org/licenses/" }
                     }
                 },
-                values: ImmutableArray<ISettingValue>.Empty),
+                values: ImmutableArray<SettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -854,7 +854,7 @@ namespace SettingsProject
                     category: "License",
                     priority: 500,
                     editorType: "FileBrowse"),
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
 
             /////////////
             //////////// DEBUG
@@ -881,7 +881,7 @@ namespace SettingsProject
                         { "Command", "ManageLaunchProfiles" }
                     }
                 },
-                values: ImmutableArray<ISettingValue>.Empty),
+                values: ImmutableArray<SettingValue>.Empty),
 
             /////////////
             //////////// SIGNING
@@ -903,7 +903,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             // TODO StrongNameKeySetting -- with new/add and change password actions
             new Setting(
                 context: DefaultContext,
@@ -917,7 +917,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue("")),
+                new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -930,7 +930,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
 
             /////////////
             //////////// CODE ANALYSIS
@@ -956,7 +956,7 @@ namespace SettingsProject
                         { "URL", "https://docs.microsoft.com/visualstudio/code-quality/roslyn-analyzers-overview" }
                     }
                 },
-                values: ImmutableArray<ISettingValue>.Empty),
+                values: ImmutableArray<SettingValue>.Empty),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -969,7 +969,7 @@ namespace SettingsProject
                 {
                     SupportsPerConfigurationValues = true
                 },
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
                 new SettingMetadata(
@@ -979,7 +979,7 @@ namespace SettingsProject
                     category: "Analyzers",
                     priority: 300,
                     editorType: "Bool"),
-                new UnconfiguredSettingValue(false)),
+                new SettingValue(ImmutableArray<string>.Empty, false)),
        };
     }
 }

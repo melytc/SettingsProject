@@ -321,7 +321,7 @@ namespace SettingsProject
                         value = metadata.Editor.GetDefaultValue(metadata);
                     }
 
-                    return new Setting(context, metadata, ImmutableArray.Create<ISettingValue>(new UnconfiguredSettingValue(value)));
+                    return new Setting(context, metadata, ImmutableArray.Create(new SettingValue(ImmutableArray<string>.Empty, value)));
                 }
             }
 
