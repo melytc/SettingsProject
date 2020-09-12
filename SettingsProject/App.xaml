@@ -42,13 +42,13 @@
             </DataTemplate>
 
             <DataTemplate x:Key="UnconfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
-                <ComboBox ItemsSource="{Binding Parent.EnumValues}" SelectedItem="{Binding Value}" />
+                <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
             </DataTemplate>
 
             <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
                 <DockPanel Margin="0,2">
                     <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
-                    <ComboBox ItemsSource="{Binding Parent.EnumValues}" SelectedItem="{Binding Value}" />
+                    <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
                 </DockPanel>
             </DataTemplate>
 

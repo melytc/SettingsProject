@@ -12,6 +12,7 @@ namespace SettingsProject
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private object _value;
+        private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
 
         public SettingValue(ImmutableArray<string> configurationDimensions, object value)
         {
@@ -25,7 +26,17 @@ namespace SettingsProject
 
         public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Metadata.Editor?.UnconfiguredDataTemplate : Parent?.Metadata.Editor?.ConfiguredDataTemplate;
 
-        public Setting? Parent { get; set; }
+        public Setting? Parent { get; internal set; }
+
+        public ImmutableArray<string> EnumValues
+        {
+            get => _enumValues;
+            set
+            {
+                _enumValues = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets and sets the current value of the property.

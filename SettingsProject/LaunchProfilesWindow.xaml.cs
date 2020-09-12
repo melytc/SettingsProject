@@ -60,10 +60,7 @@ namespace SettingsProject
             page: "Debug",
             category: "General",
             priority: 420,
-            editorType: "Enum")
-        {
-            EnumValues = ImmutableArray.Create("None", "Windows")
-        };
+            editorType: "Enum");
 
         private static readonly SettingMetadata LaunchBrowser = new SettingMetadata(
             name: "Launch Browser",
@@ -135,10 +132,7 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1200,
-            editorType: "Enum")
-        {
-            EnumValues = ImmutableArray.Create("Default", "x64", "x86")
-        };
+            editorType: "Enum");
 
         private static readonly SettingMetadata HostingModel = new SettingMetadata(
             name: "Hosting Model",
@@ -146,10 +140,7 @@ namespace SettingsProject
             page: "Debug",
             category: "Web Server Settings",
             priority: 1300,
-            editorType: "Enum")
-        {
-            EnumValues = ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process")
-        };
+            editorType: "Enum");
 
         private static readonly SettingMetadata EnableSSL = new SettingMetadata(
             name: "Enable SSL",
@@ -259,6 +250,23 @@ namespace SettingsProject
             var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, FindDrawing("IISDrawing"));
             var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, FindDrawing("IISExpressDrawing"));
 
+            var enumValuesBySetting = new Dictionary<SettingIdentity, ImmutableArray<string>>
+            {
+                { AuthenticationMode.Identity, ImmutableArray.Create("None", "Windows") },
+                { IisExpressBitness.Identity, ImmutableArray.Create("Default", "x64", "x86") },
+                { HostingModel.Identity, ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process") }
+            };
+
+            var defaultValueByEditorType = new Dictionary<string, object>
+            {
+                {"String", ""},
+                {"MultiLineString", ""},
+                {"Bool", false},
+                {"Enum", ""},
+                {"FileBrowse", ""},
+                {"LinkAction", ""}
+            };
+
             var profileKinds = ImmutableArray.Create(projectKind, executableKind, snapshotDebuggerKind, iisKind, iisExpressKind);
 
             var profiles = new ObservableCollection<LaunchProfileViewModel>
@@ -292,7 +300,7 @@ namespace SettingsProject
 
             InitializeComponent();
 
-            static LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
+            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
                 var context = new SettingContext();
                 var settings = kind.Metadata.Select(CreateSetting).ToImmutableArray();
@@ -315,13 +323,22 @@ namespace SettingsProject
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
-                    if (!initialValues.TryGetValue(metadata.Identity, out object value))
+                    var configurationDimensions = ImmutableArray<string>.Empty;
+                    var settingValue = new SettingValue(configurationDimensions, value: "");
+
+                    if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
                     {
-                        Assumes.NotNull(metadata.Editor);
-                        value = metadata.Editor.GetDefaultValue(metadata);
+                        settingValue.EnumValues = enumValues;
+                        settingValue.Value = enumValues.First();
                     }
 
-                    return new Setting(context, metadata, ImmutableArray.Create(new SettingValue(ImmutableArray<string>.Empty, value)));
+                    if (initialValues.TryGetValue(metadata.Identity, out object value) ||
+                        defaultValueByEditorType.TryGetValue(metadata.EditorType, out value))
+                    {
+                        settingValue.Value = value;
+                    }
+
+                    return new Setting(context, metadata, ImmutableArray.Create(settingValue));
                 }
             }
 

@@ -28,7 +28,6 @@ namespace SettingsProject
         public string? Description => Metadata.Description;
         public int Priority => Metadata.Priority;
         public SettingIdentity Identity => Metadata.Identity;
-        public ImmutableArray<string> EnumValues => Metadata.EnumValues;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
         public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description) && Metadata.Editor?.ShouldShowDescription(Values) != false;
@@ -140,10 +139,13 @@ namespace SettingsProject
                 if (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
                     return true;
 
-                foreach (var enumValue in Metadata.EnumValues)
+                foreach (var value in _values)
                 {
-                    if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
-                        return true;
+                    foreach (var enumValue in value.EnumValues)
+                    {
+                        if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                            return true;
+                    }
                 }
 
                 foreach (var searchTerm in Metadata.SearchTerms)

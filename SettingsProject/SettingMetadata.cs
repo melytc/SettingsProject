@@ -37,9 +37,6 @@ namespace SettingsProject
 
         public bool SupportsPerConfigurationValues { get; init; } = false;
 
-        // TODO this will move to the SettingValue type probably
-        public ImmutableArray<string> EnumValues { get; init; } = ImmutableArray<string>.Empty;
-
         public ISettingEditor? Editor { get; }
 
         public ImmutableArray<string> SearchTerms { get; init; } = ImmutableArray<string>.Empty;

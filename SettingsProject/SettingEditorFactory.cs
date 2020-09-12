@@ -59,47 +59,38 @@ namespace SettingsProject
                 }
             }
 
-            public abstract object GetDefaultValue(SettingMetadata metadata);
-
             public virtual bool ShouldShowDescription(ImmutableArray<SettingValue> values) => true;
         }
 
         private sealed class StringSettingEditor : SettingEditorBase
         {
             public StringSettingEditor() : base("String", "GenericSettingTemplate", "UnconfiguredStringSettingValueTemplate", "ConfiguredStringSettingValueTemplate") {}
-            public override object GetDefaultValue(SettingMetadata metadata) => "";
         }
 
         private sealed class MultiLineStringSettingEditor : SettingEditorBase
         {
             public MultiLineStringSettingEditor() : base("MultiLineString", "GenericSettingTemplate", "UnconfiguredMultilineStringSettingValueTemplate", "ConfiguredMultilineStringSettingValueTemplate") {}
-            public override object GetDefaultValue(SettingMetadata metadata) => "";
         }
 
         private sealed class BoolSettingEditor : SettingEditorBase
         {
-            private static readonly object BoxedFalse = false;
             public BoolSettingEditor() : base("Bool", "GenericSettingTemplate", "UnconfiguredBoolSettingValueTemplate", "ConfiguredBoolSettingValueTemplate") {}
-            public override object GetDefaultValue(SettingMetadata metadata) => BoxedFalse;
             public override bool ShouldShowDescription(ImmutableArray<SettingValue> values) => values.Length > 1;
         }
 
         private sealed class EnumSettingEditor : SettingEditorBase
         {
             public EnumSettingEditor() : base("Enum", "GenericSettingTemplate", "UnconfiguredEnumSettingValueTemplate", "ConfiguredEnumSettingValueTemplate") {}
-            public override object GetDefaultValue(SettingMetadata metadata) => metadata.EnumValues.FirstOrDefault() ?? "";
         }
 
         private sealed class FileBrowseEditor : SettingEditorBase
         {
             public FileBrowseEditor() : base("FileBrowse", "GenericSettingTemplate", "UnconfiguredFileBrowseSettingValueTemplate", "ConfiguredFileBrowseSettingValueTemplate") {}
-            public override object GetDefaultValue(SettingMetadata metadata) => "";
         }
 
         private sealed class LinkActionEditor : SettingEditorBase
         {
             public LinkActionEditor() : base("LinkAction", "LinkActionTemplate", null, null) {}
-            public override object GetDefaultValue(SettingMetadata metadata) => "";
         }
     }
 }

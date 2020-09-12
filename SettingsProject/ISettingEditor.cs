@@ -11,7 +11,6 @@ namespace SettingsProject
         DataTemplate SettingDataTemplate { get; }
         DataTemplate? UnconfiguredDataTemplate { get; }
         DataTemplate? ConfiguredDataTemplate { get; }
-        object GetDefaultValue(SettingMetadata metadata);
         bool ShouldShowDescription(ImmutableArray<SettingValue> values);
     }
 }
