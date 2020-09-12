@@ -6,6 +6,9 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+          <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="pack://application:,,,/Icons.xaml" />
+          </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:SettingValue">
                 <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
