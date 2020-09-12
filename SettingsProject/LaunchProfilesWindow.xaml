@@ -8,7 +8,7 @@
         Icon="VisualStudio.Preview.ico"
         Background="#FBFBFB"
         Title="Launch Profiles"
-        Height="450"
+        Height="520"
         Width="800"
         MinWidth="600"
         x:ClassModifier="internal"
