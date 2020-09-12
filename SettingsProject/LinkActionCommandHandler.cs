@@ -12,7 +12,7 @@ namespace SettingsProject
         private static readonly Dictionary<string, Action<IReadOnlyDictionary<string, string>>> s_commandRegistry = new Dictionary<string, Action<IReadOnlyDictionary<string, string>>>
         {
             // TODO import these via MEF imports
-            { "ManageLaunchProfiles", _ => new LaunchProfilesWindow().Show() }
+            { "ManageLaunchProfiles", _ => new LaunchProfilesWindow().ShowDialog() }
         };
 
         public static ICommand ActionCommand { get; } = new DelegateCommand<Setting>(setting => Handle(setting.Metadata.EditorMetadata));
