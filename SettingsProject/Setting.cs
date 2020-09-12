@@ -125,9 +125,7 @@ namespace SettingsProject
         {
             var wasVisible = IsVisible;
 
-            _isSearchVisible = Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1
-                || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
-                || MatchesSearchText(searchString);
+            _isSearchVisible = MatchesSearchText(searchString);
 
             if (wasVisible != IsVisible)
             {
@@ -136,6 +134,12 @@ namespace SettingsProject
 
             bool MatchesSearchText(string searchString)
             {
+                if (Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+
+                if (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+
                 foreach (var enumValue in Metadata.EnumValues)
                 {
                     if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
