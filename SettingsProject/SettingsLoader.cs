@@ -190,7 +190,10 @@ namespace SettingsProject
                     page: "Application",
                     category: "General",
                     priority: 600,
-                    editorType: "Bool"),
+                    editorType: "Bool")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, true)),
             new Setting(
                 context: DefaultContext,
@@ -200,7 +203,10 @@ namespace SettingsProject
                     page: "Application",
                     category: "General",
                     priority: 700,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "(Not set)")
                 {
                     EnumValues = ImmutableArray.Create("(Not set)"),
@@ -302,7 +308,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "General",
                     priority: 200,
-                    editorType: "Bool"),
+                    editorType: "Bool")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 values: ImmutableArray.Create(
                     new SettingValue(ImmutableArray.Create("Debug"), value: true),
                     new SettingValue(ImmutableArray.Create("Release"), value: false))),
@@ -327,7 +336,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "General",
                     priority: 400,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "Any CPU")
                 {
                     EnumValues = ImmutableArray.Create("Any CPU", "x86")
@@ -354,7 +366,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "General",
                     priority: 600,
-                    editorType: "Bool"),
+                    editorType: "Bool")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
@@ -364,7 +379,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "General",
                     priority: 700,
-                    editorType: "Bool"),
+                    editorType: "Bool")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
                 context: DefaultContext,
@@ -374,7 +392,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "General",
                     priority: 800,
-                    editorType: "Bool"),
+                    editorType: "Bool")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 values: ImmutableArray.Create(
                     new SettingValue(ImmutableArray.Create("Debug"), value: false),
                     new SettingValue(ImmutableArray.Create("Release"), value: true))),
@@ -392,7 +413,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Errors and warnings",
                     priority: 40,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "4")
                 {
                     EnumValues = ImmutableArray.Create("0", "1", "2", "3", "4")
@@ -405,7 +429,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Errors and warnings",
                     priority: 200,
-                    editorType: "String"),
+                    editorType: "String")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, "1701;1702")),
             new Setting(
                 context: DefaultContext,
@@ -415,7 +442,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Errors and warnings",
                     priority: 300,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "Specific warnings")
                 {
                     EnumValues = ImmutableArray.Create("None", "All", "Specific warnings"),
@@ -428,7 +458,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Errors and warnings",
                     priority: 400,
-                    editorType: "String"),
+                    editorType: "String")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, "NU1605")),
 
             //////
@@ -443,7 +476,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Output",
                     priority: 50,
-                    editorType: "FileBrowse"),
+                    editorType: "FileBrowse")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
@@ -453,7 +489,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Output",
                     priority: 200,
-                    editorType: "String"),
+                    editorType: "String")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
@@ -510,7 +549,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Advanced",
                     priority: 200,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "Prompt")
                 {
                     EnumValues = ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
@@ -552,7 +594,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Advanced",
                     priority: 500,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "512")
                 {
                     EnumValues = ImmutableArray.Create("512", "1024", "2048", "4096", "8192")
@@ -565,7 +610,10 @@ namespace SettingsProject
                     page: "Build",
                     category: "Advanced",
                     priority: 600,
-                    editorType: "String"),
+                    editorType: "String")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 new SettingValue(ImmutableArray<string>.Empty, "0x11000000")),
 
             /////////////
@@ -585,7 +633,10 @@ namespace SettingsProject
                     page: "Build Events",
                     category: "General",
                     priority: 70,
-                    editorType: "MultiLineString"),
+                    editorType: "MultiLineString")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
@@ -595,7 +646,10 @@ namespace SettingsProject
                     page: "Build Events",
                     category: "General",
                     priority: 200,
-                    editorType: "MultiLineString"),
+                    editorType: "MultiLineString")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
                 context: DefaultContext,
@@ -605,7 +659,10 @@ namespace SettingsProject
                     page: "Build Events",
                     category: "General",
                     priority: 300,
-                    editorType: "Enum"),
+                    editorType: "Enum")
+                {
+                    SupportsPerConfigurationValues = true
+                },
                 value: new SettingValue(ImmutableArray<string>.Empty, "On successful build")
                 {
                     EnumValues = ImmutableArray.Create(
