@@ -42,6 +42,8 @@ namespace SettingsProject
 
         public ISettingEditor? Editor { get; }
 
+        public ImmutableArray<string> SearchTerms { get; init; } = ImmutableArray<string>.Empty;
+
         public SettingMetadata(string name, string? description, string page, string category, int priority, string editorType)
         {
             Name = name;

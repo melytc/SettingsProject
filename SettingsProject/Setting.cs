@@ -146,6 +146,12 @@ namespace SettingsProject
                         return true;
                 }
 
+                foreach (var searchTerm in Metadata.SearchTerms)
+                {
+                    if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        return true;
+                }
+
                 return false;
             }
         }
