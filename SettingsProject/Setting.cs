@@ -9,33 +9,18 @@ using System.Runtime.CompilerServices;
 
 namespace SettingsProject
 {
-    internal sealed class SettingContext
-    {
-        private readonly Dictionary<SettingIdentity, Setting> _settingByIdentity = new Dictionary<SettingIdentity, Setting>();
-
-        public void AddSetting(Setting setting)
-        {
-            _settingByIdentity.Add(setting.Identity, setting);
-        }
-
-        public Setting GetSetting(in SettingIdentity targetIdentity)
-        {
-            return _settingByIdentity[targetIdentity];
-        }
-    }
-
-    internal class Setting : INotifyPropertyChanged
+    internal sealed class Setting : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
         private List<(SettingIdentity target, object visibleWhenValue)>? _dependentTargets;
-        private ImmutableArray<ISettingValue> _values;
+        private ImmutableArray<SettingValue> _values;
 
         private readonly SettingContext _context;
 
-        protected internal SettingMetadata Metadata { get; }
+        internal SettingMetadata Metadata { get; }
 
         public string Name => Metadata.Name;
         public string Page => Metadata.Page;
@@ -43,14 +28,13 @@ namespace SettingsProject
         public string? Description => Metadata.Description;
         public int Priority => Metadata.Priority;
         public SettingIdentity Identity => Metadata.Identity;
-        public ImmutableArray<string> EnumValues => Metadata.EnumValues;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
         public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description) && Metadata.Editor?.ShouldShowDescription(Values) != false;
 
-        public bool HasPerConfigurationValues => Values.Any(value => value.Configuration != null);
+        public bool HasPerConfigurationValues => Values.Any(value => !value.ConfigurationDimensions.IsEmpty);
 
-        public ImmutableArray<ISettingValue> Values
+        public ImmutableArray<SettingValue> Values
         {
             get => _values;
             set
@@ -78,17 +62,12 @@ namespace SettingsProject
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, UnconfiguredSettingValue value, ImmutableArray<string>? enumValues = null, bool supportsPerConfigurationValues = false)
-            : this(context, new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues, enumValues ?? ImmutableArray<string>.Empty), ImmutableArray.Create<ISettingValue>(value))
+        public Setting(SettingContext context, SettingMetadata metadata, SettingValue value)
+            : this(context, metadata, ImmutableArray.Create(value))
         {
         }
 
-        public Setting(SettingContext context, string name, string? description, string page, string category, int priority, string editorType, ImmutableArray<string>? enumValues, ImmutableArray<ConfiguredSettingValue> values)
-            : this(context, new SettingMetadata(name, page, category, description, priority, editorType, supportsPerConfigurationValues: true, enumValues ?? ImmutableArray<string>.Empty), values.CastArray<ISettingValue>())
-        {
-        }
-
-        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<ISettingValue> values)
+        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<SettingValue> values)
         {
             _context = context;
             Metadata = metadata;
@@ -145,9 +124,7 @@ namespace SettingsProject
         {
             var wasVisible = IsVisible;
 
-            _isSearchVisible = Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1
-                || (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
-                || MatchesSearchText(searchString);
+            _isSearchVisible = MatchesSearchText(searchString);
 
             if (wasVisible != IsVisible)
             {
@@ -156,11 +133,28 @@ namespace SettingsProject
 
             bool MatchesSearchText(string searchString)
             {
-                foreach (var enumValue in Metadata.EnumValues)
+                if (Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+
+                if (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    return true;
+
+                foreach (var value in _values)
                 {
-                    if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    foreach (var enumValue in value.EnumValues)
+                    {
+                        if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                            return true;
+                    }
+                }
+
+                foreach (var searchTerm in Metadata.SearchTerms)
+                {
+                    if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
                         return true;
                 }
+
+                // TODO search evaluated/unevaluated values too
 
                 return false;
             }
@@ -171,25 +165,6 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
-    }
-
-    internal sealed class LinkAction : Setting
-    {
-        public LinkAction(SettingContext context, string name, string? description, string page, string category, int priority)
-            : base(context, new SettingMetadata(name, page, category, description, priority, null, supportsPerConfigurationValues: false, ImmutableArray<string>.Empty), ImmutableArray<ISettingValue>.Empty)
-        {
-        }
-
-        private LinkAction(SettingContext context, SettingMetadata metadata)
-            : base(context, metadata, ImmutableArray<ISettingValue>.Empty)
-        {
-        }
-
-        public string HeadingText => Description != null ? Name : "";
-        
-        public string LinkText => Description ?? Name;
-
-        public override Setting Clone(SettingContext context) => new LinkAction(context, Metadata);
+        public Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
     }
 }

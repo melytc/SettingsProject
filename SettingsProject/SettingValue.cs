@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -6,35 +7,36 @@ using System.Windows;
 
 namespace SettingsProject
 {
-    internal interface ISettingValue : INotifyPropertyChanged
-    {
-        // null if this value applies to all configurations
-        string? Configuration { get; }
-
-        DataTemplate? Template { get; }
-
-        object Value { get; }
-
-        Setting? Parent { get; set; }
-
-        ISettingValue Clone();
-    }
-
-    internal abstract class SettingValue : ISettingValue
+    internal sealed class SettingValue : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private object _value;
+        private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
 
-        protected SettingValue(object value)
+        public SettingValue(ImmutableArray<string> configurationDimensions, object value)
         {
+            ConfigurationDimensions = configurationDimensions;
             _value = value;
         }
 
-        public abstract string? Configuration { get; }
-        public abstract DataTemplate? Template { get; }
+        // the set of dimensions for which this value is specified. any omitted dimensions are invariant.
+        // empty if this value applies to all configurations
+        public ImmutableArray<string> ConfigurationDimensions { get; }
 
-        public Setting? Parent { get; set; }
+        public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Metadata.Editor?.UnconfiguredDataTemplate : Parent?.Metadata.Editor?.ConfiguredDataTemplate;
+
+        public Setting? Parent { get; internal set; }
+
+        public ImmutableArray<string> EnumValues
+        {
+            get => _enumValues;
+            set
+            {
+                _enumValues = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets and sets the current value of the property.
@@ -47,41 +49,16 @@ namespace SettingsProject
                 if (!Equals(value, Value))
                 {
                     _value = value;
-                    OnPropertyChanged(nameof(Value));
+                    OnPropertyChanged();
                 }
             }
         }
 
-        public abstract ISettingValue Clone();
+        public SettingValue Clone() => new SettingValue(ConfigurationDimensions, _value);
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-    }
-
-    internal sealed class UnconfiguredSettingValue : SettingValue
-    {
-        public UnconfiguredSettingValue(object value)
-            : base(value)
-        {
-        }
-
-        public override DataTemplate? Template => Parent?.Metadata.Editor?.UnconfiguredDataTemplate;
-        public override string? Configuration => null;
-        public override ISettingValue Clone() => new UnconfiguredSettingValue(Value);
-    }
-
-    internal sealed class ConfiguredSettingValue : SettingValue
-    {
-        public ConfiguredSettingValue(string configuration, object value)
-            : base(value)
-        {
-            Configuration = configuration;
-        }
-
-        public override DataTemplate? Template => Parent?.Metadata.Editor?.ConfiguredDataTemplate;
-        public override string Configuration { get; }
-        public override ISettingValue Clone() => new ConfiguredSettingValue(Configuration, Value);
     }
 }

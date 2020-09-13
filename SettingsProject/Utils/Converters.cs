@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -21,6 +22,11 @@ namespace SettingsProject
         public static IValueConverter DoubleToBottomThickness { get; } = new LambdaConverter<double, Thickness>(d => new Thickness(0, 0, 0, d));
 
         public static IValueConverter Negate { get; } = new LambdaConverter<bool, bool>(b => !b);
+
+        public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Setting, string>(setting => setting.Description != null ? setting.Name : "");
+        public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Setting, string>(setting => setting.Description ?? setting.Name);
+
+        public static IValueConverter DimensionNames { get; } = new LambdaConverter<ImmutableArray<string>, string>(dimensions => string.Join(" | ", dimensions));
 
         private sealed class LambdaConverter<TFrom, TTo> : IValueConverter
         {

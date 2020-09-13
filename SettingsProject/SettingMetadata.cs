@@ -1,6 +1,14 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 #nullable enable
+
+namespace System.Runtime.CompilerServices
+{
+    internal class IsExternalInit
+    {
+    }
+}
 
 namespace SettingsProject
 {
@@ -22,18 +30,18 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        // TODO don't allow this to be null -- it's currently null only for LinkAction, which could have its own editor type if that specified the top-level template too
         // TODO will probably be an array in precedence order
-        public string? EditorType { get; }
+        public string EditorType { get; }
 
-        public bool SupportsPerConfigurationValues { get; }
+        public IReadOnlyDictionary<string, string> EditorMetadata { get; init; } = ImmutableDictionary<string, string>.Empty;
 
-        // TODO this will move to the SettingValue type probably
-        public ImmutableArray<string> EnumValues { get; }
+        public bool SupportsPerConfigurationValues { get; init; } = false;
 
         public ISettingEditor? Editor { get; }
 
-        public SettingMetadata(string name, string page, string category, string? description, int priority, string? editorType, bool supportsPerConfigurationValues, ImmutableArray<string> enumValues)
+        public ImmutableArray<string> SearchTerms { get; init; } = ImmutableArray<string>.Empty;
+
+        public SettingMetadata(string name, string? description, string page, string category, int priority, string editorType)
         {
             Name = name;
             Page = page;
@@ -41,13 +49,8 @@ namespace SettingsProject
             Description = description;
             Priority = priority;
             EditorType = editorType;
-            SupportsPerConfigurationValues = supportsPerConfigurationValues;
-            EnumValues = enumValues;
 
-            if (EditorType != null)
-            {
-                Editor = SettingEditorFactory.Default.GetEditor(EditorType);
-            }
+            Editor = SettingEditorFactory.Default.GetEditor(EditorType);
         }
 
         public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);

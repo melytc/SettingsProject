@@ -8,7 +8,7 @@
         Icon="VisualStudio.Preview.ico"
         Background="#FBFBFB"
         Title="Launch Profiles"
-        Height="450"
+        Height="520"
         Width="800"
         MinWidth="600"
         x:ClassModifier="internal"
@@ -50,7 +50,13 @@
 
         <ToolBar DockPanel.Dock="Top" BorderThickness="0" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never" >
           <Menu VerticalAlignment="Center">
-            <MenuItem Header="New ▼" ToolTip="Create a new profile" ItemsSource="{Binding Path=ProfileKinds}" UsesItemContainerTemplate="False">
+            <MenuItem ToolTip="Create a new profile" ItemsSource="{Binding Path=ProfileKinds}" UsesItemContainerTemplate="False">
+              <MenuItem.Header>
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="New" />
+                  <Path Fill="Black" Data="M 0 0 H 6 L 3 4 Z" VerticalAlignment="Center" Margin="4,0,0,0" SnapsToDevicePixels="True" />
+                </StackPanel>
+              </MenuItem.Header>
               <MenuItem.ItemContainerStyle>
                 <Style>
                   <Setter Property="MenuItem.Header" Value="{Binding Name}" />
