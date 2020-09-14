@@ -4,9 +4,7 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft;
 
 #nullable enable
 
@@ -16,21 +14,21 @@ namespace SettingsProject
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private readonly SettingMetadata _metadata;
+
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
         private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
         private ImmutableArray<SettingValue> _values;
         private SettingContext? _context;
 
-        internal SettingMetadata Metadata { get; }
-
-        public string Name => Metadata.Name;
-        public string Page => Metadata.Page;
-        public string Category => Metadata.Category;
-        public string? Description => Metadata.Description;
-        public int Priority => Metadata.Priority;
-        public SettingIdentity Identity => Metadata.Identity;
-        public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
+        public string Name => _metadata.Name;
+        public string Page => _metadata.Page;
+        public string Category => _metadata.Category;
+        public string? Description => _metadata.Description;
+        public int Priority => _metadata.Priority;
+        public SettingIdentity Identity => _metadata.Identity;
+        public bool SupportsPerConfigurationValues => _metadata.SupportsPerConfigurationValues;
 
         public ISettingEditor? Editor { get; }
         public IReadOnlyDictionary<string, string> EditorMetadata { get; }
@@ -78,7 +76,7 @@ namespace SettingsProject
 
         public Setting(SettingMetadata metadata, ImmutableArray<SettingValue> values)
         {
-            Metadata = metadata;
+            _metadata = metadata;
             Values = values;
 
             (Editor, EditorMetadata) = SettingEditorFactory.Default.GetEditor(metadata.Editors);
@@ -153,7 +151,7 @@ namespace SettingsProject
                     }
                 }
 
-                foreach (var searchTerm in Metadata.SearchTerms)
+                foreach (var searchTerm in _metadata.SearchTerms)
                 {
                     if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
                         return true;
@@ -170,7 +168,7 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
+        public Setting Clone() => new Setting(_metadata, Values.Select(value => value.Clone()).ToImmutableArray());
 
         public override string ToString() => Identity.ToString();
     }
