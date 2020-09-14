@@ -71,7 +71,9 @@ namespace SettingsProject
 
             var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
 
-            CollectionViewGroup group = viewSource.Groups.Cast<CollectionViewGroup>().FirstOrDefault(g => g.Name.Equals(section.Page));
+            Assumes.NotNull(viewSource.Groups);
+
+            CollectionViewGroup? group = viewSource.Groups.Cast<CollectionViewGroup>().FirstOrDefault(g => g.Name.Equals(section.Page));
 
             _scrollToTopGroup = group;
             _scrollToSubGroup = null;
