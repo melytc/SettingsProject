@@ -74,7 +74,14 @@ namespace SettingsProject
                 target: new SettingIdentity("Signing", "General", "Delay signing")),
         };
 
-        public static readonly SettingContext DefaultContext = new SettingContext();
+        public static readonly IImmutableDictionary<string, ImmutableArray<string>> DefaultConfigurationDictionary = new Dictionary<string, ImmutableArray<string>>
+        {
+            { "Configuration", ImmutableArray.Create("Debug", "Release") },
+            { "Platform", ImmutableArray.Create("x86", "AnyCPU") },
+            { "Target Framework", ImmutableArray.Create("net5.0", "net472") },
+        }.ToImmutableDictionary();
+
+        public static readonly SettingContext DefaultContext = new SettingContext(DefaultConfigurationDictionary);
 
         public static readonly IReadOnlyList<Setting> DefaultSettings = new Setting[]
         {

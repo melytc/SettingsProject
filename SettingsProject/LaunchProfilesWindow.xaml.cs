@@ -302,7 +302,7 @@ namespace SettingsProject
 
             LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
-                var context = new SettingContext();
+                var context = new SettingContext(SettingsLoader.DefaultConfigurationDictionary);
                 var settings = kind.Metadata.Select(CreateSetting).ToImmutableArray();
 
                 // TODO revisit how we model conditionality between settings
@@ -319,7 +319,7 @@ namespace SettingsProject
                     source.AddDependentTarget(target.Identity, condition.SourceValue);
                 }
 
-                return new LaunchProfileViewModel(name, settings, kind);
+                return new LaunchProfileViewModel(name, settings, kind, context);
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
