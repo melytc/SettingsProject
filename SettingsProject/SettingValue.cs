@@ -56,6 +56,8 @@ namespace SettingsProject
 
         public SettingValue Clone() => new SettingValue(ConfigurationDimensions, _value);
 
+        public override string ToString() => $"[{string.Join(" | ", ConfigurationDimensions.Values)}] = {_value}";
+
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
