@@ -14,5 +14,10 @@ namespace SettingsProject
             SourceValue = sourceValue;
             Target = target;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Source)}: {Source}, {nameof(SourceValue)}: {SourceValue}, {nameof(Target)}: {Target}";
+        }
     }
 }

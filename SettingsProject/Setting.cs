@@ -157,5 +157,7 @@ namespace SettingsProject
         }
 
         public Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
+
+        public override string ToString() => Identity.ToString();
     }
 }
