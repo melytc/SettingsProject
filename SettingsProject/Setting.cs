@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft;
 
 #nullable enable
 
@@ -22,6 +21,7 @@ namespace SettingsProject
         private ImmutableArray<SettingValue> _values;
 
         internal SettingMetadata Metadata { get; }
+        internal SettingContext? Context { get; private set; }
 
         public string Name => Metadata.Name;
         public string Page => Metadata.Page;
@@ -31,7 +31,7 @@ namespace SettingsProject
         public SettingIdentity Identity => Metadata.Identity;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
-        public bool HasPerConfigurationValues => Values.Any(value => !value.ConfigurationDimensions.IsEmpty);
+        public ImmutableArray<object> ConfigurationCommands { get; private set; }
 
         public ImmutableArray<SettingValue> Values
         {
@@ -76,6 +76,30 @@ namespace SettingsProject
         {
             Metadata = metadata;
             Values = values;
+        }
+
+        internal void Initialize(SettingContext context)
+        {
+            if (Context != null)
+                throw new InvalidOperationException("Already initialized.");
+
+            Context = context;
+
+            if (context.HasConfigurableDimensions && Metadata.SupportsPerConfigurationValues)
+            {
+                var builder = ImmutableArray.CreateBuilder<object>();
+                builder.Add(new SingleValueConfigurationCommand(this));
+                builder.Add(new Separator());
+                foreach (var (dimensionName, dimensionValues) in context.Dimensions)
+                {
+                    builder.Add(new DimensionConfigurationCommand(this, dimensionName, dimensionValues));
+                }
+                ConfigurationCommands = builder.ToImmutable();
+            }
+            else
+            {
+                ConfigurationCommands = ImmutableArray<object>.Empty;
+            }
         }
 
         private void UpdateDependentVisibility(Setting target, object visibleWhenValue)
@@ -159,5 +183,59 @@ namespace SettingsProject
         public Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
 
         public override string ToString() => Identity.ToString();
+
+        private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
+        {
+            private readonly Setting _setting;
+
+            public string Caption => "Use the same value across all configurations";
+
+            public string? DimensionName => null;
+
+            public SingleValueConfigurationCommand(Setting setting) => _setting = setting;
+
+            public void Invoke()
+            {
+                if (!_setting.Values.IsEmpty)
+                {
+                    // Apply the first configured value to all configurations
+                    // TODO consider showing UI when more than one value is available to choose between
+                    _setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, _setting.Values.First().Value));
+                }
+            }
+        }
+
+        private sealed class DimensionConfigurationCommand : ISettingConfigurationCommand
+        {
+            private readonly Setting _setting;
+            private readonly ImmutableArray<string> _dimensionValues;
+
+            public string? DimensionName { get; }
+
+            public string Caption => $"Vary value by {DimensionName}";
+
+            public DimensionConfigurationCommand(Setting setting, string dimensionName, ImmutableArray<string> dimensionValues)
+            {
+                _setting = setting;
+                DimensionName = dimensionName;
+                _dimensionValues = dimensionValues;
+            }
+
+            public void Invoke()
+            {
+                // TODO expand/contract the Values array accordingly
+            }
+        }
+
+        public static ICommand InvokeConfigurationCommand { get; } = new DelegateCommand<ISettingConfigurationCommand>(command => command.Invoke());
+    }
+
+    internal interface ISettingConfigurationCommand
+    {
+        string Caption { get; }
+        
+        string? DimensionName { get; }
+
+        void Invoke();
     }
 }

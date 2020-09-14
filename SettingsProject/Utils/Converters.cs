@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -30,6 +31,24 @@ namespace SettingsProject
 
         public static IMultiValueConverter DescriptionVisibility { get; } = new LambdaMultiConverter<Setting, string, ImmutableArray<SettingValue>, Visibility>(
             (setting, description, values) => !string.IsNullOrWhiteSpace(description) && setting.Metadata.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);
+
+        public static IMultiValueConverter SettingConfigurationCommandChecked { get; } = new LambdaMultiConverter<ISettingConfigurationCommand, ImmutableArray<SettingValue>, bool>(
+            (command, values) =>
+            {
+                if (command.DimensionName == null)
+                    return values.Length == 1;
+
+                return values.Any(value => value.ConfigurationDimensions.Any(dim => dim.Key == command.DimensionName));
+            });
+
+        public static IMultiValueConverter SettingConfigurationCommandEnabled { get; } = new LambdaMultiConverter<ISettingConfigurationCommand, Setting, bool>(
+            (command, setting) =>
+            {
+                if (command.DimensionName == null)
+                    return true;
+
+                return setting.Context!.Dimensions[command.DimensionName].Length > 1;
+            });
 
         private sealed class LambdaConverter<TFrom, TTo> : IValueConverter
         {

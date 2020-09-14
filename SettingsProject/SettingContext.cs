@@ -81,6 +81,11 @@ namespace SettingsProject
             Settings = settings;
 
             HasConfigurableDimensions = dimensions.Any(entry => entry.Value.Length > 1);
+
+            foreach (var setting in Settings)
+            {
+                setting.Initialize(this);
+            }
         }
 
         public SettingContext Clone()
