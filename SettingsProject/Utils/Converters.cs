@@ -47,7 +47,8 @@ namespace SettingsProject
                 if (command.DimensionName == null)
                     return true;
 
-                return setting.Context!.Dimensions[command.DimensionName].Length > 1;
+                // TODO source dimensions via binding and remove Context from Setting?
+                return setting.Context.Dimensions[command.DimensionName].Length > 1;
             });
 
         private sealed class LambdaConverter<TFrom, TTo> : IValueConverter

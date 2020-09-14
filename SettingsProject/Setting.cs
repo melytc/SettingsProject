@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft;
 
 #nullable enable
 
@@ -19,9 +20,9 @@ namespace SettingsProject
         private bool _isConditionalVisible = true;
         private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
         private ImmutableArray<SettingValue> _values;
+        private SettingContext? _context;
 
         internal SettingMetadata Metadata { get; }
-        internal SettingContext? Context { get; private set; }
 
         public string Name => Metadata.Name;
         public string Page => Metadata.Page;
@@ -30,6 +31,8 @@ namespace SettingsProject
         public int Priority => Metadata.Priority;
         public SettingIdentity Identity => Metadata.Identity;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
+
+        internal SettingContext Context => _context ?? throw new InvalidOperationException("Setting has not been initialized.");
 
         public ImmutableArray<object> ConfigurationCommands { get; private set; }
 
@@ -80,10 +83,12 @@ namespace SettingsProject
 
         internal void Initialize(SettingContext context)
         {
-            if (Context != null)
+            if (_context != null)
                 throw new InvalidOperationException("Already initialized.");
 
-            Context = context;
+            _context = context;
+
+            // TODO move command objects to context, and reuse (reduce allocations)?
 
             if (context.HasConfigurableDimensions && Metadata.SupportsPerConfigurationValues)
             {
@@ -210,7 +215,7 @@ namespace SettingsProject
             private readonly Setting _setting;
             private readonly ImmutableArray<string> _dimensionValues;
 
-            public string? DimensionName { get; }
+            public string DimensionName { get; }
 
             public string Caption => $"Vary value by {DimensionName}";
 
@@ -223,11 +228,60 @@ namespace SettingsProject
 
             public void Invoke()
             {
-                // TODO expand/contract the Values array accordingly
+                bool isAdding = !_setting.Values.Any(value => value.ConfigurationDimensions.ContainsKey(DimensionName));
+
+                if (isAdding)
+                {
+                    _setting.Values = _setting.Values
+                        .SelectMany(value => _dimensionValues
+                            .Select(dim => new SettingValue(value.ConfigurationDimensions.Add(DimensionName, dim), value.Value)))
+                        .ToImmutableArray();
+                }
+                else
+                {
+                    Assumes.False(_setting.Values.IsEmpty);
+                    var oldValueGroups = _setting.Values.GroupBy(value => value.ConfigurationDimensions.Remove(DimensionName), DimensionValueEqualityComparer.Instance);
+
+                    _setting.Values = oldValueGroups
+                        .Select(group => new SettingValue(group.First().ConfigurationDimensions.Remove(DimensionName), group.First().Value))
+                        .ToImmutableArray();
+                }
             }
         }
 
         public static ICommand InvokeConfigurationCommand { get; } = new DelegateCommand<ISettingConfigurationCommand>(command => command.Invoke());
+
+        private sealed class DimensionValueEqualityComparer : IEqualityComparer<ImmutableDictionary<string, string>>
+        {
+            public static DimensionValueEqualityComparer Instance { get; } = new DimensionValueEqualityComparer();
+
+            public bool Equals(ImmutableDictionary<string, string> x, ImmutableDictionary<string, string> y)
+            {
+                if (x.Count != y.Count)
+                    return false;
+
+                foreach (var (key, a) in x)
+                {
+                    if (!y.TryGetValue(key, out var b))
+                        return false;
+                    if (!string.Equals(a, b, StringComparison.Ordinal))
+                        return false;
+                }
+
+                return true;
+            }
+
+            public int GetHashCode(ImmutableDictionary<string, string> obj)
+            {
+                var hashCode = 1;
+                foreach (var (key, value) in obj)
+                {
+                    hashCode = (hashCode * 397) ^ key.GetHashCode();
+                    hashCode = (hashCode * 397) ^ value.GetHashCode();
+                }
+                return hashCode;
+            }
+        }
     }
 
     internal interface ISettingConfigurationCommand
