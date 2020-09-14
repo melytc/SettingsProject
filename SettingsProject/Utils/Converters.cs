@@ -77,7 +77,7 @@ namespace SettingsProject
 
             public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
             {
-                if (values.Length == 3 && TryConvert(values[0], out TFrom1 t1) && TryConvert(values[1], out TFrom2 t2))
+                if (values.Length == 2 && TryConvert(values[0], out TFrom1 t1) && TryConvert(values[1], out TFrom2 t2))
                 {
                     return _convert(t1, t2);
                 }
