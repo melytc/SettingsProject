@@ -28,7 +28,7 @@ namespace SettingsProject
         public static IValueConverter DimensionNames { get; } = new LambdaConverter<ImmutableDictionary<string, string>, string>(dimensions => string.Join(" | ", dimensions.Values));
 
         public static IMultiValueConverter DescriptionVisibility { get; } = new LambdaMultiConverter<Setting, string, ImmutableArray<SettingValue>, Visibility>(
-            (setting, description, values) => !string.IsNullOrWhiteSpace(description) && setting.Metadata.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);
+            (setting, description, values) => !string.IsNullOrWhiteSpace(description) && setting.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);
 
         public static IMultiValueConverter SettingConfigurationCommandChecked { get; } = new LambdaMultiConverter<ISettingConfigurationCommand, ImmutableArray<SettingValue>, bool>(
             (command, values) =>
@@ -45,7 +45,6 @@ namespace SettingsProject
                 if (command.DimensionName == null)
                     return true;
 
-                // TODO source dimensions via binding and remove Context from Setting?
                 return setting.Context.Dimensions[command.DimensionName].Length > 1;
             });
     }

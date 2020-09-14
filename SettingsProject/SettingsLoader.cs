@@ -145,14 +145,14 @@ namespace SettingsProject
                         page: "Application",
                         category: "General",
                         priority: 400,
-                        editorType: "LinkAction")
-                    {
-                        EditorMetadata = new Dictionary<string, string>
-                        {
-                            {"Action", "URL"},
-                            {"URL", "http://go.microsoft.com/fwlink/?LinkID=287120"}
-                        }
-                    },
+                        editors: ImmutableArray.Create(
+                            new EditorSpecification(
+                                "LinkAction",
+                                new Dictionary<string, string>
+                                {
+                                    {"Action", "URL"},
+                                    {"URL", "http://go.microsoft.com/fwlink/?LinkID=287120"}
+                                }))),
                     values: ImmutableArray<SettingValue>.Empty),
                 new Setting(
                     new SettingMetadata(
@@ -495,14 +495,14 @@ namespace SettingsProject
                         page: "Build",
                         category: "Advanced",
                         priority: 60,
-                        editorType: "LinkAction")
-                    {
-                        EditorMetadata = new Dictionary<string, string>
-                        {
-                            {"Action", "URL"},
-                            {"URL", "https://aka.ms/csharp-versions"}
-                        }
-                    },
+                        editors: ImmutableArray.Create(
+                            new EditorSpecification(
+                                "LinkAction",
+                                new Dictionary<string, string>
+                                {
+                                    {"Action", "URL"},
+                                    {"URL", "https://aka.ms/csharp-versions"}
+                                }))),
                     values: ImmutableArray<SettingValue>.Empty),
 
                 new Setting(
@@ -831,14 +831,14 @@ namespace SettingsProject
                         page: "Packaging",
                         category: "License",
                         priority: 400,
-                        editorType: "LinkAction")
-                    {
-                        EditorMetadata = new Dictionary<string, string>
-                        {
-                            {"Action", "URL"},
-                            {"URL", "https://spdx.org/licenses/"}
-                        }
-                    },
+                        editors: ImmutableArray.Create(
+                            new EditorSpecification(
+                                "LinkAction",
+                                new Dictionary<string, string>
+                                {
+                                    {"Action", "URL"},
+                                    {"URL", "https://spdx.org/licenses/"}
+                                }))),
                     values: ImmutableArray<SettingValue>.Empty),
                 new Setting(
                     new SettingMetadata(
@@ -866,14 +866,14 @@ namespace SettingsProject
                         page: "Debug",
                         category: "General",
                         priority: 90,
-                        editorType: "LinkAction")
-                    {
-                        EditorMetadata = new Dictionary<string, string>
-                        {
-                            {"Action", "Command"},
-                            {"Command", "ManageLaunchProfiles"}
-                        }
-                    },
+                        editors: ImmutableArray.Create(
+                            new EditorSpecification(
+                                "LinkAction",
+                                new Dictionary<string, string>
+                                {
+                                    {"Action", "Command"},
+                                    {"Command", "ManageLaunchProfiles"}
+                                }))),
                     values: ImmutableArray<SettingValue>.Empty),
 
                 /////////////
@@ -937,14 +937,14 @@ namespace SettingsProject
                         page: "Code Analysis",
                         category: "Analyzers",
                         priority: 94,
-                        editorType: "LinkAction")
-                    {
-                        EditorMetadata = new Dictionary<string, string>
-                        {
-                            {"Action", "URL"},
-                            {"URL", "https://docs.microsoft.com/visualstudio/code-quality/roslyn-analyzers-overview"}
-                        }
-                    },
+                        editors: ImmutableArray.Create(
+                            new EditorSpecification(
+                                "LinkAction",
+                                new Dictionary<string, string>
+                                {
+                                    {"Action", "URL"},
+                                    {"URL", "https://docs.microsoft.com/visualstudio/code-quality/roslyn-analyzers-overview"}
+                                }))),
                     values: ImmutableArray<SettingValue>.Empty),
                 new Setting(
                     new SettingMetadata(

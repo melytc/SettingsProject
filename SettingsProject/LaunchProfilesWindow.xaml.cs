@@ -321,7 +321,7 @@ namespace SettingsProject
                     }
 
                     if (initialValues.TryGetValue(metadata.Identity, out object value) ||
-                        defaultValueByEditorType.TryGetValue(metadata.EditorType, out value))
+                        defaultValueByEditorType.TryGetValue(metadata.Editors.Last().TypeName, out value))
                     {
                         settingValue.Value = value;
                     }

@@ -10,7 +10,7 @@ namespace SettingsProject
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
             if (item is Setting setting)
-                return setting.Metadata.Editor?.SettingDataTemplate;
+                return setting.Editor?.SettingDataTemplate;
 
             return null;
         }

@@ -24,7 +24,7 @@ namespace SettingsProject
         // empty if this value applies to all configurations
         public ImmutableDictionary<string, string> ConfigurationDimensions { get; }
 
-        public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Metadata.Editor?.UnconfiguredDataTemplate : Parent?.Metadata.Editor?.ConfiguredDataTemplate;
+        public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Editor?.UnconfiguredDataTemplate : Parent?.Editor?.ConfiguredDataTemplate;
 
         public Setting? Parent { get; internal set; }
 

@@ -32,6 +32,9 @@ namespace SettingsProject
         public SettingIdentity Identity => Metadata.Identity;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
+        public ISettingEditor? Editor { get; }
+        public IReadOnlyDictionary<string, string> EditorMetadata { get; }
+
         public SettingContext Context => _context ?? throw new InvalidOperationException("Setting has not been initialized.");
 
         public ImmutableArray<SettingValue> Values
@@ -77,6 +80,8 @@ namespace SettingsProject
         {
             Metadata = metadata;
             Values = values;
+
+            (Editor, EditorMetadata) = SettingEditorFactory.Default.GetEditor(metadata.Editors);
         }
 
         internal void Initialize(SettingContext context)

@@ -15,7 +15,7 @@ namespace SettingsProject
             { "ManageLaunchProfiles", _ => new LaunchProfilesWindow().ShowDialog() }
         };
 
-        public static ICommand ActionCommand { get; } = new DelegateCommand<Setting>(setting => Handle(setting.Metadata.EditorMetadata));
+        public static ICommand ActionCommand { get; } = new DelegateCommand<Setting>(setting => Handle(setting.EditorMetadata));
 
         private static void Handle(IReadOnlyDictionary<string, string> editorMetadata)
         {
