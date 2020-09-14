@@ -32,9 +32,7 @@ namespace SettingsProject
         public SettingIdentity Identity => Metadata.Identity;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
-        internal SettingContext Context => _context ?? throw new InvalidOperationException("Setting has not been initialized.");
-
-        public ImmutableArray<object> ConfigurationCommands { get; private set; }
+        public SettingContext Context => _context ?? throw new InvalidOperationException("Setting has not been initialized.");
 
         public ImmutableArray<SettingValue> Values
         {
@@ -87,24 +85,6 @@ namespace SettingsProject
                 throw new InvalidOperationException("Already initialized.");
 
             _context = context;
-
-            // TODO move command objects to context, and reuse (reduce allocations)?
-
-            if (context.HasConfigurableDimensions && Metadata.SupportsPerConfigurationValues)
-            {
-                var builder = ImmutableArray.CreateBuilder<object>();
-                builder.Add(new SingleValueConfigurationCommand(this));
-                builder.Add(new Separator());
-                foreach (var (dimensionName, dimensionValues) in context.Dimensions)
-                {
-                    builder.Add(new DimensionConfigurationCommand(this, dimensionName, dimensionValues));
-                }
-                ConfigurationCommands = builder.ToImmutable();
-            }
-            else
-            {
-                ConfigurationCommands = ImmutableArray<object>.Empty;
-            }
         }
 
         private void UpdateDependentVisibility(Setting target, object visibleWhenValue)
@@ -188,100 +168,6 @@ namespace SettingsProject
         public Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
 
         public override string ToString() => Identity.ToString();
-
-        private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
-        {
-            private readonly Setting _setting;
-
-            public string Caption => "Use the same value across all configurations";
-
-            public string? DimensionName => null;
-
-            public SingleValueConfigurationCommand(Setting setting) => _setting = setting;
-
-            public void Invoke()
-            {
-                if (!_setting.Values.IsEmpty)
-                {
-                    // Apply the first configured value to all configurations
-                    // TODO consider showing UI when more than one value is available to choose between
-                    _setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, _setting.Values.First().Value));
-                }
-            }
-        }
-
-        private sealed class DimensionConfigurationCommand : ISettingConfigurationCommand
-        {
-            private readonly Setting _setting;
-            private readonly ImmutableArray<string> _dimensionValues;
-
-            public string DimensionName { get; }
-
-            public string Caption => $"Vary value by {DimensionName}";
-
-            public DimensionConfigurationCommand(Setting setting, string dimensionName, ImmutableArray<string> dimensionValues)
-            {
-                _setting = setting;
-                DimensionName = dimensionName;
-                _dimensionValues = dimensionValues;
-            }
-
-            public void Invoke()
-            {
-                bool isAdding = !_setting.Values.Any(value => value.ConfigurationDimensions.ContainsKey(DimensionName));
-
-                if (isAdding)
-                {
-                    _setting.Values = _setting.Values
-                        .SelectMany(value => _dimensionValues
-                            .Select(dim => new SettingValue(value.ConfigurationDimensions.Add(DimensionName, dim), value.Value)))
-                        .ToImmutableArray();
-                }
-                else
-                {
-                    Assumes.False(_setting.Values.IsEmpty);
-                    var oldValueGroups = _setting.Values.GroupBy(value => value.ConfigurationDimensions.Remove(DimensionName), DimensionValueEqualityComparer.Instance);
-
-                    _setting.Values = oldValueGroups
-                        .Select(group => new SettingValue(group.First().ConfigurationDimensions.Remove(DimensionName), group.First().Value))
-                        .ToImmutableArray();
-                }
-            }
-        }
-
-        public static ICommand InvokeConfigurationCommand { get; } = new DelegateCommand<ISettingConfigurationCommand>(command => command.Invoke());
-
-        private sealed class DimensionValueEqualityComparer : IEqualityComparer<ImmutableDictionary<string, string>>
-        {
-            public static DimensionValueEqualityComparer Instance { get; } = new DimensionValueEqualityComparer();
-
-            public bool Equals(ImmutableDictionary<string, string> x, ImmutableDictionary<string, string> y)
-            {
-                if (x.Count != y.Count)
-                    return false;
-
-                foreach (var (key, a) in x)
-                {
-                    if (!y.TryGetValue(key, out var b))
-                        return false;
-                    if (!string.Equals(a, b, StringComparison.Ordinal))
-                        return false;
-                }
-
-                return true;
-            }
-
-            public int GetHashCode(ImmutableDictionary<string, string> obj)
-            {
-                var hashCode = 1;
-                foreach (var (key, value) in obj)
-                {
-                    hashCode = (hashCode * 397) ^ key.GetHashCode();
-                    hashCode = (hashCode * 397) ^ value.GetHashCode();
-                }
-                return hashCode;
-            }
-        }
     }
 
     internal interface ISettingConfigurationCommand
@@ -290,6 +176,6 @@ namespace SettingsProject
         
         string? DimensionName { get; }
 
-        void Invoke();
+        ICommand Command { get; }
     }
 }

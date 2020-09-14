@@ -120,7 +120,7 @@
                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
               </ControlTemplate>
             </Menu.Template>
-            <MenuItem Cursor="Hand" ItemsSource="{Binding Path=ConfigurationCommands}" UsesItemContainerTemplate="False">
+            <MenuItem Cursor="Hand" ItemsSource="{Binding Path=Context.ConfigurationCommands}" UsesItemContainerTemplate="False">
               <MenuItem.Header>
                 <Rectangle Fill="{StaticResource SettingsIconBrush}" Width="16" Height="16" />
               </MenuItem.Header>
@@ -169,8 +169,8 @@
                       </MultiBinding>
                     </Setter.Value>
                   </Setter>
-                  <Setter Property="MenuItem.Command" Value="{x:Static local:Setting.InvokeConfigurationCommand}" />
-                  <Setter Property="MenuItem.CommandParameter" Value="{Binding}" />
+                  <Setter Property="MenuItem.Command" Value="{Binding Path=Command}" />
+                  <Setter Property="MenuItem.CommandParameter" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Menu}}, Path=DataContext}" />
                 </Style>
               </MenuItem.ItemContainerStyle>
             </MenuItem>
