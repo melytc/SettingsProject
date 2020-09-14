@@ -9,25 +9,9 @@ namespace SettingsProject
 {
     internal static class SettingsLoader
     {
-        static SettingsLoader()
-        {
-            var settingByIdentity = DefaultSettings.ToDictionary(setting => setting.Identity);
-
-            foreach (var condition in DefaultConditions)
-            {
-                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source))
-                    throw new Exception("Unknown source: " + condition.Source);
-                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target))
-                    throw new Exception("Unknown target: " + condition.Target);
-
-                source.AddDependentTarget(target.Identity, condition.SourceValue);
-            }
-        }
-
         // TODO control 'Prefer 32-bit' visibility based on target framework(s)
 
-        public static readonly IReadOnlyList<SettingCondition> DefaultConditions = new[]
-        {
+        public static readonly ImmutableArray<SettingCondition> DefaultConditions = ImmutableArray.Create(
             // Multi-targeting
             new SettingCondition(
                 source: new SettingIdentity("Application", "General", "Multi-targeting"),
@@ -71,8 +55,8 @@ namespace SettingsProject
             new SettingCondition(
                 source: new SettingIdentity("Signing", "General", "Signing"),
                 sourceValue: true,
-                target: new SettingIdentity("Signing", "General", "Delay signing")),
-        };
+                target: new SettingIdentity("Signing", "General", "Delay signing"))
+        );
 
         public static readonly IImmutableDictionary<string, ImmutableArray<string>> DefaultConfigurationDictionary = new Dictionary<string, ImmutableArray<string>>
         {
@@ -81,9 +65,7 @@ namespace SettingsProject
             { "Target Framework", ImmutableArray.Create("net5.0", "net472") },
         }.ToImmutableDictionary();
 
-        public static readonly SettingContext DefaultContext = new SettingContext(DefaultConfigurationDictionary);
-
-        public static readonly IReadOnlyList<Setting> DefaultSettings = new Setting[]
+        public static readonly SettingContext DefaultContext = new SettingContextBuilder(DefaultConfigurationDictionary, DefaultConditions, requireConditionMatches: true)
         {
             /////////////
             //////////// APPLICATION
@@ -94,7 +76,6 @@ namespace SettingsProject
             ////
 
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Assembly name",
                     description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
@@ -104,7 +85,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Default namespace",
                     description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
@@ -114,7 +94,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Multi-targeting",
                     description: "Build this project for multiple target frameworks.",
@@ -126,7 +105,6 @@ namespace SettingsProject
             // TODO come up with a better editing experience, perhaps via a FlagsSetting
             // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Target frameworks",
                     description: "Specifies the semicolon-delimited list of frameworks that this project will target.",
@@ -136,7 +114,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "net5")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Target framework",
                     description: "Specifies the framework that this project will target.",
@@ -157,7 +134,6 @@ namespace SettingsProject
                         ".NET Core 1.0")
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Install other frameworks",
                     description: null,
@@ -174,7 +150,6 @@ namespace SettingsProject
                 },
                 values: ImmutableArray<SettingValue>.Empty),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Output type",
                     description: "Specifies whether the output is executable, and whether it runs in a console or as a desktop application.",
@@ -190,7 +165,6 @@ namespace SettingsProject
                         "Class Library")
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Binding redirects",
                     description: "Whether to auto-generate binding redirects.",
@@ -203,7 +177,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, true)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Startup object",
                     description: "Specifies the entry point for the executable.",
@@ -220,7 +193,6 @@ namespace SettingsProject
                 }),
 
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Resources",
                     description: "Specifies how application resources will be managed.",
@@ -234,7 +206,6 @@ namespace SettingsProject
                 }),
             // TODO make this IconBrowseSetting
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Icon path",
                     description: "Path to the icon to embed into the output assembly.",
@@ -246,7 +217,6 @@ namespace SettingsProject
             // TODO make this FileBrowseSetting
             // TODO this can appear disabled, find out why
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Manifest path",
                     description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
@@ -259,7 +229,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create(""),
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Resource file path",
                     description: "Specifies a Win32 res file to compile into this project.",
@@ -295,7 +264,6 @@ namespace SettingsProject
             ////
 
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Conditional compilation symbols",
                     description: "A semicolon-delimited list of symbols to define for the compilation.",
@@ -308,7 +276,6 @@ namespace SettingsProject
                 },
                 value: new SettingValue(ImmutableArray<string>.Empty, "TRACE")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Define DEBUG symbol",
                     description: "Specifies whether to define the DEBUG compilation symbol.",
@@ -323,7 +290,6 @@ namespace SettingsProject
                     new SettingValue(ImmutableArray.Create("Debug"), value: true),
                     new SettingValue(ImmutableArray.Create("Release"), value: false))),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Define TRACE symbol",
                     description: "Specifies whether to define the TRACE compilation symbol.",
@@ -336,7 +302,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Platform target",
                     description: "The platform to target in this project configuration.",
@@ -352,7 +317,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create("Any CPU", "x86")
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Nullable reference types",
                     description: "Controls use of nullable annotations and warnings.",
@@ -366,7 +330,6 @@ namespace SettingsProject
                 }),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Prefer 32-bit",
                     description: "Specifies whether to prefer 32-bit when available.",
@@ -379,7 +342,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Unsafe code",
                     description: "Allow unsafe code in this project.",
@@ -392,7 +354,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Optimize code",
                     description: "Produce optimized output. Optimized binaries may be harder to debug.",
@@ -412,7 +373,6 @@ namespace SettingsProject
             ////
             
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Warning level",
                     description: "Sets the warning level, where higher levels produce more warnings.",
@@ -429,7 +389,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create("0", "1", "2", "3", "4")
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Suppress specific warnings",
                     description: "A semicolon-delimited list of warning codes to suppress.",
@@ -442,7 +401,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, "1701;1702")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Warnings as errors",
                     description: "Controls which warnings are treated as errors.",
@@ -458,7 +416,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create("None", "All", "Specific warnings"),
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Treat specific warnings as errors",
                     description: "A semicolon-delimited list of warning codes to treat as errors.",
@@ -476,7 +433,6 @@ namespace SettingsProject
             ////
             
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Output path",
                     description: "Relative destination path for build output.",
@@ -489,7 +445,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "XML documentation path",
                     description: "Relative path to the output XML documentation. Clear to disable generation.",
@@ -503,7 +458,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO this is disabled in .NET Core -- why?
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Register for COM interop",
                     description: "Add metadata from the output assembly to the registry, allowing COM clients to create .NET classes.",
@@ -513,7 +467,6 @@ namespace SettingsProject
                     editorType: "Bool"),
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Generate serialization assembly",
                     description: null,
@@ -531,7 +484,6 @@ namespace SettingsProject
             ////
             
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Language version",
                     description: "Why can't I select the C# language version?",
@@ -549,7 +501,6 @@ namespace SettingsProject
                 values: ImmutableArray<SettingValue>.Empty),
 
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Internal compiler error reporting",
                     description: null,
@@ -565,7 +516,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Overflow checking",
                     description: "Enable arithmetic overflow checking at runtime.",
@@ -578,7 +528,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Debugging information",
                     description: null,
@@ -594,7 +543,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create("None", "Full", "Pdb-only", "Portable", "Embedded")
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "File alignment",
                     description: null,
@@ -610,7 +558,6 @@ namespace SettingsProject
                     EnumValues = ImmutableArray.Create("512", "1024", "2048", "4096", "8192")
                 }),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Library base address",
                     description: null,
@@ -633,7 +580,6 @@ namespace SettingsProject
 
             // TODO both these build events can be edited in a pop-out editor with macro support
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Pre-build event",
                     description: "Commands to execute before a build occurs.",
@@ -646,7 +592,6 @@ namespace SettingsProject
                 },
                 value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Post-build event",
                     description: "Commands to execute after a build completes.",
@@ -659,7 +604,6 @@ namespace SettingsProject
                 },
                 value: new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Run the post-build event",
                     description: "Controls when any post-build event is executed.",
@@ -687,7 +631,6 @@ namespace SettingsProject
             ////
 
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Generate NuGet package on build",
                     description: "Specifies whether a NuGet package should be produced in the output directory when the project is build.",
@@ -700,7 +643,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Package ID",
                     description: null,
@@ -711,7 +653,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Package version",
                     description: null,
@@ -721,7 +662,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "1.0.0")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Authors",
                     description: null,
@@ -731,7 +671,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Company",
                     description: null,
@@ -741,7 +680,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Product",
                     description: null,
@@ -751,7 +689,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "ConsoleApp1")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Description",
                     description: null,
@@ -761,7 +698,6 @@ namespace SettingsProject
                     editorType: "MultiLineString"),
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Copyright",
                     description: null,
@@ -772,7 +708,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO make this IconBrowseSetting
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Package icon file",
                     description: "Path to the icon to include in and use for the package.",
@@ -782,7 +717,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Repository URL",
                     description: null, // TODO describe what this URL means
@@ -793,7 +727,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO provide feedback about valid URLs here
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Repository type",
                     description: null,
@@ -803,7 +736,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Tags",
                     description: null, // TODO describe how this is delimited
@@ -813,7 +745,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Release notes",
                     description: null,
@@ -824,7 +755,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             // TODO this is a combo box with many languages listed
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Assembly neutral language",
                     description: null,
@@ -835,7 +765,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "(None)")),
             // TODO VersionSetting
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Assembly version",
                     description: null,
@@ -846,7 +775,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, "1.0.0.0")),
             // TODO VersionSetting
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Assembly file version",
                     description: null,
@@ -861,7 +789,6 @@ namespace SettingsProject
             ////
             
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Require license acceptance",
                     description: "Controls whether consumers of the generated package are presented with a license acceptance prompt when adding a reference to this package.",
@@ -871,7 +798,6 @@ namespace SettingsProject
                     editorType: "Bool"),
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "License specification",
                     description: "Controls how the package's license is specified.",
@@ -885,7 +811,6 @@ namespace SettingsProject
                 }),
             // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "License expression",
                     description: "The SPDX expression that specifies the package's license.",
@@ -895,7 +820,6 @@ namespace SettingsProject
                     editorType: "String"),
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Read about SPDX license expressions",
                     description: null,
@@ -912,7 +836,6 @@ namespace SettingsProject
                 },
                 values: ImmutableArray<SettingValue>.Empty),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "License file path",
                     description: "The path to the license file to include in the package. May be relative to the project directory.",
@@ -932,7 +855,6 @@ namespace SettingsProject
             
             // TODO make this link action show the launch profiles UI
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Manage launch profiles",
                     description: null,
@@ -958,7 +880,6 @@ namespace SettingsProject
             ////
             
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Signing",
                     description: "Sign the project's output assembly.",
@@ -972,7 +893,6 @@ namespace SettingsProject
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             // TODO StrongNameKeySetting -- with new/add and change password actions
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Key file path",
                     description: "Choose a string name key file",
@@ -985,7 +905,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, "")),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Delay signing",
                     description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
@@ -1007,7 +926,6 @@ namespace SettingsProject
             ////
             
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "What are the benefits of source code analyzers?",
                     description: null,
@@ -1024,7 +942,6 @@ namespace SettingsProject
                 },
                 values: ImmutableArray<SettingValue>.Empty),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Run on build",
                     description: "Run analyzers during build.",
@@ -1037,7 +954,6 @@ namespace SettingsProject
                 },
                 new SettingValue(ImmutableArray<string>.Empty, false)),
             new Setting(
-                context: DefaultContext,
                 new SettingMetadata(
                     name: "Run live analysis",
                     description: "Run analyzers live in the IDE.",
@@ -1045,7 +961,7 @@ namespace SettingsProject
                     category: "Analyzers",
                     priority: 300,
                     editorType: "Bool"),
-                new SettingValue(ImmutableArray<string>.Empty, false)),
-       };
+                new SettingValue(ImmutableArray<string>.Empty, false))
+        }.Build();
     }
 }

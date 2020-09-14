@@ -4,6 +4,9 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Microsoft;
 
 #nullable enable
 
@@ -15,10 +18,8 @@ namespace SettingsProject
 
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
-        private List<(SettingIdentity target, object visibleWhenValue)>? _dependentTargets;
+        private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
         private ImmutableArray<SettingValue> _values;
-
-        private readonly SettingContext _context;
 
         internal SettingMetadata Metadata { get; }
 
@@ -37,6 +38,10 @@ namespace SettingsProject
             get => _values;
             set
             {
+                // TODO validate incoming values
+                // - set of dimensions across values must be identical
+                // - number of values must match the dimension specifications
+
                 _values = value;
                 
                 foreach (var settingValue in value)
@@ -46,76 +51,64 @@ namespace SettingsProject
 
                     void OnSettingValuePropertyChanged(object _, PropertyChangedEventArgs e)
                     {
-                        if (e.PropertyName == nameof(SettingValue.Value))
+                        if (e.PropertyName == nameof(SettingValue.Value) && _dependentTargets != null)
                         {
-                            UpdateDependentVisibilities();
+                            foreach (var (target, visibleWhenValue) in _dependentTargets)
+                            {
+                                UpdateDependentVisibility(target, visibleWhenValue);
+                            }
                         }
                     }
                 }
 
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(HasPerConfigurationValues));
             }
         }
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public Setting(SettingContext context, SettingMetadata metadata, SettingValue value)
-            : this(context, metadata, ImmutableArray.Create(value))
+        public Setting(SettingMetadata metadata, SettingValue value)
+            : this(metadata, ImmutableArray.Create(value))
         {
         }
 
-        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<SettingValue> values)
+        public Setting(SettingMetadata metadata, ImmutableArray<SettingValue> values)
         {
-            _context = context;
             Metadata = metadata;
             Values = values;
-
-            _context.AddSetting(this);
         }
 
-        internal void UpdateDependentVisibilities()
+        private void UpdateDependentVisibility(Setting target, object visibleWhenValue)
         {
-            // TODO model this as a graph with edges so that multiple upstream properties may influence a single downstream one
+            var wasVisible = target.IsVisible;
 
-            if (_dependentTargets == null)
+            bool isConditionallyVisible = false;
+
+            // Target is visible if any upstream value matches
+            foreach (var value in Values)
             {
-                return;
+                if (Equals(visibleWhenValue, value.Value))
+                {
+                    isConditionallyVisible = true;
+                    break;
+                }
             }
 
-            foreach (var (targetIdentity, visibleWhenValue) in _dependentTargets)
+            target._isConditionalVisible = isConditionallyVisible;
+
+            if (wasVisible != target.IsVisible)
             {
-                var target = _context.GetSetting(targetIdentity);
-                var wasVisible = target.IsVisible;
-
-                bool isConditionallyVisible = false;
-
-                // Target is visible if any upstream value matches
-                foreach (var value in Values)
-                {
-                    if (Equals(visibleWhenValue, value.Value))
-                    {
-                        isConditionallyVisible = true;
-                        break;
-                    }
-                }
-
-                target._isConditionalVisible = isConditionallyVisible;
-
-                if (wasVisible != target.IsVisible)
-                {
-                    target.OnPropertyChanged(nameof(IsVisible));
-                }
+                target.OnPropertyChanged(nameof(IsVisible));
             }
         }
 
-        public void AddDependentTarget(SettingIdentity target, object visibleWhenValue)
+        public void AddDependentTarget(Setting target, object visibleWhenValue)
         {
-            _dependentTargets ??= new List<(SettingIdentity target, object visibleWhenValue)>();
+            _dependentTargets ??= new List<(Setting target, object visibleWhenValue)>();
 
             _dependentTargets.Add((target, visibleWhenValue));
 
-            UpdateDependentVisibilities();
+            UpdateDependentVisibility(target, visibleWhenValue);
         }
 
         public void UpdateSearchState(string searchString)
@@ -163,6 +156,6 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
+        public Setting Clone() => new Setting(Metadata, Values.Select(value => value.Clone()).ToImmutableArray());
     }
 }

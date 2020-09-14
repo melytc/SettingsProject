@@ -19,7 +19,7 @@ namespace SettingsProject
 
         public ApplicationViewModel()
         {
-            var settings = SettingsLoader.DefaultSettings;
+            var settings = SettingsLoader.DefaultContext.Settings;
 
             SettingsListViewModel = new SettingsListViewModel(settings, useGrouping: true);
 

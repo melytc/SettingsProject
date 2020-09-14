@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 #nullable enable
@@ -20,9 +18,9 @@ namespace SettingsProject
 
         public SettingsListViewModel SettingsListViewModel { get; }
 
-        public LaunchProfileViewModel(string name, ImmutableArray<Setting> settings, LaunchProfileKind kind, SettingContext context)
+        public LaunchProfileViewModel(string name, LaunchProfileKind kind, SettingContext context)
         {
-            SettingsListViewModel = new SettingsListViewModel(settings, useGrouping: false);
+            SettingsListViewModel = new SettingsListViewModel(context.Settings, useGrouping: false);
 
             _name = name;
             _context = context;
@@ -57,15 +55,7 @@ namespace SettingsProject
 
         public LaunchProfileViewModel Clone()
         {
-            var context = new SettingContext(_context.Dimensions);
-            var settings = SettingsListViewModel.Settings.Select(setting => setting.Clone(context)).ToImmutableArray();
-
-            foreach (var setting in settings)
-            {
-                setting.UpdateDependentVisibilities();
-            }
-
-            return new LaunchProfileViewModel($"{Name} (2)", settings, Kind, context);
+            return new LaunchProfileViewModel($"{Name} (2)", Kind, _context.Clone());
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

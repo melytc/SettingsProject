@@ -168,25 +168,22 @@ namespace SettingsProject
 
         #endregion
 
-        private static readonly IReadOnlyList<SettingCondition> Conditions = new[]
-        {
-            new SettingCondition(
-                source: UseRemoteMachine.Identity,
-                sourceValue: true,
-                target: RemoteMachineHostName.Identity),
-            new SettingCondition(
-                source: UseRemoteMachine.Identity,
-                sourceValue: true,
-                target: AuthenticationMode.Identity),
-            new SettingCondition(
-                source: LaunchBrowser.Identity,
-                sourceValue: true,
-                target: LaunchBrowserUrl.Identity),
-        };
-
-
         public LaunchProfilesWindow()
         {
+            var conditions = ImmutableArray.Create(
+                new SettingCondition(
+                    source: UseRemoteMachine.Identity,
+                    sourceValue: true,
+                    target: RemoteMachineHostName.Identity),
+                new SettingCondition(
+                    source: UseRemoteMachine.Identity,
+                    sourceValue: true,
+                    target: AuthenticationMode.Identity),
+                new SettingCondition(
+                    source: LaunchBrowser.Identity,
+                    sourceValue: true,
+                    target: LaunchBrowserUrl.Identity));
+
             var executableKindSettingMetadata = ImmutableArray.Create(
                 ExecutablePath,
                 ApplicationArguments,
@@ -302,28 +299,20 @@ namespace SettingsProject
 
             LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
-                var context = new SettingContext(SettingsLoader.DefaultConfigurationDictionary);
-                var settings = kind.Metadata.Select(CreateSetting).ToImmutableArray();
+                var contextBuilder = new SettingContextBuilder(SettingsLoader.DefaultConfigurationDictionary, conditions, requireConditionMatches: false);
 
-                // TODO revisit how we model conditionality between settings
-
-                var settingByIdentity = settings.ToDictionary(setting => setting.Identity);
-
-                foreach (var condition in Conditions)
+                foreach (var metadata in kind.Metadata)
                 {
-                    if (!settingByIdentity.TryGetValue(condition.Source, out Setting? source))
-                        continue; // throw new Exception("Unknown source: " + condition.Source);
-                    if (!settingByIdentity.TryGetValue(condition.Target, out Setting? target))
-                        continue; // throw new Exception("Unknown target: " + condition.Target);
-
-                    source.AddDependentTarget(target.Identity, condition.SourceValue);
+                    contextBuilder.Add(CreateSetting(metadata));
                 }
 
-                return new LaunchProfileViewModel(name, settings, kind, context);
+                return new LaunchProfileViewModel(name, kind, contextBuilder.Build());
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
+                    // Debug launch profile values are unconfigured, so use an empty dimensions array
                     var configurationDimensions = ImmutableArray<string>.Empty;
+
                     var settingValue = new SettingValue(configurationDimensions, value: "");
 
                     if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
@@ -338,7 +327,7 @@ namespace SettingsProject
                         settingValue.Value = value;
                     }
 
-                    return new Setting(context, metadata, ImmutableArray.Create(settingValue));
+                    return new Setting(metadata, ImmutableArray.Create(settingValue));
                 }
             }
 
