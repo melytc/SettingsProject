@@ -311,7 +311,7 @@ namespace SettingsProject
                 Setting CreateSetting(SettingMetadata metadata)
                 {
                     // Debug launch profile values are unconfigured, so use an empty dimensions array
-                    var configurationDimensions = ImmutableArray<string>.Empty;
+                    var configurationDimensions = ImmutableDictionary<string, string>.Empty;
 
                     var settingValue = new SettingValue(configurationDimensions, value: "");
 

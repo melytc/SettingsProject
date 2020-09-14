@@ -26,7 +26,7 @@ namespace SettingsProject
         public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Setting, string>(setting => setting.Description != null ? setting.Name : "");
         public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Setting, string>(setting => setting.Description ?? setting.Name);
 
-        public static IValueConverter DimensionNames { get; } = new LambdaConverter<ImmutableArray<string>, string>(dimensions => string.Join(" | ", dimensions));
+        public static IValueConverter DimensionNames { get; } = new LambdaConverter<ImmutableDictionary<string, string>, string>(dimensions => string.Join(" | ", dimensions.Values));
 
         public static IMultiValueConverter DescriptionVisibility { get; } = new LambdaMultiConverter<Setting, string, ImmutableArray<SettingValue>, Visibility>(
             (setting, description, values) => !string.IsNullOrWhiteSpace(description) && setting.Metadata.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);
