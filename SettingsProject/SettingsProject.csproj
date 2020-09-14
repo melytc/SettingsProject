@@ -69,6 +69,7 @@
     <Compile Include="LaunchProfilesWindow.xaml.cs">
       <DependentUpon>LaunchProfilesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\DeconstructionExtensions.cs" />
     <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="NavigationSection.cs" />
