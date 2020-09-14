@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:SettingsProject"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -98,7 +97,17 @@
 
             <DataTemplate x:Key="GenericSettingTemplate" DataType="local:Setting">
               <DockPanel Margin="0,0,0,24" Background="Transparent">
-                <Menu DockPanel.Dock="Left" Margin="0,2,0,0" Width="16" Height="16" VerticalAlignment="Top" HorizontalAlignment="Left" IsTabStop="False" Focusable="False" Name="CommandMenuButton" Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.HiddenWhenFalse}}">
+                <Menu
+                  DockPanel.Dock="Left"
+                  Margin="0,2,0,0"
+                  Width="16"
+                  Height="16"
+                  VerticalAlignment="Top"
+                  HorizontalAlignment="Left"
+                  IsTabStop="False"
+                  Focusable="False"
+                  Name="CommandMenuButton"
+                  Visibility="{Binding SupportsPerConfigurationValues, Converter={x:Static local:Converters.HiddenWhenFalse}}">
                   <Menu.Template>
                     <ControlTemplate TargetType="{x:Type Menu}">
                       <ItemsPresenter SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
@@ -128,9 +137,7 @@
                               <Border.Effect>
                                 <DropShadowEffect Opacity="0.3" BlurRadius="4" ShadowDepth="3" />
                               </Border.Effect>
-                              <ItemsPresenter Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle"
-                                              KeyboardNavigation.TabNavigation="Cycle"
-                                              Grid.IsSharedSizeScope="true"/>
+                              <ItemsPresenter Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" KeyboardNavigation.TabNavigation="Cycle" Grid.IsSharedSizeScope="true" />
                             </Border>
                           </Popup>
                         </Grid>
