@@ -35,13 +35,13 @@
             </DataTemplate>
 
             <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
-                <CheckBox IsChecked="{Binding Value}">
+                <CheckBox IsChecked="{Binding Value}" HorizontalAlignment="Left">
                     <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
                 </CheckBox>
             </DataTemplate>
 
             <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
-                <CheckBox Margin="0,2" IsChecked="{Binding Value}">
+                <CheckBox Margin="0,2" IsChecked="{Binding Value}" HorizontalAlignment="Left">
                     <TextBlock Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
                 </CheckBox>
             </DataTemplate>
