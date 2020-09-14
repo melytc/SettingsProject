@@ -299,14 +299,13 @@ namespace SettingsProject
 
             LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
-                var contextBuilder = new SettingContextBuilder(SettingsLoader.DefaultConfigurationDictionary, conditions, requireConditionMatches: false);
+                var context = new SettingContext(
+                    SettingsLoader.DefaultConfigurationDictionary,
+                    conditions,
+                    requireConditionMatches: false,
+                    kind.Metadata.Select(CreateSetting).ToImmutableArray());
 
-                foreach (var metadata in kind.Metadata)
-                {
-                    contextBuilder.Add(CreateSetting(metadata));
-                }
-
-                return new LaunchProfileViewModel(name, kind, contextBuilder.Build());
+                return new LaunchProfileViewModel(name, kind, context);
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
