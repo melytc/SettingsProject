@@ -79,8 +79,15 @@
                   Margin="28,0,0,4"
                   HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}"
                   Text="{Binding Converter={x:Static local:Converters.LinkActionHeading}}"
-                  FontWeight="Bold"
-                  Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                  FontWeight="Bold">
+                  <local:HighlightTextBlock.Visibility>
+                    <MultiBinding Converter="{x:Static local:Converters.DescriptionVisibility}">
+                      <Binding />
+                      <Binding Path="Description" />
+                      <Binding Path="Values" />
+                    </MultiBinding>
+                  </local:HighlightTextBlock.Visibility>
+                </local:HighlightTextBlock>
                 <TextBlock Margin="28,0,0,6">
                   <Hyperlink Command="{x:Static local:LinkActionCommandHandler.ActionCommand}" CommandParameter="{Binding}">
                     <Run Text="{Binding Converter={x:Static local:Converters.LinkActionLinkText}, Mode=OneTime}" />
@@ -143,7 +150,15 @@
                   </MenuItem>
                 </Menu>
                 <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
-                <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap" Visibility="{Binding HasDescription, Converter={x:Static local:Converters.CollapsedWhenFalse}}" />
+                <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap">
+                  <local:HighlightTextBlock.Visibility>
+                    <MultiBinding Converter="{x:Static local:Converters.DescriptionVisibility}">
+                      <Binding />
+                      <Binding Path="Description" />
+                      <Binding Path="Values" />
+                    </MultiBinding>
+                  </local:HighlightTextBlock.Visibility>
+                </local:HighlightTextBlock>
                 <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="local:SettingValue">

@@ -30,8 +30,6 @@ namespace SettingsProject
         public SettingIdentity Identity => Metadata.Identity;
         public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
 
-        public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description) && Metadata.Editor?.ShouldShowDescription(Values) != false;
-
         public bool HasPerConfigurationValues => Values.Any(value => !value.ConfigurationDimensions.IsEmpty);
 
         public ImmutableArray<SettingValue> Values
