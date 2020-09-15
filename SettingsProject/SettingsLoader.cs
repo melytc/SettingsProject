@@ -447,7 +447,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("", "")),
+                    ImmutableArray.Create(
+                        new SettingValue("bin\\$(Configuration)", "bin\\Debug", DebugConfiguration),
+                        new SettingValue("bin\\$(Configuration)", "bin\\Release", ReleaseConfiguration))),
                 new Setting(
                     new SettingMetadata(
                         name: "XML documentation path",
@@ -459,7 +461,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("", "")),
+                    ImmutableArray.Create(
+                        new SettingValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Debug\\ConsoleApp1.xml", DebugConfiguration),
+                        new SettingValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Release\\ConsoleApp1.xml", ReleaseConfiguration))),
                 // TODO this is disabled in .NET Core -- why?
                 new Setting(
                     new SettingMetadata(
