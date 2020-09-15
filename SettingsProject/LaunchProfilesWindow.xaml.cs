@@ -12,6 +12,7 @@ namespace SettingsProject
 {
     internal partial class LaunchProfilesWindow
     {
+
         #region SettingMetadata
 
         private static readonly SettingMetadata ExecutablePath = new SettingMetadata(
@@ -168,9 +169,7 @@ namespace SettingsProject
 
         #endregion
 
-        public LaunchProfilesWindow()
-        {
-            var conditions = ImmutableArray.Create(
+        public static ImmutableArray<SettingCondition> Conditions = ImmutableArray.Create(
                 new SettingCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
@@ -184,6 +183,8 @@ namespace SettingsProject
                     sourceValue: true,
                     target: LaunchBrowserUrl.Identity));
 
+        public LaunchProfilesWindow()
+        {
             var executableKindSettingMetadata = ImmutableArray.Create(
                 ExecutablePath,
                 ApplicationArguments,
@@ -301,7 +302,7 @@ namespace SettingsProject
             {
                 var context = new SettingContext(
                     SettingsLoader.DefaultConfigurationDictionary,
-                    conditions,
+                    Conditions,
                     requireConditionMatches: false,
                     kind.Metadata.Select(CreateSetting).ToImmutableArray());
 
