@@ -15,7 +15,7 @@ namespace SettingsProject
         private string _unevaluatedValue;
         private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
 
-        public SettingValue(ImmutableDictionary<string, string> configurationDimensions, object evaluatedValue, string unevaluatedValue)
+        public SettingValue(string unevaluatedValue, object evaluatedValue, ImmutableDictionary<string, string> configurationDimensions)
         {
             ConfigurationDimensions = configurationDimensions;
             _evaluatedValue = evaluatedValue;
@@ -72,7 +72,7 @@ namespace SettingsProject
             }
         }
 
-        public SettingValue Clone() => new SettingValue(ConfigurationDimensions, _evaluatedValue, _unevaluatedValue);
+        public SettingValue Clone() => new SettingValue(_unevaluatedValue, _evaluatedValue, ConfigurationDimensions);
 
         public override string ToString()
         {

@@ -96,7 +96,7 @@ namespace SettingsProject
                             // Apply the first configured value to all configurations
                             // TODO consider showing UI when more than one value is available to choose between
                             var value = setting.Values.First();
-                            setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, value.EvaluatedValue, value.UnevaluatedValue));
+                            setting.Values = ImmutableArray.Create(new SettingValue(value.UnevaluatedValue, value.EvaluatedValue, ImmutableDictionary<string, string>.Empty));
                         }
                     });
             }
@@ -121,7 +121,7 @@ namespace SettingsProject
                         if (isAdding)
                         {
                             setting.Values = setting.Values
-                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.ConfigurationDimensions.Add(dimensionName, dim), value.EvaluatedValue, value.UnevaluatedValue)))
+                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.UnevaluatedValue, value.EvaluatedValue, value.ConfigurationDimensions.Add(dimensionName, dim))))
                                 .ToImmutableArray();
                         }
                         else
@@ -130,7 +130,7 @@ namespace SettingsProject
                             var oldValueGroups = setting.Values.GroupBy(value => value.ConfigurationDimensions.Remove(dimensionName), DimensionValueEqualityComparer.Instance);
 
                             setting.Values = oldValueGroups
-                                .Select(group => new SettingValue(group.First().ConfigurationDimensions.Remove(dimensionName), group.First().EvaluatedValue, group.First().UnevaluatedValue))
+                                .Select(group => new SettingValue(group.First().UnevaluatedValue, group.First().EvaluatedValue, group.First().ConfigurationDimensions.Remove(dimensionName)))
                                 .ToImmutableArray();
                         }
                     });
