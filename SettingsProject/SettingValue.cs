@@ -14,7 +14,7 @@ namespace SettingsProject
         private object _value;
         private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
 
-        public SettingValue(ImmutableArray<string> configurationDimensions, object value)
+        public SettingValue(ImmutableDictionary<string, string> configurationDimensions, object value)
         {
             ConfigurationDimensions = configurationDimensions;
             _value = value;
@@ -22,9 +22,9 @@ namespace SettingsProject
 
         // the set of dimensions for which this value is specified. any omitted dimensions are invariant.
         // empty if this value applies to all configurations
-        public ImmutableArray<string> ConfigurationDimensions { get; }
+        public ImmutableDictionary<string, string> ConfigurationDimensions { get; }
 
-        public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Metadata.Editor?.UnconfiguredDataTemplate : Parent?.Metadata.Editor?.ConfiguredDataTemplate;
+        public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Editor?.UnconfiguredDataTemplate : Parent?.Editor?.ConfiguredDataTemplate;
 
         public Setting? Parent { get; internal set; }
 
@@ -55,6 +55,8 @@ namespace SettingsProject
         }
 
         public SettingValue Clone() => new SettingValue(ConfigurationDimensions, _value);
+
+        public override string ToString() => $"[{string.Join(" | ", ConfigurationDimensions.Values)}] = {_value}";
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

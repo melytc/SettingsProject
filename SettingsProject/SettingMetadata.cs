@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 
 #nullable enable
@@ -30,29 +31,46 @@ namespace SettingsProject
         /// </summary>
         public int Priority { get; }
 
-        // TODO will probably be an array in precedence order
-        public string EditorType { get; }
+        /// <summary>
+        /// Array of supported editors, in precedence order such that more desirable editors appear first in the array.
+        /// </summary>
+        public ImmutableArray<EditorSpecification> Editors { get; }
 
-        public IReadOnlyDictionary<string, string> EditorMetadata { get; init; } = ImmutableDictionary<string, string>.Empty;
-
-        public bool SupportsPerConfigurationValues { get; init; } = false;
-
-        public ISettingEditor? Editor { get; }
+        public bool SupportsPerConfigurationValues { get; init; }
 
         public ImmutableArray<string> SearchTerms { get; init; } = ImmutableArray<string>.Empty;
 
         public SettingMetadata(string name, string? description, string page, string category, int priority, string editorType)
+            : this(name, description, page, category, priority, ImmutableArray.Create(new EditorSpecification(editorType, ImmutableDictionary<string, string>.Empty)))
         {
+        }
+
+        public SettingMetadata(string name, string? description, string page, string category, int priority, ImmutableArray<EditorSpecification> editors)
+        {
+            if (editors.IsEmpty)
+                throw new ArgumentException("Cannot be empty.", nameof(editors));
+
             Name = name;
             Page = page;
             Category = category;
             Description = description;
             Priority = priority;
-            EditorType = editorType;
-
-            Editor = SettingEditorFactory.Default.GetEditor(EditorType);
+            Editors = editors;
         }
 
         public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);
+    }
+
+    internal sealed class EditorSpecification
+    {
+        public string TypeName { get; }
+
+        public IReadOnlyDictionary<string, string> Metadata { get; }
+
+        public EditorSpecification(string typeName, IReadOnlyDictionary<string, string> metadata)
+        {
+            TypeName = typeName;
+            Metadata = metadata;
+        }
     }
 }

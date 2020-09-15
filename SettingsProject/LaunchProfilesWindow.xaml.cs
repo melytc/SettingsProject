@@ -168,25 +168,22 @@ namespace SettingsProject
 
         #endregion
 
-        private static readonly IReadOnlyList<SettingCondition> Conditions = new[]
-        {
-            new SettingCondition(
-                source: UseRemoteMachine.Identity,
-                sourceValue: true,
-                target: RemoteMachineHostName.Identity),
-            new SettingCondition(
-                source: UseRemoteMachine.Identity,
-                sourceValue: true,
-                target: AuthenticationMode.Identity),
-            new SettingCondition(
-                source: LaunchBrowser.Identity,
-                sourceValue: true,
-                target: LaunchBrowserUrl.Identity),
-        };
-
-
         public LaunchProfilesWindow()
         {
+            var conditions = ImmutableArray.Create(
+                new SettingCondition(
+                    source: UseRemoteMachine.Identity,
+                    sourceValue: true,
+                    target: RemoteMachineHostName.Identity),
+                new SettingCondition(
+                    source: UseRemoteMachine.Identity,
+                    sourceValue: true,
+                    target: AuthenticationMode.Identity),
+                new SettingCondition(
+                    source: LaunchBrowser.Identity,
+                    sourceValue: true,
+                    target: LaunchBrowserUrl.Identity));
+
             var executableKindSettingMetadata = ImmutableArray.Create(
                 ExecutablePath,
                 ApplicationArguments,
@@ -302,28 +299,19 @@ namespace SettingsProject
 
             LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
             {
-                var context = new SettingContext();
-                var settings = kind.Metadata.Select(CreateSetting).ToImmutableArray();
+                var context = new SettingContext(
+                    SettingsLoader.DefaultConfigurationDictionary,
+                    conditions,
+                    requireConditionMatches: false,
+                    kind.Metadata.Select(CreateSetting).ToImmutableArray());
 
-                // TODO revisit how we model conditionality between settings
-
-                var settingByIdentity = settings.ToDictionary(setting => setting.Identity);
-
-                foreach (var condition in Conditions)
-                {
-                    if (!settingByIdentity.TryGetValue(condition.Source, out Setting? source))
-                        continue; // throw new Exception("Unknown source: " + condition.Source);
-                    if (!settingByIdentity.TryGetValue(condition.Target, out Setting? target))
-                        continue; // throw new Exception("Unknown target: " + condition.Target);
-
-                    source.AddDependentTarget(target.Identity, condition.SourceValue);
-                }
-
-                return new LaunchProfileViewModel(name, settings, kind);
+                return new LaunchProfileViewModel(name, kind, context);
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
-                    var configurationDimensions = ImmutableArray<string>.Empty;
+                    // Debug launch profile values are unconfigured, so use an empty dimensions array
+                    var configurationDimensions = ImmutableDictionary<string, string>.Empty;
+
                     var settingValue = new SettingValue(configurationDimensions, value: "");
 
                     if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
@@ -333,12 +321,12 @@ namespace SettingsProject
                     }
 
                     if (initialValues.TryGetValue(metadata.Identity, out object value) ||
-                        defaultValueByEditorType.TryGetValue(metadata.EditorType, out value))
+                        defaultValueByEditorType.TryGetValue(metadata.Editors.Last().TypeName, out value))
                     {
                         settingValue.Value = value;
                     }
 
-                    return new Setting(context, metadata, ImmutableArray.Create(settingValue));
+                    return new Setting(metadata, ImmutableArray.Create(settingValue));
                 }
             }
 

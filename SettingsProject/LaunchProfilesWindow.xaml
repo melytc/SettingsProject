@@ -1,18 +1,19 @@
-﻿<Window x:Class="SettingsProject.LaunchProfilesWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SettingsProject"
-        mc:Ignorable="d"
-        Icon="VisualStudio.Preview.ico"
-        Background="#FBFBFB"
-        Title="Launch Profiles"
-        Height="520"
-        Width="800"
-        MinWidth="600"
-        x:ClassModifier="internal"
-        d:DataContext="{d:DesignInstance local:LaunchProfilesWindowViewModel}">
+﻿<Window
+  x:Class="SettingsProject.LaunchProfilesWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:SettingsProject"
+  mc:Ignorable="d"
+  Icon="VisualStudio.Preview.ico"
+  Background="#FBFBFB"
+  Title="Launch Profiles"
+  Height="520"
+  Width="800"
+  MinWidth="600"
+  x:ClassModifier="internal"
+  d:DataContext="{d:DesignInstance local:LaunchProfilesWindowViewModel}">
 
   <Window.Resources>
 
@@ -48,7 +49,7 @@
     <Border Background="#eeeeee" Padding="8,0,0,8">
       <DockPanel>
 
-        <ToolBar DockPanel.Dock="Top" BorderThickness="0" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never" >
+        <ToolBar DockPanel.Dock="Top" BorderThickness="0" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never">
           <Menu VerticalAlignment="Center">
             <MenuItem ToolTip="Create a new profile" ItemsSource="{Binding Path=ProfileKinds}" UsesItemContainerTemplate="False">
               <MenuItem.Header>

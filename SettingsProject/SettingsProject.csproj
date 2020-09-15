@@ -65,10 +65,15 @@
     <Compile Include="SettingMetadata.cs" />
     <Compile Include="SettingsList.cs" />
     <Compile Include="Utils\Annotations.cs" />
+    <Compile Include="Utils\Converters.BoolToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters.cs" />
     <Compile Include="LaunchProfilesWindow.xaml.cs">
       <DependentUpon>LaunchProfilesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Converters.LambdaConverter.cs" />
+    <Compile Include="Utils\Converters.LambdaMultiConverter.cs" />
+    <Compile Include="Utils\Converters.SingleValueVisibilityConverter.cs" />
+    <Compile Include="Utils\DeconstructionExtensions.cs" />
     <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="HighlightTextBlock.cs" />
     <Compile Include="NavigationSection.cs" />

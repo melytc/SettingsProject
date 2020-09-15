@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 #nullable enable
 
@@ -13,32 +14,36 @@ namespace SettingsProject
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private readonly SettingMetadata _metadata;
+
         private bool _isSearchVisible = true;
         private bool _isConditionalVisible = true;
-        private List<(SettingIdentity target, object visibleWhenValue)>? _dependentTargets;
+        private List<(Setting target, object visibleWhenValue)>? _dependentTargets;
         private ImmutableArray<SettingValue> _values;
+        private SettingContext? _context;
 
-        private readonly SettingContext _context;
+        public string Name => _metadata.Name;
+        public string Page => _metadata.Page;
+        public string Category => _metadata.Category;
+        public string? Description => _metadata.Description;
+        public int Priority => _metadata.Priority;
+        public SettingIdentity Identity => _metadata.Identity;
+        public bool SupportsPerConfigurationValues => _metadata.SupportsPerConfigurationValues;
 
-        internal SettingMetadata Metadata { get; }
+        public ISettingEditor? Editor { get; }
+        public IReadOnlyDictionary<string, string> EditorMetadata { get; }
 
-        public string Name => Metadata.Name;
-        public string Page => Metadata.Page;
-        public string Category => Metadata.Category;
-        public string? Description => Metadata.Description;
-        public int Priority => Metadata.Priority;
-        public SettingIdentity Identity => Metadata.Identity;
-        public bool SupportsPerConfigurationValues => Metadata.SupportsPerConfigurationValues;
-
-        public bool HasDescription => !string.IsNullOrWhiteSpace(Metadata.Description) && Metadata.Editor?.ShouldShowDescription(Values) != false;
-
-        public bool HasPerConfigurationValues => Values.Any(value => !value.ConfigurationDimensions.IsEmpty);
+        public SettingContext Context => _context ?? throw new InvalidOperationException("Setting has not been initialized.");
 
         public ImmutableArray<SettingValue> Values
         {
             get => _values;
             set
             {
+                // TODO validate incoming values
+                // - set of dimensions across values must be identical
+                // - number of values must match the dimension specifications
+
                 _values = value;
                 
                 foreach (var settingValue in value)
@@ -48,76 +53,74 @@ namespace SettingsProject
 
                     void OnSettingValuePropertyChanged(object _, PropertyChangedEventArgs e)
                     {
-                        if (e.PropertyName == nameof(SettingValue.Value))
+                        if (e.PropertyName == nameof(SettingValue.Value) && _dependentTargets != null)
                         {
-                            UpdateDependentVisibilities();
+                            foreach (var (target, visibleWhenValue) in _dependentTargets)
+                            {
+                                UpdateDependentVisibility(target, visibleWhenValue);
+                            }
                         }
                     }
                 }
 
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(HasPerConfigurationValues));
             }
         }
 
         public bool IsVisible => _isSearchVisible && _isConditionalVisible;
 
-        public Setting(SettingContext context, SettingMetadata metadata, SettingValue value)
-            : this(context, metadata, ImmutableArray.Create(value))
+        public Setting(SettingMetadata metadata, SettingValue value)
+            : this(metadata, ImmutableArray.Create(value))
         {
         }
 
-        public Setting(SettingContext context, SettingMetadata metadata, ImmutableArray<SettingValue> values)
+        public Setting(SettingMetadata metadata, ImmutableArray<SettingValue> values)
         {
-            _context = context;
-            Metadata = metadata;
+            _metadata = metadata;
             Values = values;
 
-            _context.AddSetting(this);
+            (Editor, EditorMetadata) = SettingEditorFactory.Default.GetEditor(metadata.Editors);
         }
 
-        internal void UpdateDependentVisibilities()
+        internal void Initialize(SettingContext context)
         {
-            // TODO model this as a graph with edges so that multiple upstream properties may influence a single downstream one
+            if (_context != null)
+                throw new InvalidOperationException("Already initialized.");
 
-            if (_dependentTargets == null)
+            _context = context;
+        }
+
+        private void UpdateDependentVisibility(Setting target, object visibleWhenValue)
+        {
+            var wasVisible = target.IsVisible;
+
+            bool isConditionallyVisible = false;
+
+            // Target is visible if any upstream value matches
+            foreach (var value in Values)
             {
-                return;
+                if (Equals(visibleWhenValue, value.Value))
+                {
+                    isConditionallyVisible = true;
+                    break;
+                }
             }
 
-            foreach (var (targetIdentity, visibleWhenValue) in _dependentTargets)
+            target._isConditionalVisible = isConditionallyVisible;
+
+            if (wasVisible != target.IsVisible)
             {
-                var target = _context.GetSetting(targetIdentity);
-                var wasVisible = target.IsVisible;
-
-                bool isConditionallyVisible = false;
-
-                // Target is visible if any upstream value matches
-                foreach (var value in Values)
-                {
-                    if (Equals(visibleWhenValue, value.Value))
-                    {
-                        isConditionallyVisible = true;
-                        break;
-                    }
-                }
-
-                target._isConditionalVisible = isConditionallyVisible;
-
-                if (wasVisible != target.IsVisible)
-                {
-                    target.OnPropertyChanged(nameof(IsVisible));
-                }
+                target.OnPropertyChanged(nameof(IsVisible));
             }
         }
 
-        public void AddDependentTarget(SettingIdentity target, object visibleWhenValue)
+        public void AddDependentTarget(Setting target, object visibleWhenValue)
         {
-            _dependentTargets ??= new List<(SettingIdentity target, object visibleWhenValue)>();
+            _dependentTargets ??= new List<(Setting target, object visibleWhenValue)>();
 
             _dependentTargets.Add((target, visibleWhenValue));
 
-            UpdateDependentVisibilities();
+            UpdateDependentVisibility(target, visibleWhenValue);
         }
 
         public void UpdateSearchState(string searchString)
@@ -148,7 +151,7 @@ namespace SettingsProject
                     }
                 }
 
-                foreach (var searchTerm in Metadata.SearchTerms)
+                foreach (var searchTerm in _metadata.SearchTerms)
                 {
                     if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
                         return true;
@@ -165,6 +168,17 @@ namespace SettingsProject
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Setting Clone(SettingContext context) => new Setting(context, Metadata, Values.Select(value => value.Clone()).ToImmutableArray()) { _dependentTargets = _dependentTargets };
+        public Setting Clone() => new Setting(_metadata, Values.Select(value => value.Clone()).ToImmutableArray());
+
+        public override string ToString() => Identity.ToString();
+    }
+
+    internal interface ISettingConfigurationCommand
+    {
+        string Caption { get; }
+        
+        string? DimensionName { get; }
+
+        ICommand Command { get; }
     }
 }

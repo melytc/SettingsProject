@@ -26,9 +26,17 @@ namespace SettingsProject
             _editorByTypeName = editors.ToDictionary(editor => editor.TypeName);
         }
 
-        public ISettingEditor GetEditor(string typeName)
+        public (ISettingEditor?, IReadOnlyDictionary<string, string>) GetEditor(ImmutableArray<EditorSpecification> editorSpecifications)
         {
-            return _editorByTypeName[typeName];
+            foreach (var editorSpecification in editorSpecifications)
+            {
+                if (_editorByTypeName.TryGetValue(editorSpecification.TypeName, out var editor))
+                {
+                    return (editor, editorSpecification.Metadata);
+                }
+            }
+
+            return (null, ImmutableDictionary<string, string>.Empty);
         }
 
         private abstract class SettingEditorBase : ISettingEditor
