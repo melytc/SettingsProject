@@ -149,6 +149,9 @@ namespace SettingsProject
                         if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
                             return true;
                     }
+
+                    if (value.Value is string s && s.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        return true;
                 }
 
                 foreach (var searchTerm in _metadata.SearchTerms)
@@ -156,8 +159,6 @@ namespace SettingsProject
                     if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
                         return true;
                 }
-
-                // TODO search evaluated/unevaluated values too
 
                 return false;
             }
