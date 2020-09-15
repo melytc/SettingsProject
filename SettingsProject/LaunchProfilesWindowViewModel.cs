@@ -1,18 +1,21 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 #nullable enable
 
 namespace SettingsProject
 {
-    internal sealed class LaunchProfilesWindowViewModel
+    internal sealed class LaunchProfilesWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<LaunchProfileViewModel> Profiles { get; }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public LaunchProfileViewModel? SelectedProfile { get; set; }
+        private LaunchProfileViewModel? _selectedProfile;
+
+        public ObservableCollection<LaunchProfileViewModel> Profiles { get; }
 
         public ICommand CloneCommand { get; }
 
@@ -23,6 +26,19 @@ namespace SettingsProject
         public ICommand NewCommand { get; }
 
         public ImmutableArray<LaunchProfileKind> ProfileKinds { get; }
+
+        public LaunchProfileViewModel? SelectedProfile
+        {
+            get => _selectedProfile;
+            set
+            {
+                if (!ReferenceEquals(value, _selectedProfile))
+                {
+                    _selectedProfile = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public LaunchProfilesWindowViewModel(ObservableCollection<LaunchProfileViewModel> profiles, ImmutableArray<LaunchProfileKind> profileKinds)
         {
@@ -55,6 +71,11 @@ namespace SettingsProject
                 // TODO: select the profile after creating it, implement a notification.
                 //SelectedProfile = newProfile;
             });
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
