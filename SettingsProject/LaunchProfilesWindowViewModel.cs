@@ -64,8 +64,8 @@ namespace SettingsProject
                 //TODO: use real data
                 var context = new SettingContext(SettingsLoader.DefaultConfigurationDictionary, LaunchProfilesWindow.Conditions, false, kind.Metadata.Select(md => new Setting(md, new SettingValue(ImmutableDictionary<string, string>.Empty, ""))).ToImmutableArray());
 
-                var newProfile = new LaunchProfileViewModel("New profile", kind, context);
-                
+                var newProfile = new LaunchProfileViewModel("New profile", kind, context) { IsRenaming = true };
+
                 Profiles.Add(newProfile);
                 
                 SelectedProfile = newProfile;
