@@ -68,8 +68,7 @@ namespace SettingsProject
                 
                 Profiles.Add(newProfile);
                 
-                // TODO: select the profile after creating it, implement a notification.
-                //SelectedProfile = newProfile;
+                SelectedProfile = newProfile;
             });
         }
 
