@@ -54,6 +54,8 @@ namespace SettingsProject
             Assumes.NotNull(_textBlock);
             Assumes.NotNull(_textBox);
 
+            OnIsRenamingChanged(IsRenaming);
+
             _textBox.LostFocus += delegate { IsRenaming = false; };
             _textBox.KeyUp += (sender, args) =>
             {
@@ -78,8 +80,10 @@ namespace SettingsProject
 
         private void OnIsRenamingChanged(bool newValue)
         {
-            Assumes.NotNull(_textBlock);
-            Assumes.NotNull(_textBox);
+            if (_textBlock == null || _textBox == null)
+            {
+                return;
+            }
 
             if (newValue)
             {
