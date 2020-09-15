@@ -44,7 +44,7 @@ namespace SettingsProject
         {
             Profiles = profiles;
             ProfileKinds = profileKinds;
-            SelectedProfile = profiles.First();
+            SelectedProfile = profiles.FirstOrDefault();
 
             CloneCommand = new DelegateCommand<LaunchProfileViewModel>(profile =>
             {
