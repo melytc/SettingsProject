@@ -127,41 +127,43 @@ namespace SettingsProject
         {
             var wasVisible = IsVisible;
 
-            _isSearchVisible = MatchesSearchText(searchString);
+            _isSearchVisible = DoSearch();
 
             if (wasVisible != IsVisible)
             {
                 OnPropertyChanged(nameof(IsVisible));
             }
 
-            bool MatchesSearchText(string searchString)
+            bool DoSearch()
             {
-                if (Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                if (IsMatch(Name))
                     return true;
 
-                if (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                if (Description != null && IsMatch(Description))
                     return true;
 
                 foreach (var value in _values)
                 {
                     foreach (var enumValue in value.EnumValues)
                     {
-                        if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        if (IsMatch(enumValue))
                             return true;
                     }
 
-                    if (value.Value is string s && s.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    if (value.Value is string s && IsMatch(s))
                         return true;
                 }
 
                 foreach (var searchTerm in _metadata.SearchTerms)
                 {
-                    if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    if (IsMatch(searchTerm))
                         return true;
                 }
 
                 return false;
             }
+
+            bool IsMatch(string s) => s.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1;
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
