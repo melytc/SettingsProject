@@ -17,54 +17,54 @@
       </ResourceDictionary.MergedDictionaries>
 
       <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:SettingValue">
-        <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+        <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
       </DataTemplate>
 
       <DataTemplate x:Key="ConfiguredStringSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2">
           <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
-          <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+          <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>
 
       <DataTemplate x:Key="UnconfiguredMultilineStringSettingValueTemplate" DataType="local:SettingValue">
-        <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
       </DataTemplate>
 
       <DataTemplate x:Key="ConfiguredMultilineStringSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2">
           <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
-          <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+          <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
         </DockPanel>
       </DataTemplate>
 
       <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
-        <CheckBox IsChecked="{Binding Value}" HorizontalAlignment="Left">
+        <CheckBox IsChecked="{Binding EvaluatedValue}" HorizontalAlignment="Left">
           <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
         </CheckBox>
       </DataTemplate>
 
       <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
-        <CheckBox Margin="0,2" IsChecked="{Binding Value}" HorizontalAlignment="Left">
+        <CheckBox Margin="0,2" IsChecked="{Binding EvaluatedValue}" HorizontalAlignment="Left">
           <TextBlock Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
         </CheckBox>
       </DataTemplate>
 
       <DataTemplate x:Key="UnconfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
-        <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
+        <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding EvaluatedValue}" />
       </DataTemplate>
 
       <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2">
           <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
-          <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding Value}" />
+          <ComboBox ItemsSource="{Binding EnumValues}" SelectedItem="{Binding EvaluatedValue}" />
         </DockPanel>
       </DataTemplate>
 
       <DataTemplate x:Key="UnconfiguredFileBrowseSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel HorizontalAlignment="Left">
           <Button DockPanel.Dock="Right" Content="Browse..." Margin="8,0,0,0" Padding="6,0" />
-          <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+          <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>
 
@@ -72,7 +72,7 @@
         <DockPanel Margin="0,2" HorizontalAlignment="Left">
           <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
           <Button DockPanel.Dock="Right" Content="Browse" />
-          <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+          <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>
 

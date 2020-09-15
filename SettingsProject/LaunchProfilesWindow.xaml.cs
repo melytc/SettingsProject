@@ -256,42 +256,42 @@ namespace SettingsProject
                 { HostingModel.Identity, ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process") }
             };
 
-            var defaultValueByEditorType = new Dictionary<string, object>
+            var defaultValueByEditorType = new Dictionary<string, (string Unevaluated, object Evaluated)>
             {
-                {"String", ""},
-                {"MultiLineString", ""},
-                {"Bool", false},
-                {"Enum", ""},
-                {"FileBrowse", ""},
-                {"LinkAction", ""}
+                {"String", ("", "")},
+                {"MultiLineString", ("", "")},
+                {"Bool", ("false", false)},
+                {"Enum", ("", "")},
+                {"FileBrowse", ("", "")},
+                {"LinkAction", ("", "")}
             };
 
             var profileKinds = ImmutableArray.Create(projectKind, executableKind, snapshotDebuggerKind, iisKind, iisExpressKind);
 
             var profiles = new ObservableCollection<LaunchProfileViewModel>
             {
-                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { ApplicationArguments.Identity, "/foo /bar" }
+                    { ApplicationArguments.Identity, ("/foo /bar", "/foo /bar") }
                 }),
-                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { ExecutablePath.Identity, "devenv.exe" },
-                    { ApplicationArguments.Identity, "/rootSuffix Exp" }
+                    { ExecutablePath.Identity, ("devenv.exe", "devenv.exe") },
+                    { ApplicationArguments.Identity, ("/rootSuffix Exp", "/rootSuffix Exp") }
                 }),
-                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
                     // TODO
                 }),
-                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { AppUrl.Identity, "http://localhost:52531" },
-                    { LaunchBrowser.Identity, true }
+                    { AppUrl.Identity, ("http://localhost:52531", "http://localhost:52531") },
+                    { LaunchBrowser.Identity, ("true", true) }
                 }),
-                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { AppUrl.Identity, "http://localhost:52531" },
-                    { LaunchBrowser.Identity, true }
+                    { AppUrl.Identity, ("http://localhost:52531", "http://localhost:52531") },
+                    { LaunchBrowser.Identity, ("true", true) }
                 })
             };
 
@@ -299,7 +299,7 @@ namespace SettingsProject
 
             InitializeComponent();
 
-            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
+            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)> initialValues)
             {
                 var context = new SettingContext(
                     SettingsLoader.DefaultConfigurationDictionary,
@@ -313,18 +313,19 @@ namespace SettingsProject
                     // Debug launch profile values are unconfigured, so use an empty dimensions array
                     var configurationDimensions = ImmutableDictionary<string, string>.Empty;
 
-                    var settingValue = new SettingValue(configurationDimensions, value: "");
+                    var settingValue = new SettingValue(configurationDimensions, evaluatedValue: "", unevaluatedValue: "");
 
                     if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
                     {
                         settingValue.EnumValues = enumValues;
-                        settingValue.Value = enumValues.First();
+                        settingValue.EvaluatedValue = enumValues.First();
                     }
 
-                    if (initialValues.TryGetValue(metadata.Identity, out object value) ||
+                    if (initialValues.TryGetValue(metadata.Identity, out (string Unevaluated, object Evaluated) value) ||
                         defaultValueByEditorType.TryGetValue(metadata.Editors.Last().TypeName, out value))
                     {
-                        settingValue.Value = value;
+                        settingValue.UnevaluatedValue = value.Unevaluated;
+                        settingValue.EvaluatedValue = value.Evaluated;
                     }
 
                     return new Setting(metadata, ImmutableArray.Create(settingValue));

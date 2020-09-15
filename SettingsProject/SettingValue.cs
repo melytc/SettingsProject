@@ -11,13 +11,15 @@ namespace SettingsProject
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private object _value;
+        private object _evaluatedValue;
+        private string _unevaluatedValue;
         private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
 
-        public SettingValue(ImmutableDictionary<string, string> configurationDimensions, object value)
+        public SettingValue(ImmutableDictionary<string, string> configurationDimensions, object evaluatedValue, string unevaluatedValue)
         {
             ConfigurationDimensions = configurationDimensions;
-            _value = value;
+            _evaluatedValue = evaluatedValue;
+            _unevaluatedValue = unevaluatedValue;
         }
 
         // the set of dimensions for which this value is specified. any omitted dimensions are invariant.
@@ -39,24 +41,45 @@ namespace SettingsProject
         }
 
         /// <summary>
-        /// Gets and sets the current value of the property.
+        /// Gets and sets the current evaluated value of the property.
         /// </summary>
-        public object Value
+        public object EvaluatedValue
         {
-            get => _value;
+            get => _evaluatedValue;
             set
             {
-                if (!Equals(value, Value))
+                if (!Equals(value, EvaluatedValue))
                 {
-                    _value = value;
+                    _evaluatedValue = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public SettingValue Clone() => new SettingValue(ConfigurationDimensions, _value);
+        /// <summary>
+        /// Gets and sets the current unevaluated value of the property.
+        /// </summary>
+        public string UnevaluatedValue
+        {
+            get => _unevaluatedValue;
+            set
+            {
+                if (!Equals(value, UnevaluatedValue))
+                {
+                    _unevaluatedValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public override string ToString() => $"[{string.Join(" & ", ConfigurationDimensions.Values)}] = {_value}";
+        public SettingValue Clone() => new SettingValue(ConfigurationDimensions, _evaluatedValue, _unevaluatedValue);
+
+        public override string ToString()
+        {
+            return Equals(_evaluatedValue, _unevaluatedValue)
+                ? $"[{string.Join(" & ", ConfigurationDimensions.Values)}] = {_evaluatedValue}"
+                : $"[{string.Join(" & ", ConfigurationDimensions.Values)}] = EVAL({_unevaluatedValue}) = {_evaluatedValue}";
+        }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

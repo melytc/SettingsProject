@@ -95,7 +95,8 @@ namespace SettingsProject
                         {
                             // Apply the first configured value to all configurations
                             // TODO consider showing UI when more than one value is available to choose between
-                            setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, setting.Values.First().Value));
+                            var value = setting.Values.First();
+                            setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, value.EvaluatedValue, value.UnevaluatedValue));
                         }
                     });
             }
@@ -120,7 +121,7 @@ namespace SettingsProject
                         if (isAdding)
                         {
                             setting.Values = setting.Values
-                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.ConfigurationDimensions.Add(dimensionName, dim), value.Value)))
+                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.ConfigurationDimensions.Add(dimensionName, dim), value.EvaluatedValue, value.UnevaluatedValue)))
                                 .ToImmutableArray();
                         }
                         else
@@ -129,7 +130,7 @@ namespace SettingsProject
                             var oldValueGroups = setting.Values.GroupBy(value => value.ConfigurationDimensions.Remove(dimensionName), DimensionValueEqualityComparer.Instance);
 
                             setting.Values = oldValueGroups
-                                .Select(group => new SettingValue(group.First().ConfigurationDimensions.Remove(dimensionName), group.First().Value))
+                                .Select(group => new SettingValue(group.First().ConfigurationDimensions.Remove(dimensionName), group.First().EvaluatedValue, group.First().UnevaluatedValue))
                                 .ToImmutableArray();
                         }
                     });

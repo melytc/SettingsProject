@@ -41,7 +41,7 @@ namespace SettingsProject
             set
             {
                 // TODO validate incoming values
-                // - set of dimensions across values must be identical
+                // - set of dimension names across values must be identical
                 // - number of values must match the dimension specifications
 
                 _values = value;
@@ -53,7 +53,7 @@ namespace SettingsProject
 
                     void OnSettingValuePropertyChanged(object _, PropertyChangedEventArgs e)
                     {
-                        if (e.PropertyName == nameof(SettingValue.Value) && _dependentTargets != null)
+                        if (e.PropertyName == nameof(SettingValue.EvaluatedValue) && _dependentTargets != null)
                         {
                             foreach (var (target, visibleWhenValue) in _dependentTargets)
                             {
@@ -99,7 +99,7 @@ namespace SettingsProject
             // Target is visible if any upstream value matches
             foreach (var value in Values)
             {
-                if (Equals(visibleWhenValue, value.Value))
+                if (Equals(visibleWhenValue, value.EvaluatedValue))
                 {
                     isConditionallyVisible = true;
                     break;
@@ -150,7 +150,10 @@ namespace SettingsProject
                             return true;
                     }
 
-                    if (value.Value is string s && IsMatch(s))
+                    if (IsMatch(value.UnevaluatedValue))
+                        return true;
+
+                    if (value.EvaluatedValue is string s && IsMatch(s))
                         return true;
                 }
 
