@@ -43,7 +43,18 @@ namespace SettingsProject
             
             RenameCommand = new DelegateCommand<LaunchProfileViewModel>(profile => profile.IsRenaming = true);
 
-            NewCommand = new DelegateCommand<LaunchProfileKind>(kind => MessageBox.Show($"New {kind.Name}"));
+            NewCommand = new DelegateCommand<LaunchProfileKind>(kind =>
+            {
+                //TODO: use real data
+                var context = new SettingContext(SettingsLoader.DefaultConfigurationDictionary, LaunchProfilesWindow.Conditions, false, kind.Metadata.Select(md => new Setting(md, new SettingValue(ImmutableDictionary<string, string>.Empty, ""))).ToImmutableArray());
+
+                var newProfile = new LaunchProfileViewModel("New profile", kind, context);
+                
+                Profiles.Add(newProfile);
+                
+                // TODO: select the profile after creating it, implement a notification.
+                //SelectedProfile = newProfile;
+            });
         }
     }
 }
