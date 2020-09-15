@@ -13,7 +13,6 @@ namespace SettingsProject
     internal sealed class SettingContext
     {
         private readonly ImmutableArray<SettingCondition> _settingConditions;
-        private readonly bool _requireConditionMatches;
 
         public IImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
@@ -26,10 +25,9 @@ namespace SettingsProject
         
         public ImmutableArray<object> ConfigurationCommands { get; }
 
-        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, bool requireConditionMatches, IReadOnlyList<Setting> settings)
+        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, IReadOnlyList<Setting> settings)
         {
             _settingConditions = settingConditions;
-            _requireConditionMatches = requireConditionMatches;
             Dimensions = dimensions;
             Settings = settings;
 
@@ -39,9 +37,9 @@ namespace SettingsProject
 
             foreach (var condition in settingConditions)
             {
-                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source) && _requireConditionMatches)
+                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source))
                     throw new Exception("Unknown source: " + condition.Source);
-                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target) && _requireConditionMatches)
+                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target))
                     throw new Exception("Unknown target: " + condition.Target);
 
                 if (source != null && target != null)
@@ -77,7 +75,7 @@ namespace SettingsProject
             return new SettingContext(
                 Dimensions,
                 _settingConditions,
-                _requireConditionMatches, Settings.Select(setting => setting.Clone()).ToImmutableArray());
+                Settings.Select(setting => setting.Clone()).ToImmutableArray());
         }
 
         private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
@@ -100,7 +98,6 @@ namespace SettingsProject
                             setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, setting.Values.First().Value));
                         }
                     });
-
             }
         }
 

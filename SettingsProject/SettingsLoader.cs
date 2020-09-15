@@ -69,7 +69,6 @@ namespace SettingsProject
         public static readonly SettingContext DefaultContext = new SettingContext(
             DefaultConfigurationDictionary,
             DefaultConditions,
-            requireConditionMatches: true,
             ImmutableArray.Create(
 
                 /////////////

@@ -12,7 +12,6 @@ namespace SettingsProject
 {
     internal partial class LaunchProfilesWindow
     {
-
         #region SettingMetadata
 
         private static readonly SettingMetadata ExecutablePath = new SettingMetadata(
@@ -169,7 +168,9 @@ namespace SettingsProject
 
         #endregion
 
-        public static ImmutableArray<SettingCondition> Conditions = ImmutableArray.Create(
+        public LaunchProfilesWindow()
+        {
+            var remoteMachineConditions = ImmutableArray.Create(
                 new SettingCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
@@ -177,14 +178,14 @@ namespace SettingsProject
                 new SettingCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
-                    target: AuthenticationMode.Identity),
+                    target: AuthenticationMode.Identity));
+
+            var launchBrowserConditions = ImmutableArray.Create(
                 new SettingCondition(
                     source: LaunchBrowser.Identity,
                     sourceValue: true,
                     target: LaunchBrowserUrl.Identity));
 
-        public LaunchProfilesWindow()
-        {
             var executableKindSettingMetadata = ImmutableArray.Create(
                 ExecutablePath,
                 ApplicationArguments,
@@ -242,11 +243,11 @@ namespace SettingsProject
                 EnableAnonymousAuthentication,
                 EnableWindowsAuthentication);
 
-            var projectKind = new LaunchProfileKind("Project", projectKindSettingMetadata, FindDrawing("IconApplicationDrawing"));
-            var executableKind = new LaunchProfileKind("Executable", executableKindSettingMetadata, FindDrawing("IconExecuteDrawing"));
-            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindSettingMetadata, FindDrawing("SnapshotDebuggerDrawing"));
-            var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, FindDrawing("IISDrawing"));
-            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, FindDrawing("IISExpressDrawing"));
+            var projectKind = new LaunchProfileKind("Project", projectKindSettingMetadata, remoteMachineConditions, FindDrawing("IconApplicationDrawing"));
+            var executableKind = new LaunchProfileKind("Executable", executableKindSettingMetadata, remoteMachineConditions, FindDrawing("IconExecuteDrawing"));
+            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindSettingMetadata, ImmutableArray<SettingCondition>.Empty, FindDrawing("SnapshotDebuggerDrawing"));
+            var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, launchBrowserConditions, FindDrawing("IISDrawing"));
+            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, launchBrowserConditions, FindDrawing("IISExpressDrawing"));
 
             var enumValuesBySetting = new Dictionary<SettingIdentity, ImmutableArray<string>>
             {
@@ -302,8 +303,7 @@ namespace SettingsProject
             {
                 var context = new SettingContext(
                     SettingsLoader.DefaultConfigurationDictionary,
-                    Conditions,
-                    requireConditionMatches: false,
+                    kind.Conditions,
                     kind.Metadata.Select(CreateSetting).ToImmutableArray());
 
                 return new LaunchProfileViewModel(name, kind, context);
