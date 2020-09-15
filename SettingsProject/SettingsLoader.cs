@@ -69,7 +69,6 @@ namespace SettingsProject
         public static readonly SettingContext DefaultContext = new SettingContext(
             DefaultConfigurationDictionary,
             DefaultConditions,
-            requireConditionMatches: true,
             ImmutableArray.Create(
 
                 /////////////
@@ -88,7 +87,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 10,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "ConsoleApp1")),
+                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
                 new Setting(
                     new SettingMetadata(
                         name: "Default namespace",
@@ -97,7 +96,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 200,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "ConsoleApp1")),
+                    new SettingValue("$(DefaultNamespace)", "ConsoleApp1")),
                 new Setting(
                     new SettingMetadata(
                         name: "Multi-targeting",
@@ -106,7 +105,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 300,
                         editorType: "Bool"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 // TODO come up with a better editing experience, perhaps via a FlagsSetting
                 // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
                 new Setting(
@@ -117,7 +116,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 310,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "net5")),
+                    new SettingValue("net5", "net5")),
                 new Setting(
                     new SettingMetadata(
                         name: "Target framework",
@@ -126,7 +125,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 320,
                         editorType: "Enum"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, ".NET 5")
+                    new SettingValue(".NET 5", ".NET 5")
                     {
                         EnumValues = ImmutableArray.Create(
                             ".NET 5",
@@ -162,7 +161,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 500,
                         editorType: "Enum"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "Console Application")
+                    new SettingValue("Console Application", "Console Application")
                     {
                         EnumValues = ImmutableArray.Create(
                             "Console Application",
@@ -180,7 +179,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, true)),
+                    new SettingValue("true", true)),
                 new Setting(
                     new SettingMetadata(
                         name: "Startup object",
@@ -192,7 +191,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "(Not set)")
+                    value: new SettingValue("(Not set)", "(Not set)")
                     {
                         EnumValues = ImmutableArray.Create("(Not set)"),
                     }),
@@ -205,7 +204,7 @@ namespace SettingsProject
                         category: "Resources",
                         priority: 800,
                         editorType: "Enum"),
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Icon and manifest")
+                    value: new SettingValue("Icon and manifest", "Icon and manifest")
                     {
                         EnumValues = ImmutableArray.Create("Icon and manifest", "Resource file"),
                     }),
@@ -218,7 +217,7 @@ namespace SettingsProject
                         category: "Resources",
                         priority: 810,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "(Default Icon)")),
+                    new SettingValue("(Default Icon)", "(Default Icon)")),
                 // TODO make this FileBrowseSetting
                 // TODO this can appear disabled, find out why
                 new Setting(
@@ -229,7 +228,7 @@ namespace SettingsProject
                         category: "Resources",
                         priority: 820,
                         editorType: "Enum"),
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "")
+                    value: new SettingValue("", "")
                     {
                         EnumValues = ImmutableArray.Create(""),
                     }),
@@ -241,7 +240,7 @@ namespace SettingsProject
                         category: "Resources",
                         priority: 830,
                         editorType: "FileBrowse"),
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    value: new SettingValue("", "")),
 
                 //////
                 ///// ASSEMBLY INFORMATION
@@ -279,7 +278,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "TRACE")),
+                    value: new SettingValue("TRACE", "TRACE")),
                 new Setting(
                     new SettingMetadata(
                         name: "Define DEBUG symbol",
@@ -292,8 +291,8 @@ namespace SettingsProject
                         SupportsPerConfigurationValues = true
                     },
                     values: ImmutableArray.Create(
-                        new SettingValue(DebugConfiguration, value: true),
-                        new SettingValue(ReleaseConfiguration, value: false))),
+                        new SettingValue("true", evaluatedValue: true, configurationDimensions: DebugConfiguration),
+                        new SettingValue("false", evaluatedValue: false, configurationDimensions: ReleaseConfiguration))),
                 new Setting(
                     new SettingMetadata(
                         name: "Define TRACE symbol",
@@ -305,7 +304,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Platform target",
@@ -317,7 +316,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Any CPU")
+                    value: new SettingValue("Any CPU", "Any CPU")
                     {
                         EnumValues = ImmutableArray.Create("Any CPU", "x86")
                     }),
@@ -329,7 +328,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 500,
                         editorType: "Enum"),
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Enable")
+                    value: new SettingValue("enable", "Enable")
                     {
                         EnumValues = ImmutableArray.Create("Disable", "Enable", "Warnings", "Annotations")
                     }),
@@ -345,7 +344,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Unsafe code",
@@ -357,7 +356,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Optimize code",
@@ -370,8 +369,8 @@ namespace SettingsProject
                         SupportsPerConfigurationValues = true
                     },
                     values: ImmutableArray.Create(
-                        new SettingValue(DebugConfiguration, value: false),
-                        new SettingValue(ReleaseConfiguration, value: true))),
+                        new SettingValue("false", evaluatedValue: false, configurationDimensions: DebugConfiguration),
+                        new SettingValue("true", evaluatedValue: true, configurationDimensions: ReleaseConfiguration))),
 
                 //////
                 ///// ERRORS AND WARNINGS
@@ -389,7 +388,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "4")
+                    value: new SettingValue("4", "4")
                     {
                         EnumValues = ImmutableArray.Create("0", "1", "2", "3", "4")
                     }),
@@ -404,7 +403,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "1701;1702")),
+                    new SettingValue("1701;1702", "1701;1702")),
                 new Setting(
                     new SettingMetadata(
                         name: "Warnings as errors",
@@ -416,7 +415,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Specific warnings")
+                    value: new SettingValue("Specific warnings", "Specific warnings")
                     {
                         EnumValues = ImmutableArray.Create("None", "All", "Specific warnings"),
                     }),
@@ -431,7 +430,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "NU1605")),
+                    new SettingValue("NU1605", "NU1605")),
 
                 //////
                 ///// OUTPUT
@@ -448,7 +447,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    ImmutableArray.Create(
+                        new SettingValue("bin\\$(Configuration)", "bin\\Debug", DebugConfiguration),
+                        new SettingValue("bin\\$(Configuration)", "bin\\Release", ReleaseConfiguration))),
                 new Setting(
                     new SettingMetadata(
                         name: "XML documentation path",
@@ -460,7 +461,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    ImmutableArray.Create(
+                        new SettingValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Debug\\ConsoleApp1.xml", DebugConfiguration),
+                        new SettingValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Release\\ConsoleApp1.xml", ReleaseConfiguration))),
                 // TODO this is disabled in .NET Core -- why?
                 new Setting(
                     new SettingMetadata(
@@ -470,7 +473,7 @@ namespace SettingsProject
                         category: "Output",
                         priority: 300,
                         editorType: "Bool"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Generate serialization assembly",
@@ -479,7 +482,7 @@ namespace SettingsProject
                         category: "Output",
                         priority: 400,
                         editorType: "Enum"),
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Auto")
+                    value: new SettingValue("Auto", "Auto")
                     {
                         EnumValues = ImmutableArray.Create("Auto", "On", "Off")
                     }),
@@ -516,7 +519,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Prompt")
+                    value: new SettingValue("Prompt", "Prompt")
                     {
                         EnumValues = ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
                     }),
@@ -531,7 +534,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Debugging information",
@@ -543,7 +546,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "Portable")
+                    value: new SettingValue("Portable", "Portable")
                     {
                         EnumValues = ImmutableArray.Create("None", "Full", "Pdb-only", "Portable", "Embedded")
                     }),
@@ -558,7 +561,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "512")
+                    value: new SettingValue("512", "512")
                     {
                         EnumValues = ImmutableArray.Create("512", "1024", "2048", "4096", "8192")
                     }),
@@ -573,7 +576,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "0x11000000")),
+                    new SettingValue("0x11000000", "0x11000000")),
 
                 /////////////
                 //////////// BUILD EVENTS
@@ -591,11 +594,8 @@ namespace SettingsProject
                         page: "Build Events",
                         category: "General",
                         priority: 70,
-                        editorType: "MultiLineString")
-                    {
-                        SupportsPerConfigurationValues = true
-                    },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                        editorType: "MultiLineString"),
+                    value: new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Post-build event",
@@ -603,11 +603,8 @@ namespace SettingsProject
                         page: "Build Events",
                         category: "General",
                         priority: 200,
-                        editorType: "MultiLineString")
-                    {
-                        SupportsPerConfigurationValues = true
-                    },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                        editorType: "MultiLineString"),
+                    value: new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Run the post-build event",
@@ -619,7 +616,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "On successful build")
+                    value: new SettingValue("On successful build", "On successful build")
                     {
                         EnumValues = ImmutableArray.Create(
                             "Always",
@@ -646,7 +643,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Package ID",
@@ -655,7 +652,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 300,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "ConsoleApp1")),
+                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
                 // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
                 new Setting(
                     new SettingMetadata(
@@ -665,7 +662,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 400,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "1.0.0")),
+                    new SettingValue("$(Version)", "1.0.0")),
                 new Setting(
                     new SettingMetadata(
                         name: "Authors",
@@ -674,7 +671,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 500,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "ConsoleApp1")),
+                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
                 new Setting(
                     new SettingMetadata(
                         name: "Company",
@@ -683,7 +680,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 600,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "ConsoleApp1")),
+                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
                 new Setting(
                     new SettingMetadata(
                         name: "Product",
@@ -692,7 +689,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 700,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "ConsoleApp1")),
+                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
                 new Setting(
                     new SettingMetadata(
                         name: "Description",
@@ -701,7 +698,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 800,
                         editorType: "MultiLineString"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Copyright",
@@ -710,7 +707,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 900,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 // TODO make this IconBrowseSetting
                 new Setting(
                     new SettingMetadata(
@@ -720,7 +717,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1100,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Repository URL",
@@ -729,7 +726,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1200,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 // TODO provide feedback about valid URLs here
                 new Setting(
                     new SettingMetadata(
@@ -739,7 +736,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1300,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Tags",
@@ -748,7 +745,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1400,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Release notes",
@@ -757,7 +754,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1500,
                         editorType: "MultiLineString"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 // TODO this is a combo box with many languages listed
                 new Setting(
                     new SettingMetadata(
@@ -767,7 +764,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1600,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "(None)")),
+                    new SettingValue("(None)", "(None)")),
                 // TODO VersionSetting
                 new Setting(
                     new SettingMetadata(
@@ -777,7 +774,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1700,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "1.0.0.0")),
+                    new SettingValue("1.0.0.0", "1.0.0.0")),
                 // TODO VersionSetting
                 new Setting(
                     new SettingMetadata(
@@ -787,7 +784,7 @@ namespace SettingsProject
                         category: "General",
                         priority: 1800,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "1.0.0.0")),
+                    new SettingValue("1.0.0.0", "1.0.0.0")),
 
                 //////
                 ///// LICENSE
@@ -801,7 +798,7 @@ namespace SettingsProject
                         category: "License",
                         priority: 85,
                         editorType: "Bool"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "License specification",
@@ -810,7 +807,7 @@ namespace SettingsProject
                         category: "License",
                         priority: 200,
                         editorType: "Enum"),
-                    value: new SettingValue(ImmutableDictionary<string, string>.Empty, "None")
+                    value: new SettingValue("None", "None")
                     {
                         EnumValues = ImmutableArray.Create("None", "Expression", "File")
                     }),
@@ -823,7 +820,7 @@ namespace SettingsProject
                         category: "License",
                         priority: 300,
                         editorType: "String"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Read about SPDX license expressions",
@@ -848,7 +845,7 @@ namespace SettingsProject
                         category: "License",
                         priority: 500,
                         editorType: "FileBrowse"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
 
                 /////////////
                 //////////// DEBUG
@@ -895,7 +892,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 // TODO StrongNameKeySetting -- with new/add and change password actions
                 new Setting(
                     new SettingMetadata(
@@ -908,7 +905,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
+                    new SettingValue("", "")),
                 new Setting(
                     new SettingMetadata(
                         name: "Delay signing",
@@ -920,7 +917,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
 
                 /////////////
                 //////////// CODE ANALYSIS
@@ -957,7 +954,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false)),
+                    new SettingValue("false", false)),
                 new Setting(
                     new SettingMetadata(
                         name: "Run live analysis",
@@ -966,7 +963,7 @@ namespace SettingsProject
                         category: "Analyzers",
                         priority: 300,
                         editorType: "Bool"),
-                    new SettingValue(ImmutableDictionary<string, string>.Empty, false))
+                    new SettingValue("false", false))
             ));
     }
 }

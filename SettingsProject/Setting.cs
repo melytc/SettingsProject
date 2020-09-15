@@ -41,7 +41,7 @@ namespace SettingsProject
             set
             {
                 // TODO validate incoming values
-                // - set of dimensions across values must be identical
+                // - set of dimension names across values must be identical
                 // - number of values must match the dimension specifications
 
                 _values = value;
@@ -53,7 +53,7 @@ namespace SettingsProject
 
                     void OnSettingValuePropertyChanged(object _, PropertyChangedEventArgs e)
                     {
-                        if (e.PropertyName == nameof(SettingValue.Value) && _dependentTargets != null)
+                        if (e.PropertyName == nameof(SettingValue.EvaluatedValue) && _dependentTargets != null)
                         {
                             foreach (var (target, visibleWhenValue) in _dependentTargets)
                             {
@@ -99,7 +99,7 @@ namespace SettingsProject
             // Target is visible if any upstream value matches
             foreach (var value in Values)
             {
-                if (Equals(visibleWhenValue, value.Value))
+                if (Equals(visibleWhenValue, value.EvaluatedValue))
                 {
                     isConditionallyVisible = true;
                     break;
@@ -127,40 +127,46 @@ namespace SettingsProject
         {
             var wasVisible = IsVisible;
 
-            _isSearchVisible = MatchesSearchText(searchString);
+            _isSearchVisible = DoSearch();
 
             if (wasVisible != IsVisible)
             {
                 OnPropertyChanged(nameof(IsVisible));
             }
 
-            bool MatchesSearchText(string searchString)
+            bool DoSearch()
             {
-                if (Name.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                if (IsMatch(Name))
                     return true;
 
-                if (Description != null && Description.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                if (Description != null && IsMatch(Description))
                     return true;
 
                 foreach (var value in _values)
                 {
                     foreach (var enumValue in value.EnumValues)
                     {
-                        if (enumValue.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                        if (IsMatch(enumValue))
                             return true;
                     }
+
+                    if (IsMatch(value.UnevaluatedValue))
+                        return true;
+
+                    if (value.EvaluatedValue is string s && IsMatch(s))
+                        return true;
                 }
 
                 foreach (var searchTerm in _metadata.SearchTerms)
                 {
-                    if (searchTerm.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1)
+                    if (IsMatch(searchTerm))
                         return true;
                 }
 
-                // TODO search evaluated/unevaluated values too
-
                 return false;
             }
+
+            bool IsMatch(string s) => s.IndexOf(searchString, StringComparison.CurrentCultureIgnoreCase) != -1;
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

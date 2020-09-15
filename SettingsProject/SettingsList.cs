@@ -17,7 +17,7 @@ namespace SettingsProject
             nameof(Settings),
             typeof(IReadOnlyList<Setting>),
             typeof(SettingsList),
-            new PropertyMetadata(default(IReadOnlyList<Setting>)));
+            new PropertyMetadata(null, (d, e) => ((SettingsList)d).OnSettingsChanged()));
 
         public static readonly DependencyProperty SearchViewModelProperty = DependencyProperty.Register(
             nameof(SearchViewModel),
@@ -97,6 +97,11 @@ namespace SettingsProject
             var pageGroupContainer = (GroupItem)_itemsControl.ItemContainerGenerator.ContainerFromItem(group);
 
             pageGroupContainer?.BringIntoView();
+        }
+
+        private void OnSettingsChanged()
+        {
+            _scrollViewer?.ScrollToTop();
         }
 
         public override void OnApplyTemplate()

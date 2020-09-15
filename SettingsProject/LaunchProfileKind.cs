@@ -10,13 +10,20 @@ namespace SettingsProject
         public string Name { get; }
 
         public ImmutableArray<SettingMetadata> Metadata { get; }
+        
+        public ImmutableArray<SettingCondition> Conditions { get; }
 
         public Drawing IconDrawing { get; }
 
-        public LaunchProfileKind(string name, ImmutableArray<SettingMetadata> metadata, Drawing iconDrawing)
+        public LaunchProfileKind(
+            string name,
+            ImmutableArray<SettingMetadata> metadata,
+            ImmutableArray<SettingCondition> conditions,
+            Drawing iconDrawing)
         {
             Name = name;
             Metadata = metadata;
+            Conditions = conditions;
             IconDrawing = iconDrawing;
         }
     }

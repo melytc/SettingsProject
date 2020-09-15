@@ -13,7 +13,6 @@ namespace SettingsProject
     internal sealed class SettingContext
     {
         private readonly ImmutableArray<SettingCondition> _settingConditions;
-        private readonly bool _requireConditionMatches;
 
         public IImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
@@ -26,10 +25,9 @@ namespace SettingsProject
         
         public ImmutableArray<object> ConfigurationCommands { get; }
 
-        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, bool requireConditionMatches, IReadOnlyList<Setting> settings)
+        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, IReadOnlyList<Setting> settings)
         {
             _settingConditions = settingConditions;
-            _requireConditionMatches = requireConditionMatches;
             Dimensions = dimensions;
             Settings = settings;
 
@@ -39,9 +37,9 @@ namespace SettingsProject
 
             foreach (var condition in settingConditions)
             {
-                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source) && _requireConditionMatches)
+                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source))
                     throw new Exception("Unknown source: " + condition.Source);
-                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target) && _requireConditionMatches)
+                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target))
                     throw new Exception("Unknown target: " + condition.Target);
 
                 if (source != null && target != null)
@@ -77,7 +75,7 @@ namespace SettingsProject
             return new SettingContext(
                 Dimensions,
                 _settingConditions,
-                _requireConditionMatches, Settings.Select(setting => setting.Clone()).ToImmutableArray());
+                Settings.Select(setting => setting.Clone()).ToImmutableArray());
         }
 
         private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
@@ -97,10 +95,10 @@ namespace SettingsProject
                         {
                             // Apply the first configured value to all configurations
                             // TODO consider showing UI when more than one value is available to choose between
-                            setting.Values = ImmutableArray.Create(new SettingValue(ImmutableDictionary<string, string>.Empty, setting.Values.First().Value));
+                            var value = setting.Values.First();
+                            setting.Values = ImmutableArray.Create(new SettingValue(value.UnevaluatedValue, value.EvaluatedValue));
                         }
                     });
-
             }
         }
 
@@ -123,7 +121,7 @@ namespace SettingsProject
                         if (isAdding)
                         {
                             setting.Values = setting.Values
-                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.ConfigurationDimensions.Add(dimensionName, dim), value.Value)))
+                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.UnevaluatedValue, value.EvaluatedValue, value.ConfigurationDimensions.Add(dimensionName, dim))))
                                 .ToImmutableArray();
                         }
                         else
@@ -132,7 +130,7 @@ namespace SettingsProject
                             var oldValueGroups = setting.Values.GroupBy(value => value.ConfigurationDimensions.Remove(dimensionName), DimensionValueEqualityComparer.Instance);
 
                             setting.Values = oldValueGroups
-                                .Select(group => new SettingValue(group.First().ConfigurationDimensions.Remove(dimensionName), group.First().Value))
+                                .Select(group => new SettingValue(group.First().UnevaluatedValue, group.First().EvaluatedValue, group.First().ConfigurationDimensions.Remove(dimensionName)))
                                 .ToImmutableArray();
                         }
                     });

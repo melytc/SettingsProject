@@ -1,18 +1,21 @@
 ﻿using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 #nullable enable
 
 namespace SettingsProject
 {
-    internal sealed class LaunchProfilesWindowViewModel
+    internal sealed class LaunchProfilesWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<LaunchProfileViewModel> Profiles { get; }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public LaunchProfileViewModel? SelectedProfile { get; set; }
+        private LaunchProfileViewModel? _selectedProfile;
+
+        public ObservableCollection<LaunchProfileViewModel> Profiles { get; }
 
         public ICommand CloneCommand { get; }
 
@@ -24,11 +27,24 @@ namespace SettingsProject
 
         public ImmutableArray<LaunchProfileKind> ProfileKinds { get; }
 
+        public LaunchProfileViewModel? SelectedProfile
+        {
+            get => _selectedProfile;
+            set
+            {
+                if (!ReferenceEquals(value, _selectedProfile))
+                {
+                    _selectedProfile = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public LaunchProfilesWindowViewModel(ObservableCollection<LaunchProfileViewModel> profiles, ImmutableArray<LaunchProfileKind> profileKinds)
         {
             Profiles = profiles;
             ProfileKinds = profileKinds;
-            SelectedProfile = profiles.First();
+            SelectedProfile = profiles.FirstOrDefault();
 
             CloneCommand = new DelegateCommand<LaunchProfileViewModel>(profile =>
             {
@@ -45,16 +61,21 @@ namespace SettingsProject
 
             NewCommand = new DelegateCommand<LaunchProfileKind>(kind =>
             {
-                //TODO: use real data
-                var context = new SettingContext(SettingsLoader.DefaultConfigurationDictionary, LaunchProfilesWindow.Conditions, false, kind.Metadata.Select(md => new Setting(md, new SettingValue(ImmutableDictionary<string, string>.Empty, ""))).ToImmutableArray());
+                //TODO: use real dimensions
+                //TODO: find appropriate default value for each property somehow
+                var context = new SettingContext(SettingsLoader.DefaultConfigurationDictionary, kind.Conditions, kind.Metadata.Select(md => new Setting(md, new SettingValue("", ""))).ToImmutableArray());
 
-                var newProfile = new LaunchProfileViewModel("New profile", kind, context);
-                
+                var newProfile = new LaunchProfileViewModel("New profile", kind, context) { IsRenaming = true };
+
                 Profiles.Add(newProfile);
                 
-                // TODO: select the profile after creating it, implement a notification.
-                //SelectedProfile = newProfile;
+                SelectedProfile = newProfile;
             });
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

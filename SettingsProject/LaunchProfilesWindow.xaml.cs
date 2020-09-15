@@ -12,7 +12,6 @@ namespace SettingsProject
 {
     internal partial class LaunchProfilesWindow
     {
-
         #region SettingMetadata
 
         private static readonly SettingMetadata ExecutablePath = new SettingMetadata(
@@ -169,7 +168,9 @@ namespace SettingsProject
 
         #endregion
 
-        public static ImmutableArray<SettingCondition> Conditions = ImmutableArray.Create(
+        public LaunchProfilesWindow()
+        {
+            var remoteMachineConditions = ImmutableArray.Create(
                 new SettingCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
@@ -177,14 +178,14 @@ namespace SettingsProject
                 new SettingCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
-                    target: AuthenticationMode.Identity),
+                    target: AuthenticationMode.Identity));
+
+            var launchBrowserConditions = ImmutableArray.Create(
                 new SettingCondition(
                     source: LaunchBrowser.Identity,
                     sourceValue: true,
                     target: LaunchBrowserUrl.Identity));
 
-        public LaunchProfilesWindow()
-        {
             var executableKindSettingMetadata = ImmutableArray.Create(
                 ExecutablePath,
                 ApplicationArguments,
@@ -242,11 +243,11 @@ namespace SettingsProject
                 EnableAnonymousAuthentication,
                 EnableWindowsAuthentication);
 
-            var projectKind = new LaunchProfileKind("Project", projectKindSettingMetadata, FindDrawing("IconApplicationDrawing"));
-            var executableKind = new LaunchProfileKind("Executable", executableKindSettingMetadata, FindDrawing("IconExecuteDrawing"));
-            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindSettingMetadata, FindDrawing("SnapshotDebuggerDrawing"));
-            var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, FindDrawing("IISDrawing"));
-            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, FindDrawing("IISExpressDrawing"));
+            var projectKind = new LaunchProfileKind("Project", projectKindSettingMetadata, remoteMachineConditions, FindDrawing("IconApplicationDrawing"));
+            var executableKind = new LaunchProfileKind("Executable", executableKindSettingMetadata, remoteMachineConditions, FindDrawing("IconExecuteDrawing"));
+            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindSettingMetadata, ImmutableArray<SettingCondition>.Empty, FindDrawing("SnapshotDebuggerDrawing"));
+            var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, launchBrowserConditions, FindDrawing("IISDrawing"));
+            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, launchBrowserConditions, FindDrawing("IISExpressDrawing"));
 
             var enumValuesBySetting = new Dictionary<SettingIdentity, ImmutableArray<string>>
             {
@@ -255,42 +256,42 @@ namespace SettingsProject
                 { HostingModel.Identity, ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process") }
             };
 
-            var defaultValueByEditorType = new Dictionary<string, object>
+            var defaultValueByEditorType = new Dictionary<string, (string Unevaluated, object Evaluated)>
             {
-                {"String", ""},
-                {"MultiLineString", ""},
-                {"Bool", false},
-                {"Enum", ""},
-                {"FileBrowse", ""},
-                {"LinkAction", ""}
+                {"String", ("", "")},
+                {"MultiLineString", ("", "")},
+                {"Bool", ("false", false)},
+                {"Enum", ("", "")},
+                {"FileBrowse", ("", "")},
+                {"LinkAction", ("", "")}
             };
 
             var profileKinds = ImmutableArray.Create(projectKind, executableKind, snapshotDebuggerKind, iisKind, iisExpressKind);
 
             var profiles = new ObservableCollection<LaunchProfileViewModel>
             {
-                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { ApplicationArguments.Identity, "/foo /bar" }
+                    { ApplicationArguments.Identity, ("/foo /bar", "/foo /bar") }
                 }),
-                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { ExecutablePath.Identity, "devenv.exe" },
-                    { ApplicationArguments.Identity, "/rootSuffix Exp" }
+                    { ExecutablePath.Identity, ("devenv.exe", "devenv.exe") },
+                    { ApplicationArguments.Identity, ("/rootSuffix Exp", "/rootSuffix Exp") }
                 }),
-                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
                     // TODO
                 }),
-                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { AppUrl.Identity, "http://localhost:52531" },
-                    { LaunchBrowser.Identity, true }
+                    { AppUrl.Identity, ("http://localhost:52531", "http://localhost:52531") },
+                    { LaunchBrowser.Identity, ("true", true) }
                 }),
-                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<SettingIdentity, object>
+                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
                 {
-                    { AppUrl.Identity, "http://localhost:52531" },
-                    { LaunchBrowser.Identity, true }
+                    { AppUrl.Identity, ("http://localhost:52531", "http://localhost:52531") },
+                    { LaunchBrowser.Identity, ("true", true) }
                 })
             };
 
@@ -298,33 +299,31 @@ namespace SettingsProject
 
             InitializeComponent();
 
-            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, object> initialValues)
+            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)> initialValues)
             {
                 var context = new SettingContext(
                     SettingsLoader.DefaultConfigurationDictionary,
-                    Conditions,
-                    requireConditionMatches: false,
+                    kind.Conditions,
                     kind.Metadata.Select(CreateSetting).ToImmutableArray());
 
                 return new LaunchProfileViewModel(name, kind, context);
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
-                    // Debug launch profile values are unconfigured, so use an empty dimensions array
-                    var configurationDimensions = ImmutableDictionary<string, string>.Empty;
-
-                    var settingValue = new SettingValue(configurationDimensions, value: "");
+                    // Debug launch profile values are unconfigured
+                    var settingValue = new SettingValue(unevaluatedValue: "", evaluatedValue: "");
 
                     if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
                     {
                         settingValue.EnumValues = enumValues;
-                        settingValue.Value = enumValues.First();
+                        settingValue.EvaluatedValue = enumValues.First();
                     }
 
-                    if (initialValues.TryGetValue(metadata.Identity, out object value) ||
+                    if (initialValues.TryGetValue(metadata.Identity, out (string Unevaluated, object Evaluated) value) ||
                         defaultValueByEditorType.TryGetValue(metadata.Editors.Last().TypeName, out value))
                     {
-                        settingValue.Value = value;
+                        settingValue.UnevaluatedValue = value.Unevaluated;
+                        settingValue.EvaluatedValue = value.Evaluated;
                     }
 
                     return new Setting(metadata, ImmutableArray.Create(settingValue));
