@@ -590,10 +590,7 @@ namespace SettingsProject
                         page: "Build Events",
                         category: "General",
                         priority: 70,
-                        editorType: "MultiLineString")
-                    {
-                        SupportsPerConfigurationValues = true
-                    },
+                        editorType: "MultiLineString"),
                     value: new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
                 new Setting(
                     new SettingMetadata(
@@ -602,10 +599,7 @@ namespace SettingsProject
                         page: "Build Events",
                         category: "General",
                         priority: 200,
-                        editorType: "MultiLineString")
-                    {
-                        SupportsPerConfigurationValues = true
-                    },
+                        editorType: "MultiLineString"),
                     value: new SettingValue(ImmutableDictionary<string, string>.Empty, "")),
                 new Setting(
                     new SettingMetadata(
