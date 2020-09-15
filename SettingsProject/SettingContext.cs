@@ -96,7 +96,7 @@ namespace SettingsProject
                             // Apply the first configured value to all configurations
                             // TODO consider showing UI when more than one value is available to choose between
                             var value = setting.Values.First();
-                            setting.Values = ImmutableArray.Create(new SettingValue(value.UnevaluatedValue, value.EvaluatedValue, ImmutableDictionary<string, string>.Empty));
+                            setting.Values = ImmutableArray.Create(new SettingValue(value.UnevaluatedValue, value.EvaluatedValue));
                         }
                     });
             }

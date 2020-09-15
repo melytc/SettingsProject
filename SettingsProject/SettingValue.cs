@@ -15,9 +15,9 @@ namespace SettingsProject
         private string _unevaluatedValue;
         private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
 
-        public SettingValue(string unevaluatedValue, object evaluatedValue, ImmutableDictionary<string, string> configurationDimensions)
+        public SettingValue(string unevaluatedValue, object evaluatedValue, ImmutableDictionary<string, string>? configurationDimensions = null)
         {
-            ConfigurationDimensions = configurationDimensions;
+            ConfigurationDimensions = configurationDimensions ?? ImmutableDictionary<string, string>.Empty;
             _evaluatedValue = evaluatedValue;
             _unevaluatedValue = unevaluatedValue;
         }

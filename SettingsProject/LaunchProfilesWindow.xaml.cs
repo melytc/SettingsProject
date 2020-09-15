@@ -310,10 +310,8 @@ namespace SettingsProject
 
                 Setting CreateSetting(SettingMetadata metadata)
                 {
-                    // Debug launch profile values are unconfigured, so use an empty dimensions array
-                    var configurationDimensions = ImmutableDictionary<string, string>.Empty;
-
-                    var settingValue = new SettingValue(unevaluatedValue: "", evaluatedValue: "", configurationDimensions: configurationDimensions);
+                    // Debug launch profile values are unconfigured
+                    var settingValue = new SettingValue(unevaluatedValue: "", evaluatedValue: "");
 
                     if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
                     {
