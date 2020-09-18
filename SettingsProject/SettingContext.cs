@@ -16,11 +16,11 @@ namespace SettingsProject
 
         public IImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
-        public IReadOnlyList<Setting> Settings { get; }
+        public ImmutableArray<Setting> Settings { get; }
         
         public ImmutableArray<object> ConfigurationCommands { get; }
 
-        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, IReadOnlyList<Setting> settings)
+        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
         {
             _settingConditions = settingConditions;
             Dimensions = dimensions;
