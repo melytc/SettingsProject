@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileBrowseEditor.cs" />
     <Compile Include="ISettingEditor.cs" />
     <Compile Include="LaunchProfileKind.cs" />
     <Compile Include="LaunchProfilesWindowViewModel.cs" />
