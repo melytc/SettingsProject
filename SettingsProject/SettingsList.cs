@@ -23,7 +23,7 @@ namespace SettingsProject
             nameof(SearchText),
             typeof(string),
             typeof(SettingsList),
-            new PropertyMetadata(default(string)));
+            new PropertyMetadata(""));
         
         public static readonly DependencyProperty CurrentSectionProperty = DependencyProperty.Register(
             nameof(CurrentSection),
