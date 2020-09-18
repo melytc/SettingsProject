@@ -60,6 +60,7 @@
     <Compile Include="LaunchProfileViewModel.cs" />
     <Compile Include="LinkActionCommandHandler.cs" />
     <Compile Include="Controls\RenameLabel.cs" />
+    <Compile Include="ProjectSettingsViewModel.cs" />
     <Compile Include="SettingContext.cs" />
     <Compile Include="SettingEditorFactory.cs" />
     <Compile Include="SettingMetadata.cs" />
@@ -92,7 +93,7 @@
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingValue.cs" />
     <Compile Include="SettingValueComboBoxViewModel.cs" />
-    <Compile Include="ViewModels.cs" />
+    <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Utils\VisualTreeUtil.cs" />
     <Page Include="LaunchProfilesWindow.xaml">
       <SubType>Designer</SubType>
