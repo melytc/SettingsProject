@@ -11,13 +11,13 @@ using System.Windows.Data;
 
 namespace SettingsProject
 {
-    internal sealed class ApplicationViewModel
+    internal sealed class ProjectSettingsViewModel
     {
         public SettingsListViewModel SettingsListViewModel { get; }
         public SearchViewModel SearchViewModel { get; }
         public NavigationViewModel NavigationViewModel { get; }
 
-        public ApplicationViewModel()
+        public ProjectSettingsViewModel()
         {
             var settings = SettingsLoader.DefaultContext.Settings;
 

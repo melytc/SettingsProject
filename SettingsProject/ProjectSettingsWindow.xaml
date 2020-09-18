@@ -11,7 +11,7 @@
   Height="800"
   Width="1000"
   Background="#FBFBFB"
-  d:DataContext="{d:DesignInstance local:ApplicationViewModel}">
+  d:DataContext="{d:DesignInstance local:ProjectSettingsViewModel}">
 
   <Grid>
 

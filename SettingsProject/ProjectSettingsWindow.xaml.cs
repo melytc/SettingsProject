@@ -6,7 +6,7 @@ namespace SettingsProject
     {
         public ProjectSettingsWindow()
         {
-            DataContext = new ApplicationViewModel();
+            DataContext = new ProjectSettingsViewModel();
 
             InitializeComponent();
         }
