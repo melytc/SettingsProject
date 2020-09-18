@@ -16,11 +16,6 @@ namespace SettingsProject
 
         public IImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
-        /// <summary>
-        /// Gets whether any project configuration dimension contains more than one potential value.
-        /// </summary>
-        public bool HasConfigurableDimensions { get; }
-
         public IReadOnlyList<Setting> Settings { get; }
         
         public ImmutableArray<object> ConfigurationCommands { get; }
@@ -30,8 +25,6 @@ namespace SettingsProject
             _settingConditions = settingConditions;
             Dimensions = dimensions;
             Settings = settings;
-
-            HasConfigurableDimensions = dimensions.Any(entry => entry.Value.Length > 1);
 
             var settingByIdentity = settings.ToDictionary(setting => setting.Identity);
 
@@ -53,7 +46,9 @@ namespace SettingsProject
                 setting.Initialize(this);
             }
 
-            if (HasConfigurableDimensions)
+            var hasConfigurableDimension = dimensions.Any(entry => entry.Value.Length > 1);
+
+            if (hasConfigurableDimension)
             {
                 var builder = ImmutableArray.CreateBuilder<object>();
                 builder.Add(new SingleValueConfigurationCommand());
