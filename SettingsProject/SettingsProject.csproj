@@ -74,7 +74,6 @@
     </Compile>
     <Compile Include="Utils\Converters.LambdaConverter.cs" />
     <Compile Include="Utils\Converters.LambdaMultiConverter.cs" />
-    <Compile Include="Utils\Converters.SingleValueVisibilityConverter.cs" />
     <Compile Include="Utils\DeconstructionExtensions.cs" />
     <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="Controls\HighlightTextBlock.cs" />
