@@ -144,9 +144,9 @@ namespace SettingsProject
 
                 foreach (var value in _values)
                 {
-                    foreach (var enumValue in value.EnumValues)
+                    foreach (var supportedValue in value.SupportedValues)
                     {
-                        if (IsMatch(enumValue.Value) || IsMatch(enumValue.DisplayName))
+                        if (IsMatch(supportedValue.Value) || IsMatch(supportedValue.DisplayName))
                             return true;
                     }
 

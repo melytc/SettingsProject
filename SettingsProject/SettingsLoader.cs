@@ -127,7 +127,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     new SettingValue("net5.0", "net5.0")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue(".NET 5", "net5.0"),
                             new SupportedValue(".NET Core 3.1", "netcoreapp3.1"),
                             new SupportedValue(".NET Core 3.0", "netcoreapp3.0"),
@@ -163,7 +163,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     new SettingValue("Exe", "Exe")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Console Application", "Exe"),
                             new SupportedValue("Windows Application", "WinExe"),
                             new SupportedValue("Class Library", ""))
@@ -193,7 +193,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("(Not set)", "(Not set)")
                     {
-                        EnumValues = ImmutableArray.Create(new SupportedValue("(Not set)")),
+                        SupportedValues = ImmutableArray.Create(new SupportedValue("(Not set)")),
                     }),
 
                 new Setting(
@@ -206,7 +206,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("Icon and manifest", "Icon and manifest")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Icon and manifest"),
                             new SupportedValue("Resource file")),
                     }),
@@ -232,7 +232,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("", "")
                     {
-                        EnumValues = ImmutableArray.Create(new SupportedValue(""))
+                        SupportedValues = ImmutableArray.Create(new SupportedValue(""))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -320,7 +320,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Any CPU", "Any CPU")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Any CPU"),
                             new SupportedValue("x86"))
                     }),
@@ -334,7 +334,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("enable", "Enable")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Disable"),
                             new SupportedValue("Enable"),
                             new SupportedValue("Warnings"),
@@ -398,7 +398,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("4", "4")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("0"),
                             new SupportedValue("1"),
                             new SupportedValue("2"),
@@ -430,7 +430,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Specific warnings", "Specific warnings")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
                             new SupportedValue("All"),
                             new SupportedValue("Specific warnings"))
@@ -500,7 +500,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("Auto", "Auto")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Auto"),
                             new SupportedValue("On"),
                             new SupportedValue("Off"))
@@ -540,7 +540,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Prompt", "Prompt")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
                             new SupportedValue("Prompt"),
                             new SupportedValue("Send"),
@@ -571,7 +571,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Portable", "Portable")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
                             new SupportedValue("Full"),
                             new SupportedValue("Pdb-only"),
@@ -591,7 +591,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("512", "512")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("512"),
                             new SupportedValue("1024"),
                             new SupportedValue("2048"),
@@ -651,7 +651,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("On successful build", "On successful build")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Always"),
                             new SupportedValue("On successful build"),
                             new SupportedValue("When the build updates the project output"))
@@ -842,7 +842,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("None", "None")
                     {
-                        EnumValues = ImmutableArray.Create(
+                        SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
                             new SupportedValue("Expression"),
                             new SupportedValue("File"))

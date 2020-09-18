@@ -54,7 +54,7 @@
         <ComboBox 
           DataContext="{Binding Converter={x:Static local:Converters.SettingValueComboBoxViewModel}}"
           d:DataContext="{d:DesignInstance local:SettingValueComboBoxViewModel}"
-          ItemsSource="{Binding EnumValues}"
+          ItemsSource="{Binding SupportedValues}"
           DisplayMemberPath="DisplayName"
           SelectedItem="{Binding SelectedValue}" />
       </DataTemplate>
@@ -65,7 +65,7 @@
           <ComboBox
             DataContext="{Binding Converter={x:Static local:Converters.SettingValueComboBoxViewModel}}"
             d:DataContext="{d:DesignInstance local:SettingValueComboBoxViewModel}"
-            ItemsSource="{Binding EnumValues}"
+            ItemsSource="{Binding SupportedValues}"
             DisplayMemberPath="DisplayName"
             SelectedItem="{Binding SelectedValue}" />
         </DockPanel>

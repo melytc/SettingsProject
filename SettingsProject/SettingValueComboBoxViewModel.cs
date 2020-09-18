@@ -22,7 +22,7 @@ namespace SettingsProject
             {
                 switch (e.PropertyName)
                 {
-                    case nameof(SettingValue.EnumValues):
+                    case nameof(SettingValue.SupportedValues):
                         PropertyChanged?.Invoke(this, e);
                         break;
                     case nameof(SettingValue.EvaluatedValue):
@@ -32,14 +32,14 @@ namespace SettingsProject
             };
         }
 
-        public ImmutableArray<SupportedValue> EnumValues => _settingValue.EnumValues;
+        public ImmutableArray<SupportedValue> SupportedValues => _settingValue.SupportedValues;
 
         public SupportedValue SelectedValue
         {
-            get => _settingValue.EnumValues.FirstOrDefault(v => string.Equals(v.Value, _settingValue.EvaluatedValue as string, StringComparison.OrdinalIgnoreCase));
+            get => _settingValue.SupportedValues.FirstOrDefault(v => string.Equals(v.Value, _settingValue.EvaluatedValue as string, StringComparison.OrdinalIgnoreCase));
             set
             {
-                foreach (var supportedValue in _settingValue.EnumValues)
+                foreach (var supportedValue in _settingValue.SupportedValues)
                 {
                     if (string.Equals(supportedValue.Value, value.Value, StringComparison.OrdinalIgnoreCase))
                     {
