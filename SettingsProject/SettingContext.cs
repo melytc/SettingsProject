@@ -149,7 +149,7 @@ namespace SettingsProject
                     {
                         if (!y.TryGetValue(key, out var b))
                             return false;
-                        if (!string.Equals(a, b, StringComparison.Ordinal))
+                        if (!StringComparers.ConfigurationDimensionValues.Equals(a, b))
                             return false;
                     }
 
@@ -161,8 +161,8 @@ namespace SettingsProject
                     var hashCode = 1;
                     foreach (var (key, value) in obj)
                     {
-                        hashCode = (hashCode * 397) ^ key.GetHashCode();
-                        hashCode = (hashCode * 397) ^ value.GetHashCode();
+                        hashCode = (hashCode * 397) ^ StringComparers.ConfigurationDimensionNames.GetHashCode(key);
+                        hashCode = (hashCode * 397) ^ StringComparers.ConfigurationDimensionValues.GetHashCode(value);
                     }
                     return hashCode;
                 }

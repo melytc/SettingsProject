@@ -36,12 +36,12 @@ namespace SettingsProject
 
         public SupportedValue SelectedValue
         {
-            get => _settingValue.SupportedValues.FirstOrDefault(v => string.Equals(v.Value, _settingValue.EvaluatedValue as string, StringComparison.OrdinalIgnoreCase));
+            get => _settingValue.SupportedValues.FirstOrDefault(v => StringComparers.SettingValues.Equals(v.Value, _settingValue.EvaluatedValue as string));
             set
             {
                 foreach (var supportedValue in _settingValue.SupportedValues)
                 {
-                    if (string.Equals(supportedValue.Value, value.Value, StringComparison.OrdinalIgnoreCase))
+                    if (StringComparers.SettingValues.Equals(supportedValue.Value, value.Value))
                     {
                         _settingValue.EvaluatedValue = supportedValue.Value;
                         OnPropertyChanged();

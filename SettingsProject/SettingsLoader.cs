@@ -7,8 +7,8 @@ namespace SettingsProject
 {
     internal static class SettingsLoader
     {
-        private static readonly ImmutableDictionary<string, string> DebugConfiguration = new Dictionary<string, string> {{"Configuration", "Debug"}}.ToImmutableDictionary();
-        private static readonly ImmutableDictionary<string, string> ReleaseConfiguration = new Dictionary<string, string> {{"Configuration", "Release"}}.ToImmutableDictionary();
+        private static readonly ImmutableDictionary<string, string> DebugConfiguration = new Dictionary<string, string> {{"Configuration", "Debug"}}.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
+        private static readonly ImmutableDictionary<string, string> ReleaseConfiguration = new Dictionary<string, string> {{"Configuration", "Release"}}.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
 
         // TODO control 'Prefer 32-bit' visibility based on target framework(s)
 
@@ -64,7 +64,7 @@ namespace SettingsProject
             { "Configuration", ImmutableArray.Create("Debug", "Release") },
             { "Platform", ImmutableArray.Create("x86", "AnyCPU") },
             { "Target Framework", ImmutableArray.Create("net5.0", "net472") },
-        }.ToImmutableDictionary();
+        }.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
 
         public static readonly SettingContext DefaultContext = new SettingContext(
             DefaultConfigurationDictionary,

@@ -64,6 +64,7 @@
     <Compile Include="SettingEditorFactory.cs" />
     <Compile Include="SettingMetadata.cs" />
     <Compile Include="SettingsList.cs" />
+    <Compile Include="StringComparers.cs" />
     <Compile Include="SupportedValue.cs" />
     <Compile Include="Utils\Annotations.cs" />
     <Compile Include="Utils\Converters.BoolToVisibilityConverter.cs" />

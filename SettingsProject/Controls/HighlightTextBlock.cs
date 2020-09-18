@@ -74,7 +74,7 @@ namespace SettingsProject
 
                     int searchIndex = 0;
 
-                    int GetNextMatchIndex() => s.IndexOf(highlightText, searchIndex, StringComparison.CurrentCultureIgnoreCase);
+                    int GetNextMatchIndex() => s.IndexOf(highlightText, searchIndex, StringComparisons.SearchText);
 
                     var matchIndex = GetNextMatchIndex();
 
