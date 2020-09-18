@@ -6,7 +6,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:local="clr-namespace:SettingsProject"
   mc:Ignorable="d"
-  StartupUri="MainWindow.xaml">
+  StartupUri="ProjectSettingsWindow.xaml">
 
   <Application.Resources>
 
