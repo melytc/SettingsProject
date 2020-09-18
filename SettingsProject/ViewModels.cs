@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
 
 #nullable enable
 
@@ -16,7 +15,7 @@ namespace SettingsProject
 
         private string _searchText = "";
 
-        public SettingsListViewModel SettingsListViewModel { get; }
+        public IReadOnlyList<Setting> Settings { get; }
         public NavigationViewModel NavigationViewModel { get; }
 
         public string SearchText
@@ -30,7 +29,7 @@ namespace SettingsProject
                 {
                     _searchText = searchText;
 
-                    foreach (var setting in SettingsListViewModel.Settings)
+                    foreach (var setting in Settings)
                     {
                         setting.UpdateSearchState(searchText);
                     }
@@ -42,11 +41,11 @@ namespace SettingsProject
 
         public ProjectSettingsViewModel()
         {
-            var settings = SettingsLoader.DefaultContext.Settings;
+            Settings = SettingsLoader.DefaultContext.Settings;
 
-            SettingsListViewModel = new SettingsListViewModel(settings, useGrouping: true);
+            SettingsListViewSource.Initialize(Settings, useGrouping: true);
 
-            NavigationViewModel = new NavigationViewModel(settings);
+            NavigationViewModel = new NavigationViewModel(Settings);
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -229,42 +228,6 @@ namespace SettingsProject
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    internal sealed class SettingsListViewModel
-    {
-        public IReadOnlyList<Setting> Settings { get; }
-
-        public SettingsListViewModel(IReadOnlyList<Setting> settings, bool useGrouping)
-        {
-            Settings = settings;
-
-            // Construct the default view for our settings collection and customise it.
-            // When the view binds the collection, it will use this pre-constructed view.
-            // We will be able to use this view for filtering too (search, advanced mode, etc).
-            var view = CollectionViewSource.GetDefaultView(Settings);
-
-            if (view is ICollectionViewLiveShaping shaping)
-            {
-                if (shaping.CanChangeLiveFiltering)
-                {
-                    shaping.LiveFilteringProperties.Add(nameof(Setting.IsVisible));
-                }
-
-                shaping.IsLiveFiltering = true;
-            }
-
-            view.Filter = o => o is Setting setting && setting.IsVisible;
-
-            // Specify the property to sort on, and direction to sort.
-            view.SortDescriptions.Add(new SortDescription(nameof(Setting.Priority), ListSortDirection.Ascending));
-
-            if (useGrouping && view.CanGroup)
-            {
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
-            }
         }
     }
 }

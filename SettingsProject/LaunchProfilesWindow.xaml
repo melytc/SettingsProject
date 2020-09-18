@@ -114,7 +114,7 @@
     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="16" Background="#eeeeee" BorderThickness="0" SnapsToDevicePixels="True" />
 
     <!-- Profile Edit -->
-    <local:SettingsList Grid.Column="2" Settings="{Binding Path=SelectedProfile.SettingsListViewModel.Settings}" />
+    <local:SettingsList Grid.Column="2" Settings="{Binding Path=SelectedProfile.Settings}" />
 
   </Grid>
 </Window>
