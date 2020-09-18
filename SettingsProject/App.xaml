@@ -40,7 +40,7 @@
 
       <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
         <CheckBox IsChecked="{Binding EvaluatedValue}" HorizontalAlignment="Left">
-          <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
+          <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
         </CheckBox>
       </DataTemplate>
 
@@ -93,7 +93,7 @@
           <local:HighlightTextBlock
             DockPanel.Dock="Top"
             Margin="28,0,0,4"
-            HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}"
+            HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}"
             Text="{Binding Converter={x:Static local:Converters.LinkActionHeading}}"
             FontWeight="Bold">
             <local:HighlightTextBlock.Visibility>
@@ -185,8 +185,8 @@
               </MenuItem.ItemContainerStyle>
             </MenuItem>
           </Menu>
-          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Name}" FontWeight="Bold" />
-          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchViewModel.SearchString}" Text="{Binding Description}" TextWrapping="Wrap">
+          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}" Text="{Binding Name}" FontWeight="Bold" />
+          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}" Text="{Binding Description}" TextWrapping="Wrap">
             <local:HighlightTextBlock.Visibility>
               <MultiBinding Converter="{x:Static local:Converters.DescriptionVisibility}" Mode="OneWay">
                 <Binding />

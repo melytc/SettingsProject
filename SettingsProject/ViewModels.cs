@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,11 +10,35 @@ using System.Windows.Data;
 
 namespace SettingsProject
 {
-    internal sealed class ProjectSettingsViewModel
+    internal sealed class ProjectSettingsViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private string _searchText = "";
+
         public SettingsListViewModel SettingsListViewModel { get; }
-        public SearchViewModel SearchViewModel { get; }
         public NavigationViewModel NavigationViewModel { get; }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                var searchText = value.Trim();
+
+                if (!string.Equals(_searchText, searchText, StringComparisons.SearchText))
+                {
+                    _searchText = searchText;
+
+                    foreach (var setting in SettingsListViewModel.Settings)
+                    {
+                        setting.UpdateSearchState(searchText);
+                    }
+
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public ProjectSettingsViewModel()
         {
@@ -24,16 +47,11 @@ namespace SettingsProject
             SettingsListViewModel = new SettingsListViewModel(settings, useGrouping: true);
 
             NavigationViewModel = new NavigationViewModel(settings);
+        }
 
-            SearchViewModel = new SearchViewModel();
-            
-            SearchViewModel.SearchChanged += searchString =>
-            {
-                foreach (var setting in settings)
-                {
-                    setting.UpdateSearchState(searchString);
-                }
-            };
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -246,26 +264,6 @@ namespace SettingsProject
             {
                 view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
                 view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
-            }
-        }
-    }
-
-    internal sealed class SearchViewModel
-    {
-        public Action<string>? SearchChanged;
-
-        private string _searchString = "";
-
-        public string SearchString
-        {
-            get => _searchString;
-            set
-            {
-                if (_searchString != value)
-                {
-                    _searchString = value;
-                    SearchChanged?.Invoke(value.Trim());
-                }
             }
         }
     }

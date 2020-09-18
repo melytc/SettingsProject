@@ -29,7 +29,7 @@
       Grid.Row="0"
       Grid.Column="0"
       Grid.ColumnSpan="2"
-      SearchText="{Binding SearchViewModel.SearchString, Mode=TwoWay}"
+      SearchText="{Binding SearchText, Mode=TwoWay}"
       WatermarkText="Search settings"
       Margin="8,8,8,16"
       Padding="12,3" />
@@ -47,7 +47,7 @@
       Margin="24,0,0,0"
       Padding="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={x:Static local:Converters.DoubleToBottomThickness}}"
       Settings="{Binding SettingsListViewModel.Settings}"
-      SearchViewModel="{Binding SearchViewModel}"
+      SearchText="{Binding SearchText}"
       CurrentSection="{Binding Path=NavigationViewModel.SelectedSection, Mode=TwoWay}" />
 
   </Grid>
