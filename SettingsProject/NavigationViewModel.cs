@@ -57,7 +57,10 @@ namespace SettingsProject
 
             _pageByName = Pages.ToDictionary(page => page.Name);
 
-            ScrollTo(Pages[0].Name, Pages[0].Categories[0].CategoryName);
+            if (Pages.Length != 0 && Pages[0].Categories.Length != 0)
+            {
+                ScrollTo(Pages[0].Name, Pages[0].Categories[0].CategoryName);
+            }
         }
 
         private void ScrollTo(string page, string category)
