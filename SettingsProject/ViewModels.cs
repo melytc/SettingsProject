@@ -39,9 +39,9 @@ namespace SettingsProject
             }
         }
 
-        public ProjectSettingsViewModel()
+        public ProjectSettingsViewModel(SettingContext context)
         {
-            Settings = SettingsLoader.DefaultContext.Settings;
+            Settings = context.Settings;
 
             SettingsListViewSource.Initialize(Settings, useGrouping: true);
 
