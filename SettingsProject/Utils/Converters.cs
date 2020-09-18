@@ -47,5 +47,8 @@ namespace SettingsProject
 
                 return setting.Context.Dimensions[command.DimensionName].Length > 1;
             });
+
+        public static IValueConverter SettingValueComboBoxViewModel { get; } = new LambdaConverter<SettingValue, SettingValueComboBoxViewModel>(
+            settingValue => new SettingValueComboBoxViewModel(settingValue));
     }
 }

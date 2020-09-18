@@ -125,17 +125,17 @@ namespace SettingsProject
                         category: "General",
                         priority: 320,
                         editorType: "Enum"),
-                    new SettingValue(".NET 5", ".NET 5")
+                    new SettingValue("net5.0", "net5.0")
                     {
                         EnumValues = ImmutableArray.Create(
-                            ".NET 5",
-                            ".NET Core 3.1",
-                            ".NET Core 3.0",
-                            ".NET Core 2.2",
-                            ".NET Core 2.1",
-                            ".NET Core 2.0",
-                            ".NET Core 1.1",
-                            ".NET Core 1.0")
+                            new SupportedValue(".NET 5", "net5.0"),
+                            new SupportedValue(".NET Core 3.1", "netcoreapp3.1"),
+                            new SupportedValue(".NET Core 3.0", "netcoreapp3.0"),
+                            new SupportedValue(".NET Core 2.2", "netcoreapp2.2"),
+                            new SupportedValue(".NET Core 2.1", "netcoreapp2.1"),
+                            new SupportedValue(".NET Core 2.0", "netcoreapp2.0"),
+                            new SupportedValue(".NET Core 1.1", "netcoreapp1.1"),
+                            new SupportedValue(".NET Core 1.0", "netcoreapp1.0"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -161,12 +161,12 @@ namespace SettingsProject
                         category: "General",
                         priority: 500,
                         editorType: "Enum"),
-                    new SettingValue("Console Application", "Console Application")
+                    new SettingValue("Exe", "Exe")
                     {
                         EnumValues = ImmutableArray.Create(
-                            "Console Application",
-                            "Windows Application",
-                            "Class Library")
+                            new SupportedValue("Console Application", "Exe"),
+                            new SupportedValue("Windows Application", "WinExe"),
+                            new SupportedValue("Class Library", ""))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -193,7 +193,7 @@ namespace SettingsProject
                     },
                     value: new SettingValue("(Not set)", "(Not set)")
                     {
-                        EnumValues = ImmutableArray.Create("(Not set)"),
+                        EnumValues = ImmutableArray.Create(new SupportedValue("(Not set)")),
                     }),
 
                 new Setting(
@@ -206,7 +206,9 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("Icon and manifest", "Icon and manifest")
                     {
-                        EnumValues = ImmutableArray.Create("Icon and manifest", "Resource file"),
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("Icon and manifest"),
+                            new SupportedValue("Resource file")),
                     }),
                 // TODO make this IconBrowseSetting
                 new Setting(
@@ -230,7 +232,7 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("", "")
                     {
-                        EnumValues = ImmutableArray.Create(""),
+                        EnumValues = ImmutableArray.Create(new SupportedValue(""))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -318,7 +320,9 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Any CPU", "Any CPU")
                     {
-                        EnumValues = ImmutableArray.Create("Any CPU", "x86")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("Any CPU"),
+                            new SupportedValue("x86"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -330,7 +334,11 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("enable", "Enable")
                     {
-                        EnumValues = ImmutableArray.Create("Disable", "Enable", "Warnings", "Annotations")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("Disable"),
+                            new SupportedValue("Enable"),
+                            new SupportedValue("Warnings"),
+                            new SupportedValue("Annotations"))
                     }),
                 // TODO this is disabled in .NET Core -- why?
                 new Setting(
@@ -390,7 +398,12 @@ namespace SettingsProject
                     },
                     value: new SettingValue("4", "4")
                     {
-                        EnumValues = ImmutableArray.Create("0", "1", "2", "3", "4")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("0"),
+                            new SupportedValue("1"),
+                            new SupportedValue("2"),
+                            new SupportedValue("3"),
+                            new SupportedValue("4"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -417,7 +430,10 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Specific warnings", "Specific warnings")
                     {
-                        EnumValues = ImmutableArray.Create("None", "All", "Specific warnings"),
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("None"),
+                            new SupportedValue("All"),
+                            new SupportedValue("Specific warnings"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -484,7 +500,10 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("Auto", "Auto")
                     {
-                        EnumValues = ImmutableArray.Create("Auto", "On", "Off")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("Auto"),
+                            new SupportedValue("On"),
+                            new SupportedValue("Off"))
                     }),
 
                 //////
@@ -521,7 +540,11 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Prompt", "Prompt")
                     {
-                        EnumValues = ImmutableArray.Create("None", "Prompt", "Send", "Queue"),
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("None"),
+                            new SupportedValue("Prompt"),
+                            new SupportedValue("Send"),
+                            new SupportedValue("Queue"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -548,7 +571,12 @@ namespace SettingsProject
                     },
                     value: new SettingValue("Portable", "Portable")
                     {
-                        EnumValues = ImmutableArray.Create("None", "Full", "Pdb-only", "Portable", "Embedded")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("None"),
+                            new SupportedValue("Full"),
+                            new SupportedValue("Pdb-only"),
+                            new SupportedValue("Portable"),
+                            new SupportedValue("Embedded"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -563,7 +591,12 @@ namespace SettingsProject
                     },
                     value: new SettingValue("512", "512")
                     {
-                        EnumValues = ImmutableArray.Create("512", "1024", "2048", "4096", "8192")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("512"),
+                            new SupportedValue("1024"),
+                            new SupportedValue("2048"),
+                            new SupportedValue("4096"),
+                            new SupportedValue("8192"))
                     }),
                 new Setting(
                     new SettingMetadata(
@@ -619,9 +652,9 @@ namespace SettingsProject
                     value: new SettingValue("On successful build", "On successful build")
                     {
                         EnumValues = ImmutableArray.Create(
-                            "Always",
-                            "On successful build",
-                            "When the build updates the project output")
+                            new SupportedValue("Always"),
+                            new SupportedValue("On successful build"),
+                            new SupportedValue("When the build updates the project output"))
                     }),
 
                 /////////////
@@ -809,7 +842,10 @@ namespace SettingsProject
                         editorType: "Enum"),
                     value: new SettingValue("None", "None")
                     {
-                        EnumValues = ImmutableArray.Create("None", "Expression", "File")
+                        EnumValues = ImmutableArray.Create(
+                            new SupportedValue("None"),
+                            new SupportedValue("Expression"),
+                            new SupportedValue("File"))
                     }),
                 // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
                 new Setting(

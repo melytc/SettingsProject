@@ -146,7 +146,7 @@ namespace SettingsProject
                 {
                     foreach (var enumValue in value.EnumValues)
                     {
-                        if (IsMatch(enumValue))
+                        if (IsMatch(enumValue.Value) || IsMatch(enumValue.DisplayName))
                             return true;
                     }
 

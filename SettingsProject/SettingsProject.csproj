@@ -64,6 +64,7 @@
     <Compile Include="SettingEditorFactory.cs" />
     <Compile Include="SettingMetadata.cs" />
     <Compile Include="SettingsList.cs" />
+    <Compile Include="SupportedValue.cs" />
     <Compile Include="Utils\Annotations.cs" />
     <Compile Include="Utils\Converters.BoolToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="SettingIdentity.cs" />
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingValue.cs" />
+    <Compile Include="SettingValueComboBoxViewModel.cs" />
     <Compile Include="ViewModels.cs" />
     <Compile Include="Utils\VisualTreeUtil.cs" />
     <Page Include="LaunchProfilesWindow.xaml">

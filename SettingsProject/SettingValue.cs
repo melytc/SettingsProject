@@ -13,7 +13,7 @@ namespace SettingsProject
 
         private object _evaluatedValue;
         private string _unevaluatedValue;
-        private ImmutableArray<string> _enumValues = ImmutableArray<string>.Empty;
+        private ImmutableArray<SupportedValue> _enumValues = ImmutableArray<SupportedValue>.Empty;
 
         public SettingValue(string unevaluatedValue, object evaluatedValue, ImmutableDictionary<string, string>? configurationDimensions = null)
         {
@@ -30,7 +30,7 @@ namespace SettingsProject
 
         public Setting? Parent { get; internal set; }
 
-        public ImmutableArray<string> EnumValues
+        public ImmutableArray<SupportedValue> EnumValues
         {
             get => _enumValues;
             set
