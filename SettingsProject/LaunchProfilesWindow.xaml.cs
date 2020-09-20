@@ -302,7 +302,7 @@ namespace SettingsProject
             LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)> initialValues)
             {
                 var context = new SettingContext(
-                    SettingsLoader.DefaultConfigurationDictionary,
+                    ImmutableDictionary<string, ImmutableArray<string>>.Empty,
                     kind.Conditions,
                     kind.Metadata.Select(CreateSetting).ToImmutableArray());
 
