@@ -147,6 +147,8 @@ namespace SettingsProject
 
                 var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
 
+                Assumes.NotNull(viewSource.Groups);
+
                 double offset = 0;
                 foreach (CollectionViewGroup g1 in viewSource.Groups)
                 {
