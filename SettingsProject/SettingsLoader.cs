@@ -12,7 +12,7 @@ namespace SettingsProject
 
         // TODO control 'Prefer 32-bit' visibility based on target framework(s)
 
-        public static readonly ImmutableArray<SettingCondition> DefaultConditions = ImmutableArray.Create(
+        private static readonly ImmutableArray<SettingCondition> DefaultConditions = ImmutableArray.Create(
             // Multi-targeting
             new SettingCondition(
                 source: new SettingIdentity("Application", "General", "Multi-targeting"),
@@ -59,7 +59,7 @@ namespace SettingsProject
                 target: new SettingIdentity("Signing", "General", "Delay signing"))
         );
 
-        public static readonly IImmutableDictionary<string, ImmutableArray<string>> DefaultConfigurationDictionary = new Dictionary<string, ImmutableArray<string>>
+        private static readonly IImmutableDictionary<string, ImmutableArray<string>> DefaultConfigurationDictionary = new Dictionary<string, ImmutableArray<string>>
         {
             { "Configuration", ImmutableArray.Create("Debug", "Release") },
             { "Platform", ImmutableArray.Create("x86", "AnyCPU") },
