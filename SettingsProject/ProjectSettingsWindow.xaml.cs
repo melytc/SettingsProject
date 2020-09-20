@@ -1,4 +1,7 @@
-﻿#nullable enable
+﻿using System;
+using System.Threading.Tasks;
+
+#nullable enable
 
 namespace SettingsProject
 {
@@ -6,9 +9,18 @@ namespace SettingsProject
     {
         public ProjectSettingsWindow()
         {
-            DataContext = new ProjectSettingsViewModel(SettingsLoader.DefaultContext);
+            DataContext = new AsyncLoadViewModel("Loading settings...");
 
             InitializeComponent();
+
+            Dispatcher.BeginInvoke(new Func<Task>(
+                async () =>
+                {
+                    // Simulate delayed load
+                    await Task.Delay(3000);
+
+                    DataContext = new ProjectSettingsViewModel(SettingsLoader.CreateDefaultContext());
+                }));
         }
     }
 }

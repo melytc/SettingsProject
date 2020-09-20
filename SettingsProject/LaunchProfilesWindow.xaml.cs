@@ -1,4 +1,7 @@
-﻿#nullable enable
+﻿using System;
+using System.Threading.Tasks;
+
+#nullable enable
 
 namespace SettingsProject
 {
@@ -6,9 +9,18 @@ namespace SettingsProject
     {
         public LaunchProfilesWindow()
         {
-            DataContext = SettingsLoader.CreateLaunchProfiles();
+            DataContext = new AsyncLoadViewModel("Loading launch profiles...");
 
             InitializeComponent();
+
+            Dispatcher.BeginInvoke(new Func<Task>(
+                async () =>
+                {
+                    // Simulate delayed load
+                    await Task.Delay(3000);
+
+                    DataContext = SettingsLoader.CreateLaunchProfiles();
+                }));
         }
     }
 }
