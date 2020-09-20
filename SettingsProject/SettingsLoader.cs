@@ -66,7 +66,7 @@ namespace SettingsProject
             { "Target Framework", ImmutableArray.Create("net5.0", "net472") },
         }.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
 
-        public static readonly SettingContext DefaultContext = new SettingContext(
+        public static SettingContext CreateDefaultContext() => new SettingContext(
             DefaultConfigurationDictionary,
             DefaultConditions,
             ImmutableArray.Create(
