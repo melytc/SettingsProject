@@ -11,16 +11,11 @@ namespace SettingsProject
     {
         public static IValueConverter HiddenWhenFalse    { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Visible, falseVisibility: Visibility.Hidden);
         public static IValueConverter CollapsedWhenFalse { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Visible, falseVisibility: Visibility.Collapsed);
-        public static IValueConverter CollapsedWhenTrue  { get; } = new BoolToVisibilityConverter(trueVisibility: Visibility.Collapsed, falseVisibility: Visibility.Visible);
 
         public static IValueConverter CollapsedWhenEmptyString    { get; } = new LambdaConverter<string, Visibility>(s => string.IsNullOrEmpty(s) ? Visibility.Collapsed : Visibility.Visible);
         public static IValueConverter CollapsedWhenNotEmptyString { get; } = new LambdaConverter<string, Visibility>(s => string.IsNullOrEmpty(s) ? Visibility.Visible : Visibility.Collapsed);
 
-        public static IValueConverter CollapsedWhenNull           { get; } = new SingleValueVisibilityConverter(value: null, matchValue: Visibility.Collapsed, elseValue: Visibility.Visible);
-
         public static IValueConverter DoubleToBottomThickness { get; } = new LambdaConverter<double, Thickness>(d => new Thickness(0, 0, 0, d));
-
-        public static IValueConverter Negate { get; } = new LambdaConverter<bool, bool>(b => !b);
 
         public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Setting, string>(setting => setting.Description != null ? setting.Name : "");
         public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Setting, string>(setting => setting.Description ?? setting.Name);
@@ -47,5 +42,8 @@ namespace SettingsProject
 
                 return setting.Context.Dimensions[command.DimensionName].Length > 1;
             });
+
+        public static IValueConverter SettingValueComboBoxViewModel { get; } = new LambdaConverter<SettingValue, SettingValueComboBoxViewModel>(
+            settingValue => new SettingValueComboBoxViewModel(settingValue));
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -74,7 +73,7 @@ namespace SettingsProject
 
                     int searchIndex = 0;
 
-                    int GetNextMatchIndex() => s.IndexOf(highlightText, searchIndex, StringComparison.CurrentCultureIgnoreCase);
+                    int GetNextMatchIndex() => s.IndexOf(highlightText, searchIndex, StringComparisons.SearchText);
 
                     var matchIndex = GetNextMatchIndex();
 

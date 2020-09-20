@@ -249,11 +249,11 @@ namespace SettingsProject
             var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, launchBrowserConditions, FindDrawing("IISDrawing"));
             var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, launchBrowserConditions, FindDrawing("IISExpressDrawing"));
 
-            var enumValuesBySetting = new Dictionary<SettingIdentity, ImmutableArray<string>>
+            var supportedValuesBySetting = new Dictionary<SettingIdentity, ImmutableArray<SupportedValue>>
             {
-                { AuthenticationMode.Identity, ImmutableArray.Create("None", "Windows") },
-                { IisExpressBitness.Identity, ImmutableArray.Create("Default", "x64", "x86") },
-                { HostingModel.Identity, ImmutableArray.Create("Default (In Process)", "In Process", "Out of Process") }
+                { AuthenticationMode.Identity, ImmutableArray.Create(new SupportedValue("None"), new SupportedValue("Windows")) },
+                { IisExpressBitness.Identity, ImmutableArray.Create(new SupportedValue("Default"), new SupportedValue("x64"), new SupportedValue("x86")) },
+                { HostingModel.Identity, ImmutableArray.Create(new SupportedValue("Default (In Process)"), new SupportedValue("In Process"), new SupportedValue("Out of Process")) }
             };
 
             var defaultValueByEditorType = new Dictionary<string, (string Unevaluated, object Evaluated)>
@@ -313,10 +313,10 @@ namespace SettingsProject
                     // Debug launch profile values are unconfigured
                     var settingValue = new SettingValue(unevaluatedValue: "", evaluatedValue: "");
 
-                    if (enumValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<string> enumValues))
+                    if (supportedValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<SupportedValue> supportedValues))
                     {
-                        settingValue.EnumValues = enumValues;
-                        settingValue.EvaluatedValue = enumValues.First();
+                        settingValue.SupportedValues = supportedValues;
+                        settingValue.EvaluatedValue = supportedValues.First();
                     }
 
                     if (initialValues.TryGetValue(metadata.Identity, out (string Unevaluated, object Evaluated) value) ||

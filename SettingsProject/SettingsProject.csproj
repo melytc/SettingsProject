@@ -54,16 +54,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FileBrowseEditor.cs" />
     <Compile Include="ISettingEditor.cs" />
     <Compile Include="LaunchProfileKind.cs" />
     <Compile Include="LaunchProfilesWindowViewModel.cs" />
     <Compile Include="LaunchProfileViewModel.cs" />
     <Compile Include="LinkActionCommandHandler.cs" />
     <Compile Include="Controls\RenameLabel.cs" />
+    <Compile Include="ProjectSettingsViewModel.cs" />
     <Compile Include="SettingContext.cs" />
     <Compile Include="SettingEditorFactory.cs" />
     <Compile Include="SettingMetadata.cs" />
     <Compile Include="SettingsList.cs" />
+    <Compile Include="SettingsListViewSource.cs" />
+    <Compile Include="StringComparers.cs" />
+    <Compile Include="SupportedValue.cs" />
     <Compile Include="Utils\Annotations.cs" />
     <Compile Include="Utils\Converters.BoolToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters.cs" />
@@ -72,7 +77,6 @@
     </Compile>
     <Compile Include="Utils\Converters.LambdaConverter.cs" />
     <Compile Include="Utils\Converters.LambdaMultiConverter.cs" />
-    <Compile Include="Utils\Converters.SingleValueVisibilityConverter.cs" />
     <Compile Include="Utils\DeconstructionExtensions.cs" />
     <Compile Include="Utils\DelegateCommand.cs" />
     <Compile Include="Controls\HighlightTextBlock.cs" />
@@ -89,13 +93,14 @@
     <Compile Include="SettingIdentity.cs" />
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="SettingValue.cs" />
-    <Compile Include="ViewModels.cs" />
+    <Compile Include="SettingValueComboBoxViewModel.cs" />
+    <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Utils\VisualTreeUtil.cs" />
     <Page Include="LaunchProfilesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="ProjectSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -103,8 +108,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="ProjectSettingsWindow.xaml.cs">
+      <DependentUpon>ProjectSettingsWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NavigationTree.xaml">

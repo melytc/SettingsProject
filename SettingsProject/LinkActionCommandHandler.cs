@@ -19,22 +19,27 @@ namespace SettingsProject
 
         private static void Handle(IReadOnlyDictionary<string, string> editorMetadata)
         {
-            // TODO safe dictionary lookups with more helpful error messages
-
-            var action = editorMetadata["Action"];
+            if (!editorMetadata.TryGetValue("Action", out string action))
+                throw new Exception("LinkAction setting must contain \"Action\" metadata.");
 
             switch (action)
             {
                 case "Command":
-                    var command = editorMetadata["Command"];
-                    var handler = s_commandRegistry[command];
+                    if (!editorMetadata.TryGetValue("Command", out string command))
+                        throw new Exception("LinkAction of type \"Command\" must contain \"Command\" metadata.");
+                    if (!s_commandRegistry.TryGetValue(command, out var handler))
+                        throw new Exception($"Unknown LinkAction command identifier \"{command}\".");
                     handler(editorMetadata);
                     break;
 
                 case "URL":
-                    var url = editorMetadata["URL"];
-                    // TODO sanitize URL for security
-                    Process.Start(url);
+                    if (!editorMetadata.TryGetValue("URL", out string url))
+                        throw new Exception("LinkAction of type \"URL\" must contain \"URL\" metadata.");
+                    if (!Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
+                        throw new Exception("LinkAction of type \"URL\" must contain \"URL\" metadata.");
+                    if (uri.Scheme != "http" && uri.Scheme != "https")
+                        throw new Exception("LinkAction URL must have http or https scheme.");
+                    Process.Start(uri.ToString());
                     break;
             }
         }

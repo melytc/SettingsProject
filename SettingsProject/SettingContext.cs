@@ -16,22 +16,15 @@ namespace SettingsProject
 
         public IImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
-        /// <summary>
-        /// Gets whether any project configuration dimension contains more than one potential value.
-        /// </summary>
-        public bool HasConfigurableDimensions { get; }
-
-        public IReadOnlyList<Setting> Settings { get; }
+        public ImmutableArray<Setting> Settings { get; }
         
         public ImmutableArray<object> ConfigurationCommands { get; }
 
-        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, IReadOnlyList<Setting> settings)
+        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
         {
             _settingConditions = settingConditions;
             Dimensions = dimensions;
             Settings = settings;
-
-            HasConfigurableDimensions = dimensions.Any(entry => entry.Value.Length > 1);
 
             var settingByIdentity = settings.ToDictionary(setting => setting.Identity);
 
@@ -53,7 +46,9 @@ namespace SettingsProject
                 setting.Initialize(this);
             }
 
-            if (HasConfigurableDimensions)
+            var hasConfigurableDimension = dimensions.Any(entry => entry.Value.Length > 1);
+
+            if (hasConfigurableDimension)
             {
                 var builder = ImmutableArray.CreateBuilder<object>();
                 builder.Add(new SingleValueConfigurationCommand());
@@ -149,7 +144,7 @@ namespace SettingsProject
                     {
                         if (!y.TryGetValue(key, out var b))
                             return false;
-                        if (!string.Equals(a, b, StringComparison.Ordinal))
+                        if (!StringComparers.ConfigurationDimensionValues.Equals(a, b))
                             return false;
                     }
 
@@ -161,8 +156,8 @@ namespace SettingsProject
                     var hashCode = 1;
                     foreach (var (key, value) in obj)
                     {
-                        hashCode = (hashCode * 397) ^ key.GetHashCode();
-                        hashCode = (hashCode * 397) ^ value.GetHashCode();
+                        hashCode = (hashCode * 397) ^ StringComparers.ConfigurationDimensionNames.GetHashCode(key);
+                        hashCode = (hashCode * 397) ^ StringComparers.ConfigurationDimensionValues.GetHashCode(value);
                     }
                     return hashCode;
                 }

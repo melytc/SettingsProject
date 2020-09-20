@@ -19,11 +19,11 @@ namespace SettingsProject
             typeof(SettingsList),
             new PropertyMetadata(null, (d, e) => ((SettingsList)d).OnSettingsChanged()));
 
-        public static readonly DependencyProperty SearchViewModelProperty = DependencyProperty.Register(
-            nameof(SearchViewModel),
-            typeof(SearchViewModel),
+        public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
+            nameof(SearchText),
+            typeof(string),
             typeof(SettingsList),
-            new PropertyMetadata(default(SearchViewModel)));
+            new PropertyMetadata(""));
         
         public static readonly DependencyProperty CurrentSectionProperty = DependencyProperty.Register(
             nameof(CurrentSection),
@@ -42,10 +42,10 @@ namespace SettingsProject
             set => SetValue(SettingsProperty, value);
         }
 
-        public SearchViewModel SearchViewModel
+        public string SearchText
         {
-            get => (SearchViewModel)GetValue(SearchViewModelProperty);
-            set => SetValue(SearchViewModelProperty, value);
+            get => (string)GetValue(SearchTextProperty);
+            set => SetValue(SearchTextProperty, value);
         }
 
         public NavigationSection CurrentSection
@@ -53,9 +53,6 @@ namespace SettingsProject
             get => (NavigationSection)GetValue(CurrentSectionProperty);
             set => SetValue(CurrentSectionProperty, value);
         }
-
-//        public ICommand UseSameValueAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
-//        public ICommand UseDifferentValuesAcrossConfigurationsCommand { get; } = new DelegateCommand(() => { });
 
         private bool _ignoreNextCurrentSectionChangeEvent;
 

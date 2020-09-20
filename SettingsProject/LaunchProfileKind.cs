@@ -13,6 +13,7 @@ namespace SettingsProject
         
         public ImmutableArray<SettingCondition> Conditions { get; }
 
+        // TODO this will likely become an ImageMoniker in VS
         public Drawing IconDrawing { get; }
 
         public LaunchProfileKind(

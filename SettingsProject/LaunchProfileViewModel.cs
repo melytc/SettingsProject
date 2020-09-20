@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -16,15 +17,15 @@ namespace SettingsProject
 
         public LaunchProfileKind Kind { get; }
 
-        public SettingsListViewModel SettingsListViewModel { get; }
+        public IReadOnlyList<Setting> Settings => _context.Settings;
 
         public LaunchProfileViewModel(string name, LaunchProfileKind kind, SettingContext context)
         {
-            SettingsListViewModel = new SettingsListViewModel(context.Settings, useGrouping: false);
-
             _name = name;
             _context = context;
             Kind = kind;
+         
+            SettingsListViewSource.Initialize(Settings, useGrouping: false);
         }
 
         public string Name

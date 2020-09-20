@@ -1,42 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
 
 #nullable enable
 
 namespace SettingsProject
 {
-    internal sealed class ApplicationViewModel
-    {
-        public SettingsListViewModel SettingsListViewModel { get; }
-        public SearchViewModel SearchViewModel { get; }
-        public NavigationViewModel NavigationViewModel { get; }
-
-        public ApplicationViewModel()
-        {
-            var settings = SettingsLoader.DefaultContext.Settings;
-
-            SettingsListViewModel = new SettingsListViewModel(settings, useGrouping: true);
-
-            NavigationViewModel = new NavigationViewModel(settings);
-
-            SearchViewModel = new SearchViewModel();
-            
-            SearchViewModel.SearchChanged += searchString =>
-            {
-                foreach (var setting in settings)
-                {
-                    setting.UpdateSearchState(searchString);
-                }
-            };
-        }
-    }
-
     internal sealed class NavigationViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -85,7 +57,10 @@ namespace SettingsProject
 
             _pageByName = Pages.ToDictionary(page => page.Name);
 
-            ScrollTo(Pages[0].Name, Pages[0].Categories[0].CategoryName);
+            if (Pages.Length != 0 && Pages[0].Categories.Length != 0)
+            {
+                ScrollTo(Pages[0].Name, Pages[0].Categories[0].CategoryName);
+            }
         }
 
         private void ScrollTo(string page, string category)
@@ -211,62 +186,6 @@ namespace SettingsProject
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    internal sealed class SettingsListViewModel
-    {
-        public IReadOnlyList<Setting> Settings { get; }
-
-        public SettingsListViewModel(IReadOnlyList<Setting> settings, bool useGrouping)
-        {
-            Settings = settings;
-
-            // Construct the default view for our settings collection and customise it.
-            // When the view binds the collection, it will use this pre-constructed view.
-            // We will be able to use this view for filtering too (search, advanced mode, etc).
-            var view = CollectionViewSource.GetDefaultView(Settings);
-
-            if (view is ICollectionViewLiveShaping shaping)
-            {
-                if (shaping.CanChangeLiveFiltering)
-                {
-                    shaping.LiveFilteringProperties.Add(nameof(Setting.IsVisible));
-                }
-
-                shaping.IsLiveFiltering = true;
-            }
-
-            view.Filter = o => o is Setting setting && setting.IsVisible;
-
-            // Specify the property to sort on, and direction to sort.
-            view.SortDescriptions.Add(new SortDescription(nameof(Setting.Priority), ListSortDirection.Ascending));
-
-            if (useGrouping && view.CanGroup)
-            {
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
-            }
-        }
-    }
-
-    internal sealed class SearchViewModel
-    {
-        public Action<string>? SearchChanged;
-
-        private string _searchString = "";
-
-        public string SearchString
-        {
-            get => _searchString;
-            set
-            {
-                if (_searchString != value)
-                {
-                    _searchString = value;
-                    SearchChanged?.Invoke(value.Trim());
-                }
-            }
         }
     }
 }
