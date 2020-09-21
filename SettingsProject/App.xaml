@@ -22,7 +22,14 @@
 
       <DataTemplate x:Key="ConfiguredStringSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2">
-          <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
+          <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static local:Converters.DimensionNames}">
+                <Binding Path="ConfigurationDimensions" />
+                <Binding Path="Parent.Context.DimensionOrder" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
           <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>
@@ -33,7 +40,14 @@
 
       <DataTemplate x:Key="ConfiguredMultilineStringSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2">
-          <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
+          <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static local:Converters.DimensionNames}">
+                <Binding Path="ConfigurationDimensions" />
+                <Binding Path="Parent.Context.DimensionOrder" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
           <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
         </DockPanel>
       </DataTemplate>
@@ -46,7 +60,14 @@
 
       <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
         <CheckBox Margin="0,2" IsChecked="{Binding EvaluatedValue}" HorizontalAlignment="Left">
-          <TextBlock Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
+          <TextBlock TextWrapping="Wrap">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static local:Converters.DimensionNames}">
+                <Binding Path="ConfigurationDimensions" />
+                <Binding Path="Parent.Context.DimensionOrder" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
         </CheckBox>
       </DataTemplate>
 
@@ -61,7 +82,14 @@
 
       <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2">
-          <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
+          <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static local:Converters.DimensionNames}">
+                <Binding Path="ConfigurationDimensions" />
+                <Binding Path="Parent.Context.DimensionOrder" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
           <ComboBox
             DataContext="{Binding Converter={x:Static local:Converters.SettingValueComboBoxViewModel}}"
             d:DataContext="{d:DesignInstance local:SettingValueComboBoxViewModel}"
@@ -80,7 +108,14 @@
 
       <DataTemplate x:Key="ConfiguredFileBrowseSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2" HorizontalAlignment="Left">
-          <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
+          <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static local:Converters.DimensionNames}">
+                <Binding Path="ConfigurationDimensions" />
+                <Binding Path="Parent.Context.DimensionOrder" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
           <Button DockPanel.Dock="Right" Content="{x:Static local:Resources.FileBrowseEditorBrowseButtonText}" Margin="8,0,0,0" Padding="6,0" Command="{x:Static local:FileBrowseEditor.BrowseCommand}" CommandParameter="{Binding}" />
           <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>

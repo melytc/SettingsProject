@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -64,15 +65,13 @@ namespace SettingsProject
                 target: new SettingIdentity("Signing", "General", "Delay signing"))
         );
 
-        private static readonly IImmutableDictionary<string, ImmutableArray<string>> DefaultConfigurationDictionary = new Dictionary<string, ImmutableArray<string>>
-        {
-            { "Configuration", ImmutableArray.Create("Debug", "Release") },
-            { "Platform", ImmutableArray.Create("x86", "AnyCPU") },
-            { "Target Framework", ImmutableArray.Create("net5.0", "net472") },
-        }.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
-
         public static SettingContext CreateDefaultContext() => new SettingContext(
-            DefaultConfigurationDictionary,
+            new KeyValuePair<string, ImmutableArray<string>>[]
+            {
+                new ("Configuration", ImmutableArray.Create("Debug", "Release")),
+                new ("Platform", ImmutableArray.Create("x86", "AnyCPU")),
+                new ("Target Framework", ImmutableArray.Create("net5.0", "net472"))
+            },
             DefaultConditions,
             ImmutableArray.Create(
 
@@ -1296,7 +1295,7 @@ namespace SettingsProject
             LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)> initialValues)
             {
                 var context = new SettingContext(
-                    ImmutableDictionary<string, ImmutableArray<string>>.Empty,
+                    Array.Empty<KeyValuePair<string, ImmutableArray<string>>>(),
                     kind.Conditions,
                     kind.Metadata.Select(CreateSetting).ToImmutableArray());
 

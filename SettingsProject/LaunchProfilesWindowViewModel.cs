@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -64,7 +66,7 @@ namespace SettingsProject
                 //TODO: find appropriate default value for each property somehow
                 var settings = kind.Metadata.Select(md => new Setting(md, new SettingValue("", ""))).ToImmutableArray();
 
-                var context = new SettingContext(ImmutableDictionary<string, ImmutableArray<string>>.Empty, kind.Conditions, settings);
+                var context = new SettingContext(Array.Empty<KeyValuePair<string, ImmutableArray<string>>>(), kind.Conditions, settings);
 
                 var newProfile = new LaunchProfileViewModel(Resources.LaunchProfileNewProfileName, kind, context) { IsRenaming = true };
 
