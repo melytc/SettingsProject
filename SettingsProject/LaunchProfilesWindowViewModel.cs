@@ -62,7 +62,9 @@ namespace SettingsProject
             NewCommand = new DelegateCommand<LaunchProfileKind>(kind =>
             {
                 //TODO: find appropriate default value for each property somehow
-                var context = new SettingContext(ImmutableDictionary<string, ImmutableArray<string>>.Empty, kind.Conditions, kind.Metadata.Select(md => new Setting(md, new SettingValue("", ""))).ToImmutableArray());
+                var settings = kind.Metadata.Select(md => new Setting(md, new SettingValue("", ""))).ToImmutableArray();
+
+                var context = new SettingContext(ImmutableDictionary<string, ImmutableArray<string>>.Empty, kind.Conditions, settings);
 
                 var newProfile = new LaunchProfileViewModel(Resources.LaunchProfileNewProfileName, kind, context) { IsRenaming = true };
 
