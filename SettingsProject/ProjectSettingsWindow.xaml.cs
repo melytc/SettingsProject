@@ -9,7 +9,7 @@ namespace SettingsProject
     {
         public ProjectSettingsWindow()
         {
-            DataContext = new AsyncLoadViewModel("Loading settings...");
+            DataContext = new AsyncLoadViewModel(SettingsProject.Resources.ProjectSettingsAsyncLoadMessage);
 
             InitializeComponent();
 

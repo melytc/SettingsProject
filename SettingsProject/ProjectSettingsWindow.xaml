@@ -36,7 +36,7 @@
           Grid.Column="0"
           Grid.ColumnSpan="2"
           SearchText="{Binding SearchText, Mode=TwoWay}"
-          WatermarkText="Search settings"
+          WatermarkText="{x:Static local:Resources.SearchTextBoxWatermarkText}"
           Margin="8,8,8,16"
           Padding="12,3" />
 

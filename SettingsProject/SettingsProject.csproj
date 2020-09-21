@@ -63,6 +63,11 @@
     <Compile Include="LinkActionCommandHandler.cs" />
     <Compile Include="Controls\RenameLabel.cs" />
     <Compile Include="ProjectSettingsViewModel.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SettingContext.cs" />
     <Compile Include="SettingEditorFactory.cs" />
     <Compile Include="SettingMetadata.cs" />
@@ -153,6 +158,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>

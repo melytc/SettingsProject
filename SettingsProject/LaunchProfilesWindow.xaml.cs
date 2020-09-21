@@ -9,7 +9,7 @@ namespace SettingsProject
     {
         public LaunchProfilesWindow()
         {
-            DataContext = new AsyncLoadViewModel("Loading launch profiles...");
+            DataContext = new AsyncLoadViewModel(SettingsProject.Resources.LaunchProfilesWindowAsyncLoadMessage);
 
             InitializeComponent();
 

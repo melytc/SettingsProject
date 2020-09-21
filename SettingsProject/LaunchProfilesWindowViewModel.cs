@@ -64,7 +64,7 @@ namespace SettingsProject
                 //TODO: find appropriate default value for each property somehow
                 var context = new SettingContext(ImmutableDictionary<string, ImmutableArray<string>>.Empty, kind.Conditions, kind.Metadata.Select(md => new Setting(md, new SettingValue("", ""))).ToImmutableArray());
 
-                var newProfile = new LaunchProfileViewModel("New profile", kind, context) { IsRenaming = true };
+                var newProfile = new LaunchProfileViewModel(Resources.LaunchProfileNewProfileName, kind, context) { IsRenaming = true };
 
                 Profiles.Add(newProfile);
                 

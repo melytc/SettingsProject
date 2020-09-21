@@ -73,7 +73,7 @@
 
       <DataTemplate x:Key="UnconfiguredFileBrowseSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel HorizontalAlignment="Left">
-          <Button DockPanel.Dock="Right" Content="Browse..." Margin="8,0,0,0" Padding="6,0" Command="{x:Static local:FileBrowseEditor.BrowseCommand}" CommandParameter="{Binding}" />
+          <Button DockPanel.Dock="Right" Content="{x:Static local:Resources.FileBrowseEditorBrowseButtonText}" Margin="8,0,0,0" Padding="6,0" Command="{x:Static local:FileBrowseEditor.BrowseCommand}" CommandParameter="{Binding}" />
           <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>
@@ -81,7 +81,7 @@
       <DataTemplate x:Key="ConfiguredFileBrowseSettingValueTemplate" DataType="local:SettingValue">
         <DockPanel Margin="0,2" HorizontalAlignment="Left">
           <TextBlock DockPanel.Dock="Top" Text="{Binding ConfigurationDimensions, Converter={x:Static local:Converters.DimensionNames}}" TextWrapping="Wrap" />
-          <Button DockPanel.Dock="Right" Content="Browse..." Margin="8,0,0,0" Padding="6,0" Command="{x:Static local:FileBrowseEditor.BrowseCommand}" CommandParameter="{Binding}" />
+          <Button DockPanel.Dock="Right" Content="{x:Static local:Resources.FileBrowseEditorBrowseButtonText}" Margin="8,0,0,0" Padding="6,0" Command="{x:Static local:FileBrowseEditor.BrowseCommand}" CommandParameter="{Binding}" />
           <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>

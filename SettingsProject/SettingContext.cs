@@ -75,7 +75,7 @@ namespace SettingsProject
 
         private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
         {
-            public string Caption => "Use the same value across all configurations";
+            public string Caption => Resources.SettingUseSameValueAcrossAllConfigurations;
 
             public string? DimensionName => null;
 
@@ -103,7 +103,7 @@ namespace SettingsProject
 
             public ICommand Command { get; }
 
-            public string Caption => $"Vary value by {DimensionName}";
+            public string Caption => string.Format(Resources.SettingVaryByDimension_1, DimensionName);
 
             public DimensionConfigurationCommand(string dimensionName, ImmutableArray<string> dimensionValues)
             {
