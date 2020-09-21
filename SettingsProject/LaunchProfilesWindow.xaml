@@ -62,7 +62,7 @@
                   </MenuItem.Header>
                   <MenuItem.ItemContainerStyle>
                     <Style>
-                      <Setter Property="MenuItem.Header" Value="{Binding Name}" />
+                      <Setter Property="MenuItem.Header" Value="{Binding DisplayName}" />
                       <Setter Property="MenuItem.Icon">
                         <Setter.Value>
                           <Image Width="16" Height="16">
