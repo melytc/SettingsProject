@@ -5,13 +5,6 @@ using System.ComponentModel;
 
 #nullable enable
 
-namespace System.Runtime.CompilerServices
-{
-    internal class IsExternalInit
-    {
-    }
-}
-
 namespace SettingsProject
 {
     /// <summary>
