@@ -14,16 +14,24 @@ namespace SettingsProject
     {
         private readonly ImmutableArray<SettingCondition> _settingConditions;
 
-        public IImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
+        public ImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
         public ImmutableArray<Setting> Settings { get; }
         
         public ImmutableArray<object> ConfigurationCommands { get; }
 
-        public SettingContext(IImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
+        public ImmutableArray<string> DimensionOrder { get; }
+
+        public SettingContext(IReadOnlyList<KeyValuePair<string, ImmutableArray<string>>> dimensions, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
+            : this(dimensions.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames), dimensions.Select(pair => pair.Key).ToImmutableArray(), settingConditions, settings)
         {
-            _settingConditions = settingConditions;
+        }
+
+        private SettingContext(ImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<string> dimensionOrder, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
+        {
             Dimensions = dimensions;
+            DimensionOrder = dimensionOrder;
+            _settingConditions = settingConditions;
             Settings = settings;
 
             var settingByIdentity = settings.ToDictionary(setting => setting.Identity);
@@ -69,13 +77,14 @@ namespace SettingsProject
         {
             return new SettingContext(
                 Dimensions,
+                DimensionOrder,
                 _settingConditions,
                 Settings.Select(setting => setting.Clone()).ToImmutableArray());
         }
 
         private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
         {
-            public string Caption => "Use the same value across all configurations";
+            public string Caption => Resources.SettingUseSameValueAcrossAllConfigurations;
 
             public string? DimensionName => null;
 
@@ -103,7 +112,7 @@ namespace SettingsProject
 
             public ICommand Command { get; }
 
-            public string Caption => $"Vary value by {DimensionName}";
+            public string Caption => string.Format(Resources.SettingVaryByDimension_1, DimensionName);
 
             public DimensionConfigurationCommand(string dimensionName, ImmutableArray<string> dimensionValues)
             {

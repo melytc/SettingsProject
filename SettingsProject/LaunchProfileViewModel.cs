@@ -56,6 +56,7 @@ namespace SettingsProject
 
         public LaunchProfileViewModel Clone()
         {
+            // TODO improve this strategy, as the suffix may not be unique, or the name may already have a numerical suffix
             return new LaunchProfileViewModel($"{Name} (2)", Kind, _context.Clone());
         }
 

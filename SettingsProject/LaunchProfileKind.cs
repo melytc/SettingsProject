@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Windows.Media;
 
 #nullable enable
@@ -7,7 +8,7 @@ namespace SettingsProject
 {
     internal sealed class LaunchProfileKind
     {
-        public string Name { get; }
+        public string DisplayName { get; }
 
         public ImmutableArray<SettingMetadata> Metadata { get; }
         
@@ -17,12 +18,12 @@ namespace SettingsProject
         public Drawing IconDrawing { get; }
 
         public LaunchProfileKind(
-            string name,
+            [Localizable(true)] string displayName,
             ImmutableArray<SettingMetadata> metadata,
             ImmutableArray<SettingCondition> conditions,
             Drawing iconDrawing)
         {
-            Name = name;
+            DisplayName = displayName;
             Metadata = metadata;
             Conditions = conditions;
             IconDrawing = iconDrawing;

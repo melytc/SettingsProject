@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Data;
 
@@ -20,7 +21,27 @@ namespace SettingsProject
         public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Setting, string>(setting => setting.Description != null ? setting.Name : "");
         public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Setting, string>(setting => setting.Description ?? setting.Name);
 
-        public static IValueConverter DimensionNames { get; } = new LambdaConverter<ImmutableDictionary<string, string>, string>(dimensions => string.Join(" & ", dimensions.Values));
+        public static IMultiValueConverter DimensionNames { get; } = new LambdaMultiConverter<ImmutableDictionary<string, string>, ImmutableArray<string>, string>((map, dimensions) =>
+        {
+            if (map.IsEmpty)
+                return "";
+
+            if (map.Count == 1)
+                return map.First().Value;
+
+            var sb = new StringBuilder();
+
+            foreach (var dimension in dimensions)
+            {
+                if (!map.TryGetValue(dimension, out string value))
+                    continue;
+                if (sb.Length != 0)
+                    sb.Append(" & ");
+                sb.Append(value);
+            }
+
+            return sb.ToString();
+        });
 
         public static IMultiValueConverter DescriptionVisibility { get; } = new LambdaMultiConverter<Setting, string, ImmutableArray<SettingValue>, Visibility>(
             (setting, description, values) => !string.IsNullOrWhiteSpace(description) && setting.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);

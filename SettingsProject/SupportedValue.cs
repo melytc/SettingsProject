@@ -1,4 +1,6 @@
-﻿#nullable enable
+﻿using System.ComponentModel;
+
+#nullable enable
 
 namespace SettingsProject
 {
@@ -7,12 +9,12 @@ namespace SettingsProject
         public string DisplayName { get; }
         public string Value { get; }
 
-        public SupportedValue(string value)
+        public SupportedValue([Localizable(true)] string value)
         {
             Value = DisplayName = value;
         }
 
-        public SupportedValue(string displayName, string value)
+        public SupportedValue([Localizable(true)] string displayName, string value)
         {
             DisplayName = displayName;
             Value = value;
