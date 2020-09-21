@@ -22,7 +22,7 @@ namespace SettingsProject {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SettingsProject {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SettingsProject.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SettingsProject {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Browse....
         /// </summary>
-        internal static string FileBrowseEditorBrowseButtonText {
+        public static string FileBrowseEditorBrowseButtonText {
             get {
                 return ResourceManager.GetString("FileBrowseEditorBrowseButtonText", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Delete selected profile.
         /// </summary>
-        internal static string LaunchProfileMenuDeleteToolTip {
+        public static string LaunchProfileMenuDeleteToolTip {
             get {
                 return ResourceManager.GetString("LaunchProfileMenuDeleteToolTip", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Duplicate selected profile.
         /// </summary>
-        internal static string LaunchProfileMenuDuplicateToolTip {
+        public static string LaunchProfileMenuDuplicateToolTip {
             get {
                 return ResourceManager.GetString("LaunchProfileMenuDuplicateToolTip", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
-        internal static string LaunchProfileMenuNewText {
+        public static string LaunchProfileMenuNewText {
             get {
                 return ResourceManager.GetString("LaunchProfileMenuNewText", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Create a new profile.
         /// </summary>
-        internal static string LaunchProfileMenuNewToolTip {
+        public static string LaunchProfileMenuNewToolTip {
             get {
                 return ResourceManager.GetString("LaunchProfileMenuNewToolTip", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Rename selected profile.
         /// </summary>
-        internal static string LaunchProfileMenuRenameToolTip {
+        public static string LaunchProfileMenuRenameToolTip {
             get {
                 return ResourceManager.GetString("LaunchProfileMenuRenameToolTip", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to New profile.
         /// </summary>
-        internal static string LaunchProfileNewProfileName {
+        public static string LaunchProfileNewProfileName {
             get {
                 return ResourceManager.GetString("LaunchProfileNewProfileName", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Loading launch profiles....
         /// </summary>
-        internal static string LaunchProfilesWindowAsyncLoadMessage {
+        public static string LaunchProfilesWindowAsyncLoadMessage {
             get {
                 return ResourceManager.GetString("LaunchProfilesWindowAsyncLoadMessage", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Launch Profiles.
         /// </summary>
-        internal static string LaunchProfilesWindowTitleText {
+        public static string LaunchProfilesWindowTitleText {
             get {
                 return ResourceManager.GetString("LaunchProfilesWindowTitleText", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Loading settings....
         /// </summary>
-        internal static string ProjectSettingsAsyncLoadMessage {
+        public static string ProjectSettingsAsyncLoadMessage {
             get {
                 return ResourceManager.GetString("ProjectSettingsAsyncLoadMessage", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Search settings.
         /// </summary>
-        internal static string SearchTextBoxWatermarkText {
+        public static string SearchTextBoxWatermarkText {
             get {
                 return ResourceManager.GetString("SearchTextBoxWatermarkText", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Use the same value across all configurations.
         /// </summary>
-        internal static string SettingUseSameValueAcrossAllConfigurations {
+        public static string SettingUseSameValueAcrossAllConfigurations {
             get {
                 return ResourceManager.GetString("SettingUseSameValueAcrossAllConfigurations", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace SettingsProject {
         /// <summary>
         ///   Looks up a localized string similar to Vary value by {0}.
         /// </summary>
-        internal static string SettingVaryByDimension_1 {
+        public static string SettingVaryByDimension_1 {
             get {
                 return ResourceManager.GetString("SettingVaryByDimension_1", resourceCulture);
             }
