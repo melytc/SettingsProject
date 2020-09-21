@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 
 #nullable enable
 
@@ -40,12 +41,12 @@ namespace SettingsProject
 
         public ImmutableArray<string> SearchTerms { get; init; } = ImmutableArray<string>.Empty;
 
-        public SettingMetadata(string name, string? description, string page, string category, int priority, string editorType)
+        public SettingMetadata([Localizable(true)] string name, [Localizable(true)] string? description, string page, string category, int priority, string editorType)
             : this(name, description, page, category, priority, ImmutableArray.Create(new EditorSpecification(editorType, ImmutableDictionary<string, string>.Empty)))
         {
         }
 
-        public SettingMetadata(string name, string? description, string page, string category, int priority, ImmutableArray<EditorSpecification> editors)
+        public SettingMetadata([Localizable(true)] string name, [Localizable(true)] string? description, string page, string category, int priority, ImmutableArray<EditorSpecification> editors)
         {
             if (editors.IsEmpty)
                 throw new ArgumentException("Cannot be empty.", nameof(editors));
