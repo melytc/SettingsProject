@@ -72,7 +72,7 @@
                           </Image>
                         </Setter.Value>
                       </Setter>
-                      <Setter Property="MenuItem.Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LaunchProfilesWindow}, Path=DataContext.NewCommand}" />
+                      <Setter Property="MenuItem.Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ToolBar}, Path=DataContext.NewCommand}" />
                       <Setter Property="MenuItem.CommandParameter" Value="{Binding}" />
                     </Style>
                   </MenuItem.ItemContainerStyle>
