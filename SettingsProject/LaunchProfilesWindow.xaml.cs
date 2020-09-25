@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                 async () =>
                 {
                     // Simulate delayed load
-                    await Task.Delay(3000);
+                    await Task.Delay(1000);
 
                     DataContext = SettingsLoader.CreateLaunchProfiles();
                 }));
