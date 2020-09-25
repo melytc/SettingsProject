@@ -3,7 +3,7 @@ using System.Windows;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal interface ISettingEditor
     {

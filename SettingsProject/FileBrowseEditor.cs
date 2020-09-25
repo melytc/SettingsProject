@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     public static class FileBrowseEditor
     {

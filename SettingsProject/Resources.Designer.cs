@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SettingsProject {
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer {
     using System;
     
     
@@ -39,7 +39,8 @@ namespace SettingsProject {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SettingsProject.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer.Res" +
+                            "ources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     // TODO may be able to get better perf by not deriving from TextBlock and using GlyphRun/Glyph instead
 

@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     public partial class ProjectSettingsWindow
     {
         public ProjectSettingsWindow()
         {
-            DataContext = new AsyncLoadViewModel(SettingsProject.Resources.ProjectSettingsAsyncLoadMessage);
+            DataContext = new AsyncLoadViewModel(Designer.Resources.ProjectSettingsAsyncLoadMessage);
 
             InitializeComponent();
 

@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     /// <summary>
     /// Immutable data about a setting.

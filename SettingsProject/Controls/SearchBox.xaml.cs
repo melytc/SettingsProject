@@ -2,7 +2,7 @@
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     public partial class SearchBox
     {

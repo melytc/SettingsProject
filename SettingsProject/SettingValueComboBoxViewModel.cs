@@ -7,7 +7,7 @@ using Microsoft;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     /// <summary>
     /// Maps a property's value to one of its supported values. Joins display name for UI presentation.

@@ -8,7 +8,7 @@ using Microsoft;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     [TemplatePart(Name = "PART_ItemsControl", Type = typeof(ItemsControl))]
     internal sealed class SettingsList : Control

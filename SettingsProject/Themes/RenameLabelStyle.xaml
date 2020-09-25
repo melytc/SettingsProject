@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:SettingsProject">
+                    xmlns:local="clr-namespace:Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer">
 
   <Style TargetType="local:RenameLabel">
     <Setter Property="Focusable" Value="False" />

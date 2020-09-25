@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal partial class NavigationTree
     {

@@ -8,7 +8,7 @@ using Microsoft;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal sealed class SettingContext
     {
