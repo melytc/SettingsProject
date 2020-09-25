@@ -6,13 +6,13 @@ using System.Runtime.CompilerServices;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal sealed class ProjectSettingsViewModel : INotifyPropertyChanged
+    internal sealed class ProjectPropertiesViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private string _searchText = "";
 
-        public IReadOnlyList<Setting> Settings { get; }
+        public IReadOnlyList<Property> Properties { get; }
         public NavigationViewModel NavigationViewModel { get; }
 
         public string SearchText
@@ -26,9 +26,9 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                 {
                     _searchText = searchText;
 
-                    foreach (var setting in Settings)
+                    foreach (var property in Properties)
                     {
-                        setting.UpdateSearchState(searchText);
+                        property.UpdateSearchState(searchText);
                     }
 
                     OnPropertyChanged();
@@ -36,13 +36,13 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             }
         }
 
-        public ProjectSettingsViewModel(SettingContext context)
+        public ProjectPropertiesViewModel(PropertyContext context)
         {
-            Settings = context.Settings;
+            Properties = context.Properties;
 
-            SettingsListViewSource.Initialize(Settings, useGrouping: true);
+            PropertyListViewSource.Initialize(Properties, useGrouping: true);
 
-            NavigationViewModel = new NavigationViewModel(Settings);
+            NavigationViewModel = new NavigationViewModel(Properties);
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)

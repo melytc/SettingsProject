@@ -8,7 +8,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
     {
         public static StringComparer ConfigurationDimensionNames { get; } = StringComparer.OrdinalIgnoreCase;
         public static StringComparer ConfigurationDimensionValues { get; } = StringComparer.OrdinalIgnoreCase;
-        public static StringComparer SettingValues { get; } = StringComparer.OrdinalIgnoreCase;
+        public static StringComparer PropertyValues { get; } = StringComparer.OrdinalIgnoreCase;
     }
 
     internal static class StringComparisons

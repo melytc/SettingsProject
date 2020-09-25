@@ -5,12 +5,12 @@ using System.Windows;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal interface ISettingEditor
+    internal interface IPropertyEditor
     {
         string TypeName { get; }
-        DataTemplate SettingDataTemplate { get; }
+        DataTemplate PropertyDataTemplate { get; }
         DataTemplate? UnconfiguredDataTemplate { get; }
         DataTemplate? ConfiguredDataTemplate { get; }
-        bool ShouldShowDescription(ImmutableArray<SettingValue> values);
+        bool ShouldShowDescription(ImmutableArray<PropertyValue> values);
     }
 }

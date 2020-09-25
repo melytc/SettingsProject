@@ -9,37 +9,37 @@ using System.Windows.Input;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal sealed class SettingContext
+    internal sealed class PropertyContext
     {
-        private readonly ImmutableArray<SettingCondition> _settingConditions;
+        private readonly ImmutableArray<PropertyCondition> _propertyConditions;
 
         public ImmutableDictionary<string, ImmutableArray<string>> Dimensions { get; }
 
-        public ImmutableArray<Setting> Settings { get; }
+        public ImmutableArray<Property> Properties { get; }
         
         public ImmutableArray<object> ConfigurationCommands { get; }
 
         public ImmutableArray<string> DimensionOrder { get; }
 
-        public SettingContext(IReadOnlyList<KeyValuePair<string, ImmutableArray<string>>> dimensions, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
-            : this(dimensions.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames), dimensions.Select(pair => pair.Key).ToImmutableArray(), settingConditions, settings)
+        public PropertyContext(IReadOnlyList<KeyValuePair<string, ImmutableArray<string>>> dimensions, ImmutableArray<PropertyCondition> propertyConditions, ImmutableArray<Property> properties)
+            : this(dimensions.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames), dimensions.Select(pair => pair.Key).ToImmutableArray(), propertyConditions, properties)
         {
         }
 
-        private SettingContext(ImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<string> dimensionOrder, ImmutableArray<SettingCondition> settingConditions, ImmutableArray<Setting> settings)
+        private PropertyContext(ImmutableDictionary<string, ImmutableArray<string>> dimensions, ImmutableArray<string> dimensionOrder, ImmutableArray<PropertyCondition> propertyConditions, ImmutableArray<Property> properties)
         {
             Dimensions = dimensions;
             DimensionOrder = dimensionOrder;
-            _settingConditions = settingConditions;
-            Settings = settings;
+            _propertyConditions = propertyConditions;
+            Properties = properties;
 
-            var settingByIdentity = settings.ToDictionary(setting => setting.Identity);
+            var propertyByIdentity = properties.ToDictionary(property => property.Identity);
 
-            foreach (var condition in settingConditions)
+            foreach (var condition in propertyConditions)
             {
-                if (!settingByIdentity.TryGetValue(condition.Source, out Setting source))
+                if (!propertyByIdentity.TryGetValue(condition.Source, out Property source))
                     throw new Exception("Unknown source: " + condition.Source);
-                if (!settingByIdentity.TryGetValue(condition.Target, out Setting target))
+                if (!propertyByIdentity.TryGetValue(condition.Target, out Property target))
                     throw new Exception("Unknown target: " + condition.Target);
 
                 if (source != null && target != null)
@@ -48,9 +48,9 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                 }
             }
 
-            foreach (var setting in Settings)
+            foreach (var property in Properties)
             {
-                setting.Initialize(this);
+                property.Initialize(this);
             }
 
             var hasConfigurableDimension = dimensions.Any(entry => entry.Value.Length > 1);
@@ -72,18 +72,18 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             }
         }
 
-        public SettingContext Clone()
+        public PropertyContext Clone()
         {
-            return new SettingContext(
+            return new PropertyContext(
                 Dimensions,
                 DimensionOrder,
-                _settingConditions,
-                Settings.Select(setting => setting.Clone()).ToImmutableArray());
+                _propertyConditions,
+                Properties.Select(property => property.Clone()).ToImmutableArray());
         }
 
-        private sealed class SingleValueConfigurationCommand : ISettingConfigurationCommand
+        private sealed class SingleValueConfigurationCommand : IPropertyConfigurationCommand
         {
-            public string Caption => Resources.SettingUseSameValueAcrossAllConfigurations;
+            public string Caption => Resources.PropertyUseSameValueAcrossAllConfigurations;
 
             public string? DimensionName => null;
 
@@ -91,49 +91,49 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
             public SingleValueConfigurationCommand()
             {
-                Command = new DelegateCommand<Setting>(
-                    setting =>
+                Command = new DelegateCommand<Property>(
+                    property =>
                     {
-                        if (!setting.Values.IsEmpty)
+                        if (!property.Values.IsEmpty)
                         {
                             // Apply the first configured value to all configurations
                             // TODO consider showing UI when more than one value is available to choose between
-                            var value = setting.Values.First();
-                            setting.Values = ImmutableArray.Create(new SettingValue(value.UnevaluatedValue, value.EvaluatedValue));
+                            var value = property.Values.First();
+                            property.Values = ImmutableArray.Create(new PropertyValue(value.UnevaluatedValue, value.EvaluatedValue));
                         }
                     });
             }
         }
 
-        private sealed class DimensionConfigurationCommand : ISettingConfigurationCommand
+        private sealed class DimensionConfigurationCommand : IPropertyConfigurationCommand
         {
             public string DimensionName { get; }
 
             public ICommand Command { get; }
 
-            public string Caption => string.Format(Resources.SettingVaryByDimension_1, DimensionName);
+            public string Caption => string.Format(Resources.PropertyVaryByDimension_1, DimensionName);
 
             public DimensionConfigurationCommand(string dimensionName, ImmutableArray<string> dimensionValues)
             {
                 DimensionName = dimensionName;
-                Command = new DelegateCommand<Setting>(
-                    setting =>
+                Command = new DelegateCommand<Property>(
+                    property =>
                     {
-                        bool isAdding = !setting.Values.Any(value => value.ConfigurationDimensions.ContainsKey(dimensionName));
+                        bool isAdding = !property.Values.Any(value => value.ConfigurationDimensions.ContainsKey(dimensionName));
 
                         if (isAdding)
                         {
-                            setting.Values = setting.Values
-                                .SelectMany(value => dimensionValues.Select(dim => new SettingValue(value.UnevaluatedValue, value.EvaluatedValue, value.ConfigurationDimensions.Add(dimensionName, dim))))
+                            property.Values = property.Values
+                                .SelectMany(value => dimensionValues.Select(dim => new PropertyValue(value.UnevaluatedValue, value.EvaluatedValue, value.ConfigurationDimensions.Add(dimensionName, dim))))
                                 .ToImmutableArray();
                         }
                         else
                         {
-                            Assumes.False(setting.Values.IsEmpty);
-                            var oldValueGroups = setting.Values.GroupBy(value => value.ConfigurationDimensions.Remove(dimensionName), DimensionValueEqualityComparer.Instance);
+                            Assumes.False(property.Values.IsEmpty);
+                            var oldValueGroups = property.Values.GroupBy(value => value.ConfigurationDimensions.Remove(dimensionName), DimensionValueEqualityComparer.Instance);
 
-                            setting.Values = oldValueGroups
-                                .Select(group => new SettingValue(group.First().UnevaluatedValue, group.First().EvaluatedValue, group.First().ConfigurationDimensions.Remove(dimensionName)))
+                            property.Values = oldValueGroups
+                                .Select(group => new PropertyValue(group.First().UnevaluatedValue, group.First().EvaluatedValue, group.First().ConfigurationDimensions.Remove(dimensionName)))
                                 .ToImmutableArray();
                         }
                     });

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 
@@ -8,9 +7,9 @@ using System.ComponentModel;
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     /// <summary>
-    /// Immutable data about a setting.
+    /// Immutable data about a property.
     /// </summary>
-    internal sealed class SettingMetadata
+    internal sealed class PropertyMetadata
     {
         public string Name { get; }
 
@@ -21,7 +20,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
         public string? Description { get; }
 
         /// <summary>
-        /// Relative priority of the setting, to use when ordering items in the UI.
+        /// Relative priority of the property, to use when ordering items in the UI.
         /// </summary>
         public int Priority { get; }
 
@@ -34,12 +33,12 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
         public ImmutableArray<string> SearchTerms { get; init; } = ImmutableArray<string>.Empty;
 
-        public SettingMetadata([Localizable(true)] string name, [Localizable(true)] string? description, string page, string category, int priority, string editorType)
+        public PropertyMetadata([Localizable(true)] string name, [Localizable(true)] string? description, string page, string category, int priority, string editorType)
             : this(name, description, page, category, priority, ImmutableArray.Create(new EditorSpecification(editorType, ImmutableDictionary<string, string>.Empty)))
         {
         }
 
-        public SettingMetadata([Localizable(true)] string name, [Localizable(true)] string? description, string page, string category, int priority, ImmutableArray<EditorSpecification> editors)
+        public PropertyMetadata([Localizable(true)] string name, [Localizable(true)] string? description, string page, string category, int priority, ImmutableArray<EditorSpecification> editors)
         {
             if (editors.IsEmpty)
                 throw new ArgumentException("Cannot be empty.", nameof(editors));
@@ -52,19 +51,6 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             Editors = editors;
         }
 
-        public SettingIdentity Identity => new SettingIdentity(Page, Category, Name);
-    }
-
-    internal sealed class EditorSpecification
-    {
-        public string TypeName { get; }
-
-        public IReadOnlyDictionary<string, string> Metadata { get; }
-
-        public EditorSpecification(string typeName, IReadOnlyDictionary<string, string> metadata)
-        {
-            TypeName = typeName;
-            Metadata = metadata;
-        }
+        public PropertyIdentity Identity => new PropertyIdentity(Page, Category, Name);
     }
 }

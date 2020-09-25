@@ -6,34 +6,34 @@ using System.Windows.Data;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal static class SettingsListViewSource
+    internal static class PropertyListViewSource
     {
-        public static void Initialize(IReadOnlyList<Setting> settings, bool useGrouping)
+        public static void Initialize(IReadOnlyList<Property> properties, bool useGrouping)
         {
-            // Construct the default view for our settings collection and customise it.
+            // Construct the default view for our properties collection and customise it.
             // When the view binds the collection, it will use this pre-constructed view.
             // We will be able to use this view for filtering too (search, advanced mode, etc).
-            var view = CollectionViewSource.GetDefaultView(settings);
+            var view = CollectionViewSource.GetDefaultView(properties);
 
             if (view is ICollectionViewLiveShaping shaping)
             {
                 if (shaping.CanChangeLiveFiltering)
                 {
-                    shaping.LiveFilteringProperties.Add(nameof(Setting.IsVisible));
+                    shaping.LiveFilteringProperties.Add(nameof(Property.IsVisible));
                 }
 
                 shaping.IsLiveFiltering = true;
             }
 
-            view.Filter = o => o is Setting setting && setting.IsVisible;
+            view.Filter = o => o is Property property && property.IsVisible;
 
             // Specify the property to sort on, and direction to sort.
-            view.SortDescriptions.Add(new SortDescription(nameof(Setting.Priority), ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription(nameof(Property.Priority), ListSortDirection.Ascending));
 
             if (useGrouping && view.CanGroup)
             {
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Page)));
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Setting.Category)));
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Property.Page)));
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Property.Category)));
             }
         }
     }

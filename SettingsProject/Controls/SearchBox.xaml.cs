@@ -10,13 +10,13 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             "WatermarkText",
             typeof(string),
             typeof(SearchBox),
-            new PropertyMetadata(""));
+            new System.Windows.PropertyMetadata(""));
 
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
             "SearchText",
             typeof(string),
             typeof(SearchBox),
-            new PropertyMetadata(""));
+            new System.Windows.PropertyMetadata(""));
 
         public SearchBox()
         {

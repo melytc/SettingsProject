@@ -15,12 +15,12 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             { "ManageLaunchProfiles", _ => new LaunchProfilesWindow().ShowDialog() }
         };
 
-        public static ICommand ActionCommand { get; } = new DelegateCommand<Setting>(setting => Handle(setting.EditorMetadata));
+        public static ICommand ActionCommand { get; } = new DelegateCommand<Property>(property => Handle(property.EditorMetadata));
 
         private static void Handle(IReadOnlyDictionary<string, string> editorMetadata)
         {
             if (!editorMetadata.TryGetValue("Action", out string action))
-                throw new Exception("LinkAction setting must contain \"Action\" metadata.");
+                throw new Exception("LinkAction property must contain \"Action\" metadata.");
 
             switch (action)
             {

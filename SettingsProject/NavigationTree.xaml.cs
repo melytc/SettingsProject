@@ -12,13 +12,13 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             nameof(Pages),
             typeof(ImmutableArray<NavigationPageViewModel>),
             typeof(NavigationTree),
-            new PropertyMetadata(ImmutableArray<NavigationPageViewModel>.Empty));
+            new System.Windows.PropertyMetadata(ImmutableArray<NavigationPageViewModel>.Empty));
 
         public static readonly DependencyProperty SelectedSectionProperty = DependencyProperty.Register(
             nameof(SelectedSection),
             typeof(NavigationSection),
             typeof(NavigationTree),
-            new PropertyMetadata(default(NavigationSection)));
+            new System.Windows.PropertyMetadata(default(NavigationSection)));
 
         public NavigationTree()
         {

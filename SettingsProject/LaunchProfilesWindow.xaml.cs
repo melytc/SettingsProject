@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                     // Simulate delayed load
                     await Task.Delay(1000);
 
-                    DataContext = SettingsLoader.CreateLaunchProfiles();
+                    DataContext = PropertiesLoader.CreateLaunchProfiles();
                 }));
         }
     }

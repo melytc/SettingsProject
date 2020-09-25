@@ -11,35 +11,35 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
     /// <summary>
     /// Maps a property's value to one of its supported values. Joins display name for UI presentation.
     /// </summary>
-    internal sealed class SettingValueComboBoxViewModel : INotifyPropertyChanged
+    internal sealed class PropertyValueComboBoxViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         
-        private readonly SettingValue _settingValue;
+        private readonly PropertyValue _propertyValue;
 
         /// <summary>
-        /// A local copy of the underlying setting's <see cref="SettingValue.SupportedValues"/> collection.
-        /// If the setting's value is not present in its set of supported values, we add an option to this
+        /// A local copy of the underlying property's <see cref="PropertyValue.SupportedValues"/> collection.
+        /// If the property's value is not present in its set of supported values, we add an option to this
         /// local copy so that the option can be represented in a combo box.
         /// </summary>
         public IEnumerable<SupportedValue> SupportedValues { get; private set; }
 
-        public SettingValueComboBoxViewModel(SettingValue settingValue)
+        public PropertyValueComboBoxViewModel(PropertyValue propertyValue)
         {
-            _settingValue = settingValue;
+            _propertyValue = propertyValue;
 
-            SupportedValues = settingValue.SupportedValues;
+            SupportedValues = propertyValue.SupportedValues;
 
             UpdateSupportedValues();
 
-            _settingValue.PropertyChanged += (s, e) =>
+            _propertyValue.PropertyChanged += (s, e) =>
             {
                 switch (e.PropertyName)
                 {
-                    case nameof(SettingValue.SupportedValues):
+                    case nameof(PropertyValue.SupportedValues):
                         PropertyChanged?.Invoke(this, e);
                         break;
-                    case nameof(SettingValue.EvaluatedValue):
+                    case nameof(PropertyValue.EvaluatedValue):
                         UpdateSupportedValues();
                         OnPropertyChanged(nameof(SelectedValue));
                         break;
@@ -52,11 +52,11 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             get
             {
                 // Find a supported value that matches the underlying value
-                if (_settingValue.EvaluatedValue is string value)
+                if (_propertyValue.EvaluatedValue is string value)
                 {
                     foreach (var supportedValue in SupportedValues)
                     {
-                        if (StringComparers.SettingValues.Equals(supportedValue.Value, value))
+                        if (StringComparers.PropertyValues.Equals(supportedValue.Value, value))
                         {
                             return supportedValue;
                         }
@@ -70,7 +70,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             }
             set
             {
-                _settingValue.EvaluatedValue = value.Value;
+                _propertyValue.EvaluatedValue = value.Value;
                 UpdateSupportedValues();
                 OnPropertyChanged();
             }
@@ -78,11 +78,11 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
         private void UpdateSupportedValues()
         {
-            if (_settingValue.EvaluatedValue is string value)
+            if (_propertyValue.EvaluatedValue is string value)
             {
                 foreach (var supportedValue in SupportedValues)
                 {
-                    if (StringComparers.SettingValues.Equals(supportedValue.Value, value))
+                    if (StringComparers.PropertyValues.Equals(supportedValue.Value, value))
                     {
                         // The SupportedValues collection contains the underlying property's
                         // value and does not need modification.

@@ -134,7 +134,7 @@
     </DrawingBrush.Drawing>
   </DrawingBrush>
 
-  <DrawingBrush Stretch="None" x:Key="SettingsIconBrush">
+  <DrawingBrush Stretch="None" x:Key="PropertyIconBrush">
     <DrawingBrush.Drawing>
       <DrawingGroup>
         <DrawingGroup x:Name="canvas">

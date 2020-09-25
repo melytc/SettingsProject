@@ -143,38 +143,38 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading settings....
+        ///   Looks up a localized string similar to Loading properties....
         /// </summary>
-        public static string ProjectSettingsAsyncLoadMessage {
+        public static string ProjectPropertiesAsyncLoadMessage {
             get {
-                return ResourceManager.GetString("ProjectSettingsAsyncLoadMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Search settings.
-        /// </summary>
-        public static string SearchTextBoxWatermarkText {
-            get {
-                return ResourceManager.GetString("SearchTextBoxWatermarkText", resourceCulture);
+                return ResourceManager.GetString("ProjectPropertiesAsyncLoadMessage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Use the same value across all configurations.
         /// </summary>
-        public static string SettingUseSameValueAcrossAllConfigurations {
+        public static string PropertyUseSameValueAcrossAllConfigurations {
             get {
-                return ResourceManager.GetString("SettingUseSameValueAcrossAllConfigurations", resourceCulture);
+                return ResourceManager.GetString("PropertyUseSameValueAcrossAllConfigurations", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Vary value by {0}.
         /// </summary>
-        public static string SettingVaryByDimension_1 {
+        public static string PropertyVaryByDimension_1 {
             get {
-                return ResourceManager.GetString("SettingVaryByDimension_1", resourceCulture);
+                return ResourceManager.GetString("PropertyVaryByDimension_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search properties.
+        /// </summary>
+        public static string SearchTextBoxWatermarkText {
+            get {
+                return ResourceManager.GetString("SearchTextBoxWatermarkText", resourceCulture);
             }
         }
     }

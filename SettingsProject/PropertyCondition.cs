@@ -2,13 +2,13 @@
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal readonly struct SettingCondition
+    internal readonly struct PropertyCondition
     {
-        public SettingIdentity Source { get; }
+        public PropertyIdentity Source { get; }
         public object SourceValue { get; }
-        public SettingIdentity Target { get; }
+        public PropertyIdentity Target { get; }
 
-        public SettingCondition(SettingIdentity source, object sourceValue, SettingIdentity target)
+        public PropertyCondition(PropertyIdentity source, object sourceValue, PropertyIdentity target)
         {
             Source = source;
             SourceValue = sourceValue;

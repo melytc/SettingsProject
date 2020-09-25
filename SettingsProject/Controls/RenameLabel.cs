@@ -14,13 +14,13 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             nameof(Text),
             typeof(string),
             typeof(RenameLabel),
-            new PropertyMetadata("", (d, e) => { }));
+            new System.Windows.PropertyMetadata("", (d, e) => { }));
 
         public static readonly DependencyProperty IsRenamingProperty = DependencyProperty.Register(
             nameof(IsRenaming),
             typeof(bool),
             typeof(RenameLabel),
-            new PropertyMetadata(false, (d, e) => ((RenameLabel)d).OnIsRenamingChanged((bool)e.NewValue)));
+            new System.Windows.PropertyMetadata(false, (d, e) => ((RenameLabel)d).OnIsRenamingChanged((bool)e.NewValue)));
 
         private TextBox? _textBox;
         private TextBlock? _textBlock;

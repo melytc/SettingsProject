@@ -5,12 +5,12 @@ using System.Windows.Controls;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal sealed class SettingDataTemplateSelector : DataTemplateSelector
+    internal sealed class PropertyDataTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            if (item is Setting setting)
-                return setting.Editor?.SettingDataTemplate;
+            if (item is Property property)
+                return property.Editor?.PropertyDataTemplate;
 
             return null;
         }

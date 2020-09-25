@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="pack://application:,,,/Themes/RenameLabelStyle.xaml" />
-    <ResourceDictionary Source="pack://application:,,,/Themes/SettingsListStyle.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/Themes/PropertyListStyle.xaml" />
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

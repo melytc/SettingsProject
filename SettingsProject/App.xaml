@@ -6,7 +6,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:local="clr-namespace:Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer"
   mc:Ignorable="d"
-  StartupUri="ProjectSettingsWindow.xaml">
+  StartupUri="ProjectPropertiesWindow.xaml">
 
   <Application.Resources>
 
@@ -16,11 +16,11 @@
         <ResourceDictionary Source="pack://application:,,,/Icons.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
-      <DataTemplate x:Key="UnconfiguredStringSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="UnconfiguredStringPropertyValueTemplate" DataType="local:PropertyValue">
         <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
       </DataTemplate>
 
-      <DataTemplate x:Key="ConfiguredStringSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="ConfiguredStringPropertyValueTemplate" DataType="local:PropertyValue">
         <DockPanel Margin="0,2">
           <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
             <TextBlock.Text>
@@ -34,11 +34,11 @@
         </DockPanel>
       </DataTemplate>
 
-      <DataTemplate x:Key="UnconfiguredMultilineStringSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="UnconfiguredMultilineStringPropertyValueTemplate" DataType="local:PropertyValue">
         <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="42" MaxHeight="200" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
       </DataTemplate>
 
-      <DataTemplate x:Key="ConfiguredMultilineStringSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="ConfiguredMultilineStringPropertyValueTemplate" DataType="local:PropertyValue">
         <DockPanel Margin="0,2">
           <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
             <TextBlock.Text>
@@ -52,13 +52,13 @@
         </DockPanel>
       </DataTemplate>
 
-      <DataTemplate x:Key="UnconfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="UnconfiguredBoolPropertyValueTemplate" DataType="local:PropertyValue">
         <CheckBox IsChecked="{Binding EvaluatedValue}" HorizontalAlignment="Left">
-          <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
+          <local:HighlightTextBlock HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:PropertyList}, Path=SearchText}" Text="{Binding Parent.Description}" TextWrapping="Wrap" />
         </CheckBox>
       </DataTemplate>
 
-      <DataTemplate x:Key="ConfiguredBoolSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="ConfiguredBoolPropertyValueTemplate" DataType="local:PropertyValue">
         <CheckBox Margin="0,2" IsChecked="{Binding EvaluatedValue}" HorizontalAlignment="Left">
           <TextBlock TextWrapping="Wrap">
             <TextBlock.Text>
@@ -71,16 +71,16 @@
         </CheckBox>
       </DataTemplate>
 
-      <DataTemplate x:Key="UnconfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="UnconfiguredEnumPropertyValueTemplate" DataType="local:PropertyValue">
         <ComboBox 
-          DataContext="{Binding Converter={x:Static local:Converters.SettingValueComboBoxViewModel}}"
-          d:DataContext="{d:DesignInstance local:SettingValueComboBoxViewModel}"
+          DataContext="{Binding Converter={x:Static local:Converters.PropertyValueComboBoxViewModel}}"
+          d:DataContext="{d:DesignInstance local:PropertyValueComboBoxViewModel}"
           ItemsSource="{Binding SupportedValues}"
           DisplayMemberPath="DisplayName"
           SelectedItem="{Binding SelectedValue}" />
       </DataTemplate>
 
-      <DataTemplate x:Key="ConfiguredEnumSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="ConfiguredEnumPropertyValueTemplate" DataType="local:PropertyValue">
         <DockPanel Margin="0,2">
           <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
             <TextBlock.Text>
@@ -91,22 +91,22 @@
             </TextBlock.Text>
           </TextBlock>
           <ComboBox
-            DataContext="{Binding Converter={x:Static local:Converters.SettingValueComboBoxViewModel}}"
-            d:DataContext="{d:DesignInstance local:SettingValueComboBoxViewModel}"
+            DataContext="{Binding Converter={x:Static local:Converters.PropertyValueComboBoxViewModel}}"
+            d:DataContext="{d:DesignInstance local:PropertyValueComboBoxViewModel}"
             ItemsSource="{Binding SupportedValues}"
             DisplayMemberPath="DisplayName"
             SelectedItem="{Binding SelectedValue}" />
         </DockPanel>
       </DataTemplate>
 
-      <DataTemplate x:Key="UnconfiguredFileBrowseSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="UnconfiguredFileBrowsePropertyValueTemplate" DataType="local:PropertyValue">
         <DockPanel HorizontalAlignment="Left">
           <Button DockPanel.Dock="Right" Content="{x:Static local:Resources.FileBrowseEditorBrowseButtonText}" Margin="8,0,0,0" Padding="6,0" Command="{x:Static local:FileBrowseEditor.BrowseCommand}" CommandParameter="{Binding}" />
           <TextBox Text="{Binding EvaluatedValue, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
         </DockPanel>
       </DataTemplate>
 
-      <DataTemplate x:Key="ConfiguredFileBrowseSettingValueTemplate" DataType="local:SettingValue">
+      <DataTemplate x:Key="ConfiguredFileBrowsePropertyValueTemplate" DataType="local:PropertyValue">
         <DockPanel Margin="0,2" HorizontalAlignment="Left">
           <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap">
             <TextBlock.Text>
@@ -121,14 +121,14 @@
         </DockPanel>
       </DataTemplate>
 
-      <!-- Setting data templates -->
+      <!-- Property data templates -->
 
-      <DataTemplate x:Key="LinkActionTemplate" DataType="{x:Type local:Setting}">
+      <DataTemplate x:Key="LinkActionTemplate" DataType="{x:Type local:Property}">
         <DockPanel Margin="0,0,0,24" Background="Transparent">
           <local:HighlightTextBlock
             DockPanel.Dock="Top"
             Margin="28,0,0,4"
-            HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}"
+            HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:PropertyList}, Path=SearchText}"
             Text="{Binding Converter={x:Static local:Converters.LinkActionHeading}}"
             FontWeight="Bold">
             <local:HighlightTextBlock.Visibility>
@@ -147,7 +147,7 @@
         </DockPanel>
       </DataTemplate>
 
-      <DataTemplate x:Key="GenericSettingTemplate" DataType="local:Setting">
+      <DataTemplate x:Key="GenericPropertyTemplate" DataType="local:Property">
         <DockPanel Margin="0,0,0,24" Background="Transparent">
           <Menu
             DockPanel.Dock="Left"
@@ -167,7 +167,7 @@
             </Menu.Template>
             <MenuItem Cursor="Hand" ItemsSource="{Binding Path=Context.ConfigurationCommands}" UsesItemContainerTemplate="False">
               <MenuItem.Header>
-                <Rectangle Fill="{StaticResource SettingsIconBrush}" Width="16" Height="16" />
+                <Rectangle Fill="{StaticResource PropertyIconBrush}" Width="16" Height="16" />
               </MenuItem.Header>
               <MenuItem.Template>
                 <ControlTemplate TargetType="MenuItem">
@@ -196,11 +196,11 @@
                 </ControlTemplate>
               </MenuItem.Template>
               <MenuItem.ItemContainerStyle>
-                <Style d:DataContext="{d:DesignInstance local:ISettingConfigurationCommand}">
+                <Style d:DataContext="{d:DesignInstance local:IPropertyConfigurationCommand}">
                   <Setter Property="MenuItem.Header" Value="{Binding Caption}" />
                   <Setter Property="MenuItem.IsChecked">
                     <Setter.Value>
-                      <MultiBinding Converter="{x:Static local:Converters.SettingConfigurationCommandChecked}" Mode="OneWay">
+                      <MultiBinding Converter="{x:Static local:Converters.PropertyConfigurationCommandChecked}" Mode="OneWay">
                         <Binding />
                         <Binding Path="DataContext.Values" RelativeSource="{RelativeSource FindAncestor, AncestorType=Menu}" />
                       </MultiBinding>
@@ -208,7 +208,7 @@
                   </Setter>
                   <Setter Property="MenuItem.IsEnabled">
                     <Setter.Value>
-                      <MultiBinding Converter="{x:Static local:Converters.SettingConfigurationCommandEnabled}" Mode="OneWay">
+                      <MultiBinding Converter="{x:Static local:Converters.PropertyConfigurationCommandEnabled}" Mode="OneWay">
                         <Binding />
                         <Binding Path="DataContext" RelativeSource="{RelativeSource FindAncestor, AncestorType=Menu}" />
                       </MultiBinding>
@@ -220,8 +220,8 @@
               </MenuItem.ItemContainerStyle>
             </MenuItem>
           </Menu>
-          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}" Text="{Binding Name}" FontWeight="Bold" />
-          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SettingsList}, Path=SearchText}" Text="{Binding Description}" TextWrapping="Wrap">
+          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,4" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:PropertyList}, Path=SearchText}" Text="{Binding Name}" FontWeight="Bold" />
+          <local:HighlightTextBlock DockPanel.Dock="Top" Margin="12,0,0,6" HighlightText="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:PropertyList}, Path=SearchText}" Text="{Binding Description}" TextWrapping="Wrap">
             <local:HighlightTextBlock.Visibility>
               <MultiBinding Converter="{x:Static local:Converters.DescriptionVisibility}" Mode="OneWay">
                 <Binding />
@@ -232,7 +232,7 @@
           </local:HighlightTextBlock>
           <ItemsControl ItemsSource="{Binding Values}" IsTabStop="False" Focusable="False">
             <ItemsControl.ItemTemplate>
-              <DataTemplate DataType="local:SettingValue">
+              <DataTemplate DataType="local:PropertyValue">
                 <ContentPresenter Content="{Binding}" ContentTemplate="{Binding Path=Template}" Margin="12,0,0,0" />
               </DataTemplate>
             </ItemsControl.ItemTemplate>

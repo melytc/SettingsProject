@@ -13,19 +13,19 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
         private bool _isRenaming;
         private string _name;
-        private readonly SettingContext _context;
+        private readonly PropertyContext _context;
 
         public LaunchProfileKind Kind { get; }
 
-        public IReadOnlyList<Setting> Settings => _context.Settings;
+        public IReadOnlyList<Property> Properties => _context.Properties;
 
-        public LaunchProfileViewModel(string name, LaunchProfileKind kind, SettingContext context)
+        public LaunchProfileViewModel(string name, LaunchProfileKind kind, PropertyContext context)
         {
             _name = name;
             _context = context;
             Kind = kind;
          
-            SettingsListViewSource.Initialize(Settings, useGrouping: false);
+            PropertyListViewSource.Initialize(Properties, useGrouping: false);
         }
 
         public string Name

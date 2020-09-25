@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    public partial class ProjectSettingsWindow
+    public partial class ProjectPropertiesWindow
     {
-        public ProjectSettingsWindow()
+        public ProjectPropertiesWindow()
         {
-            DataContext = new AsyncLoadViewModel(Designer.Resources.ProjectSettingsAsyncLoadMessage);
+            DataContext = new AsyncLoadViewModel(Designer.Resources.ProjectPropertiesAsyncLoadMessage);
 
             InitializeComponent();
 
@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                     // Simulate delayed load
                     await Task.Delay(1000);
 
-                    DataContext = new ProjectSettingsViewModel(SettingsLoader.CreateDefaultContext());
+                    DataContext = new ProjectPropertiesViewModel(PropertiesLoader.CreateDefaultContext());
                 }));
         }
     }

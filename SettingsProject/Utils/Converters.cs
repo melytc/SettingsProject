@@ -18,8 +18,8 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
         public static IValueConverter DoubleToBottomThickness { get; } = new LambdaConverter<double, Thickness>(d => new Thickness(0, 0, 0, d));
 
-        public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Setting, string>(setting => setting.Description != null ? setting.Name : "");
-        public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Setting, string>(setting => setting.Description ?? setting.Name);
+        public static IValueConverter LinkActionHeading { get; } = new LambdaConverter<Property, string>(property => property.Description != null ? property.Name : "");
+        public static IValueConverter LinkActionLinkText { get; } = new LambdaConverter<Property, string>(property => property.Description ?? property.Name);
 
         public static IMultiValueConverter DimensionNames { get; } = new LambdaMultiConverter<ImmutableDictionary<string, string>, ImmutableArray<string>, string>((map, dimensions) =>
         {
@@ -43,10 +43,10 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             return sb.ToString();
         });
 
-        public static IMultiValueConverter DescriptionVisibility { get; } = new LambdaMultiConverter<Setting, string, ImmutableArray<SettingValue>, Visibility>(
-            (setting, description, values) => !string.IsNullOrWhiteSpace(description) && setting.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);
+        public static IMultiValueConverter DescriptionVisibility { get; } = new LambdaMultiConverter<Property, string, ImmutableArray<PropertyValue>, Visibility>(
+            (property, description, values) => !string.IsNullOrWhiteSpace(description) && property.Editor?.ShouldShowDescription(values) != false ? Visibility.Visible : Visibility.Collapsed);
 
-        public static IMultiValueConverter SettingConfigurationCommandChecked { get; } = new LambdaMultiConverter<ISettingConfigurationCommand, ImmutableArray<SettingValue>, bool>(
+        public static IMultiValueConverter PropertyConfigurationCommandChecked { get; } = new LambdaMultiConverter<IPropertyConfigurationCommand, ImmutableArray<PropertyValue>, bool>(
             (command, values) =>
             {
                 if (command.DimensionName == null)
@@ -55,16 +55,16 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                 return values.Any(value => value.ConfigurationDimensions.Any(dim => dim.Key == command.DimensionName));
             });
 
-        public static IMultiValueConverter SettingConfigurationCommandEnabled { get; } = new LambdaMultiConverter<ISettingConfigurationCommand, Setting, bool>(
-            (command, setting) =>
+        public static IMultiValueConverter PropertyConfigurationCommandEnabled { get; } = new LambdaMultiConverter<IPropertyConfigurationCommand, Property, bool>(
+            (command, property) =>
             {
                 if (command.DimensionName == null)
                     return true;
 
-                return setting.Context.Dimensions[command.DimensionName].Length > 1;
+                return property.Context.Dimensions[command.DimensionName].Length > 1;
             });
 
-        public static IValueConverter SettingValueComboBoxViewModel { get; } = new LambdaConverter<SettingValue, SettingValueComboBoxViewModel>(
-            settingValue => new SettingValueComboBoxViewModel(settingValue));
+        public static IValueConverter PropertyValueComboBoxViewModel { get; } = new LambdaConverter<PropertyValue, PropertyValueComboBoxViewModel>(
+            propertyValue => new PropertyValueComboBoxViewModel(propertyValue));
     }
 }

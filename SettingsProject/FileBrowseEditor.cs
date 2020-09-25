@@ -6,7 +6,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 {
     public static class FileBrowseEditor
     {
-        public static ICommand BrowseCommand { get; } = new DelegateCommand<SettingValue>(
+        public static ICommand BrowseCommand { get; } = new DelegateCommand<PropertyValue>(
             value =>
             {
                 // TODO allow editor metadata to control things like file/directory path, file extensions, starting directory (project default), relative/absolute

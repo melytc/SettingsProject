@@ -5,7 +5,7 @@
                     xmlns:local="clr-namespace:Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer"
                     mc:Ignorable="d">
 
-  <Style TargetType="local:SettingsList">
+  <Style TargetType="local:PropertyList">
 
     <Setter Property="Focusable" Value="False" />
     <Setter Property="IsTabStop" Value="False" />
@@ -13,10 +13,10 @@
 
     <Setter Property="Template">
       <Setter.Value>
-        <ControlTemplate TargetType="local:SettingsList">
+        <ControlTemplate TargetType="local:PropertyList">
           <ItemsControl
               x:Name="PART_ItemsControl"
-              ItemsSource="{TemplateBinding Settings}"
+              ItemsSource="{TemplateBinding Properties}"
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.ScrollUnit="Pixel"
               VirtualizingStackPanel.VirtualizationMode="Recycling"
@@ -37,7 +37,7 @@
               </Style>
             </ItemsControl.Resources>
             <ItemsControl.ItemTemplateSelector>
-              <local:SettingDataTemplateSelector />
+              <local:PropertyDataTemplateSelector />
             </ItemsControl.ItemTemplateSelector>
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>

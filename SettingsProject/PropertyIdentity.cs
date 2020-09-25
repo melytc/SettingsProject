@@ -2,23 +2,23 @@
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal readonly struct SettingIdentity
+    internal readonly struct PropertyIdentity
     {
         public string Page { get; }
         public string Category { get; }
         public string Name { get; }
 
-        public SettingIdentity(string page, string category, string name)
+        public PropertyIdentity(string page, string category, string name)
         {
             Page = page;
             Category = category;
             Name = name;
         }
 
-        public bool Equals(SettingIdentity other) => Page == other.Page && Category == other.Category && Name == other.Name;
-        public override bool Equals(object? obj) => obj is SettingIdentity other && Equals(other);
-        public static bool operator ==(SettingIdentity left, SettingIdentity right) => left.Equals(right);
-        public static bool operator !=(SettingIdentity left, SettingIdentity right) => !left.Equals(right);
+        public bool Equals(PropertyIdentity other) => Page == other.Page && Category == other.Category && Name == other.Name;
+        public override bool Equals(object? obj) => obj is PropertyIdentity other && Equals(other);
+        public static bool operator ==(PropertyIdentity left, PropertyIdentity right) => left.Equals(right);
+        public static bool operator !=(PropertyIdentity left, PropertyIdentity right) => !left.Equals(right);
 
         public override int GetHashCode()
         {

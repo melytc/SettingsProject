@@ -22,13 +22,13 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             nameof(HighlightText),
             typeof(string),
             typeof(HighlightTextBlock),
-            new PropertyMetadata("", (d, e) => ((HighlightTextBlock)d).OnHighlightTextChanged(e.NewValue)));
+            new System.Windows.PropertyMetadata("", (d, e) => ((HighlightTextBlock)d).OnHighlightTextChanged(e.NewValue)));
 
         public static readonly DependencyProperty HighlightBrushProperty = DependencyProperty.Register(
             nameof(HighlightBrush),
             typeof(Brush),
             typeof(HighlightTextBlock),
-            new PropertyMetadata(Brushes.Yellow));
+            new System.Windows.PropertyMetadata(Brushes.Yellow));
 
         public string HighlightText
         {
