@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal sealed class NavigationViewModel : INotifyPropertyChanged
     {
@@ -35,18 +35,18 @@ namespace SettingsProject
             }
         }
 
-        public NavigationViewModel(IReadOnlyList<Setting> settings)
+        public NavigationViewModel(IReadOnlyList<Property> properties)
         {
             var categoriesByPage = new Dictionary<string, HashSet<string>>();
 
-            foreach (var setting in settings)
+            foreach (var property in properties)
             {
-                if (!categoriesByPage.TryGetValue(setting.Page, out var categories))
+                if (!categoriesByPage.TryGetValue(property.Page, out var categories))
                 {
-                    categories = categoriesByPage[setting.Page] = new HashSet<string>();
+                    categories = categoriesByPage[property.Page] = new HashSet<string>();
                 }
 
-                categories.Add(setting.Category);
+                categories.Add(property.Category);
             }
 
             Pages = categoriesByPage.Select(
@@ -81,7 +81,7 @@ namespace SettingsProject
                 else
                 {
                     _focusedPage = null;
-                    Debug.Fail("Setting page not found.");
+                    Debug.Fail("Property page not found.");
                 }
 
                 ClearCategory();

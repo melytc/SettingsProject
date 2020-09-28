@@ -4,42 +4,41 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using Microsoft;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     [TemplatePart(Name = "PART_ItemsControl", Type = typeof(ItemsControl))]
-    internal sealed class SettingsList : Control
+    internal sealed class PropertyList : Control
     {
-        public static readonly DependencyProperty SettingsProperty = DependencyProperty.Register(
-            nameof(Settings),
-            typeof(IReadOnlyList<Setting>),
-            typeof(SettingsList),
-            new PropertyMetadata(null, (d, e) => ((SettingsList)d).OnSettingsChanged()));
+        public static readonly DependencyProperty PropertiesProperty = DependencyProperty.Register(
+            nameof(Properties),
+            typeof(IReadOnlyList<Property>),
+            typeof(PropertyList),
+            new System.Windows.PropertyMetadata(null, (d, e) => ((PropertyList)d).OnPropertiesChanged()));
 
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
             nameof(SearchText),
             typeof(string),
-            typeof(SettingsList),
-            new PropertyMetadata(""));
+            typeof(PropertyList),
+            new System.Windows.PropertyMetadata(""));
         
         public static readonly DependencyProperty CurrentSectionProperty = DependencyProperty.Register(
             nameof(CurrentSection),
             typeof(NavigationSection),
-            typeof(SettingsList),
-            new PropertyMetadata(default(NavigationSection), (d, e) => ((SettingsList)d).OnCurrentSectionChanged()));
+            typeof(PropertyList),
+            new System.Windows.PropertyMetadata(default(NavigationSection), (d, e) => ((PropertyList)d).OnCurrentSectionChanged()));
 
-        static SettingsList()
+        static PropertyList()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(SettingsList), new FrameworkPropertyMetadata(typeof(SettingsList)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(PropertyList), new FrameworkPropertyMetadata(typeof(PropertyList)));
         }
 
-        public IReadOnlyList<Setting> Settings
+        public IReadOnlyList<Property> Properties
         {
-            get => (IReadOnlyList<Setting>)GetValue(SettingsProperty);
-            set => SetValue(SettingsProperty, value);
+            get => (IReadOnlyList<Property>)GetValue(PropertiesProperty);
+            set => SetValue(PropertiesProperty, value);
         }
 
         public string SearchText
@@ -66,7 +65,7 @@ namespace SettingsProject
 
             var section = CurrentSection;
 
-            var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
+            var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Properties);
 
             Assumes.NotNull(viewSource.Groups);
 
@@ -96,7 +95,7 @@ namespace SettingsProject
             pageGroupContainer?.BringIntoView();
         }
 
-        private void OnSettingsChanged()
+        private void OnPropertiesChanged()
         {
             _scrollViewer?.ScrollToTop();
         }
@@ -145,7 +144,7 @@ namespace SettingsProject
                     return;
                 }
 
-                var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Settings);
+                var viewSource = (ListCollectionView)CollectionViewSource.GetDefaultView(Properties);
 
                 Assumes.NotNull(viewSource.Groups);
 
@@ -186,11 +185,11 @@ namespace SettingsProject
                 null, 
                 result =>
                 {
-                    var setting = TryFindSetting(result.VisualHit);
+                    var property = TryFindProperty(result.VisualHit);
 
-                    if (setting != null)
+                    if (property != null)
                     {
-                        var section = new NavigationSection(setting.Page, setting.Category);
+                        var section = new NavigationSection(property.Page, property.Category);
 
                         if (section != CurrentSection)
                         {
@@ -203,7 +202,7 @@ namespace SettingsProject
                 }, 
                 new PointHitTestParameters(new Point(0, 0)));
 
-            static Setting? TryFindSetting(DependencyObject? obj)
+            static Property? TryFindProperty(DependencyObject? obj)
             {
                 while (true)
                 {
@@ -219,7 +218,7 @@ namespace SettingsProject
                             return s1;
                         }
 
-                        if (fe.DataContext is Setting s2)
+                        if (fe.DataContext is Property s2)
                         {
                             return s2;
                         }
@@ -228,7 +227,7 @@ namespace SettingsProject
                     obj = VisualTreeHelper.GetParent(obj);
                 }
 
-                static bool Try(object o, out Setting? s)
+                static bool Try(object o, out Property? s)
                 {
                     while (true)
                     {
@@ -236,7 +235,7 @@ namespace SettingsProject
                         {
                             var firstItem = g.Items.FirstOrDefault();
 
-                            if (firstItem is Setting s1)
+                            if (firstItem is Property s1)
                             {
                                 s = s1;
                                 return true;

@@ -5,9 +5,9 @@ using System.Windows;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal sealed class SettingValue : INotifyPropertyChanged
+    internal sealed class PropertyValue : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -15,7 +15,7 @@ namespace SettingsProject
         private string _unevaluatedValue;
         private ImmutableArray<SupportedValue> _supportedValues = ImmutableArray<SupportedValue>.Empty;
 
-        public SettingValue(string unevaluatedValue, object evaluatedValue, ImmutableDictionary<string, string>? configurationDimensions = null)
+        public PropertyValue(string unevaluatedValue, object evaluatedValue, ImmutableDictionary<string, string>? configurationDimensions = null)
         {
             ConfigurationDimensions = configurationDimensions ?? ImmutableDictionary<string, string>.Empty;
             _evaluatedValue = evaluatedValue;
@@ -28,7 +28,7 @@ namespace SettingsProject
 
         public DataTemplate? Template => ConfigurationDimensions.IsEmpty ? Parent?.Editor?.UnconfiguredDataTemplate : Parent?.Editor?.ConfiguredDataTemplate;
 
-        public Setting? Parent { get; internal set; }
+        public Property? Parent { get; internal set; }
 
         public ImmutableArray<SupportedValue> SupportedValues
         {
@@ -72,7 +72,7 @@ namespace SettingsProject
             }
         }
 
-        public SettingValue Clone() => new SettingValue(_unevaluatedValue, _evaluatedValue, ConfigurationDimensions);
+        public PropertyValue Clone() => new PropertyValue(_unevaluatedValue, _evaluatedValue, ConfigurationDimensions);
 
         public override string ToString()
         {

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A7B6D8C1-76FD-4F1E-A739-F9502E22CA24}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>SettingsProject</RootNamespace>
+    <RootNamespace>Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer</RootNamespace>
     <AssemblyName>SettingsProject</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -56,26 +56,27 @@
     </ApplicationDefinition>
     <Compile Include="AsyncLoadViewModel.cs" />
     <Compile Include="FileBrowseEditor.cs" />
-    <Compile Include="ISettingEditor.cs" />
+    <Compile Include="IPropertyEditor.cs" />
     <Compile Include="IsExternalInit.cs" />
     <Compile Include="LaunchProfileKind.cs" />
     <Compile Include="LaunchProfilesWindowViewModel.cs" />
     <Compile Include="LaunchProfileViewModel.cs" />
     <Compile Include="LinkActionCommandHandler.cs" />
     <Compile Include="Controls\RenameLabel.cs" />
-    <Compile Include="ProjectSettingsViewModel.cs" />
+    <Compile Include="ProjectPropertiesViewModel.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SettingContext.cs" />
-    <Compile Include="SettingEditorFactory.cs" />
-    <Compile Include="SettingMetadata.cs" />
-    <Compile Include="SettingsList.cs" />
-    <Compile Include="SettingsListViewSource.cs" />
+    <Compile Include="PropertyContext.cs" />
+    <Compile Include="PropertyEditorFactory.cs" />
+    <Compile Include="EditorSpecification.cs" />
+    <Compile Include="PropertyList.cs" />
+    <Compile Include="PropertyListViewSource.cs" />
     <Compile Include="StringComparers.cs" />
     <Compile Include="SupportedValue.cs" />
+    <Compile Include="PropertyMetadata.cs" />
     <Compile Include="Utils\Annotations.cs" />
     <Compile Include="Utils\Converters.BoolToVisibilityConverter.cs" />
     <Compile Include="Utils\Converters.cs" />
@@ -94,20 +95,20 @@
     <Compile Include="Controls\SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Setting.cs" />
-    <Compile Include="SettingCondition.cs" />
-    <Compile Include="SettingDataTemplateSelector.cs" />
-    <Compile Include="SettingIdentity.cs" />
-    <Compile Include="SettingsLoader.cs" />
-    <Compile Include="SettingValue.cs" />
-    <Compile Include="SettingValueComboBoxViewModel.cs" />
+    <Compile Include="Property.cs" />
+    <Compile Include="PropertyCondition.cs" />
+    <Compile Include="PropertyDataTemplateSelector.cs" />
+    <Compile Include="PropertyIdentity.cs" />
+    <Compile Include="PropertiesLoader.cs" />
+    <Compile Include="PropertyValue.cs" />
+    <Compile Include="PropertyValueComboBoxViewModel.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="Utils\VisualTreeUtil.cs" />
     <Page Include="LaunchProfilesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ProjectSettingsWindow.xaml">
+    <Page Include="ProjectPropertiesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -115,8 +116,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProjectSettingsWindow.xaml.cs">
-      <DependentUpon>ProjectSettingsWindow.xaml</DependentUpon>
+    <Compile Include="ProjectPropertiesWindow.xaml.cs">
+      <DependentUpon>ProjectPropertiesWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NavigationTree.xaml">
@@ -127,11 +128,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Generic.xaml">
+    <Page Include="Resources\PropertyTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Icons.xaml">
+    <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -139,7 +144,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\SettingsListStyle.xaml">
+    <Page Include="Themes\PropertyListStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -148,28 +153,11 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

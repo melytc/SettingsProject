@@ -1,11 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     [TemplatePart(Name = "PART_TextBox", Type = typeof(TextBox))]
     [TemplatePart(Name = "PART_TextBlock", Type = typeof(TextBlock))]
@@ -15,13 +14,13 @@ namespace SettingsProject
             nameof(Text),
             typeof(string),
             typeof(RenameLabel),
-            new PropertyMetadata("", (d, e) => { }));
+            new System.Windows.PropertyMetadata("", (d, e) => { }));
 
         public static readonly DependencyProperty IsRenamingProperty = DependencyProperty.Register(
             nameof(IsRenaming),
             typeof(bool),
             typeof(RenameLabel),
-            new PropertyMetadata(false, (d, e) => ((RenameLabel)d).OnIsRenamingChanged((bool)e.NewValue)));
+            new System.Windows.PropertyMetadata(false, (d, e) => ((RenameLabel)d).OnIsRenamingChanged((bool)e.NewValue)));
 
         private TextBox? _textBox;
         private TextBlock? _textBlock;

@@ -144,16 +144,16 @@
   <data name="LaunchProfilesWindowTitleText" xml:space="preserve">
     <value>Launch Profiles</value>
   </data>
-  <data name="ProjectSettingsAsyncLoadMessage" xml:space="preserve">
-    <value>Loading settings...</value>
+  <data name="ProjectPropertiesAsyncLoadMessage" xml:space="preserve">
+    <value>Loading properties...</value>
   </data>
   <data name="SearchTextBoxWatermarkText" xml:space="preserve">
-    <value>Search settings</value>
+    <value>Search properties</value>
   </data>
-  <data name="SettingUseSameValueAcrossAllConfigurations" xml:space="preserve">
+  <data name="PropertyUseSameValueAcrossAllConfigurations" xml:space="preserve">
     <value>Use the same value across all configurations</value>
   </data>
-  <data name="SettingVaryByDimension_1" xml:space="preserve">
+  <data name="PropertyVaryByDimension_1" xml:space="preserve">
     <value>Vary value by {0}</value>
   </data>
 </root>

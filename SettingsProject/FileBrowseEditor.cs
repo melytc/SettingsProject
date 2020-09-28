@@ -2,11 +2,11 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     public static class FileBrowseEditor
     {
-        public static ICommand BrowseCommand { get; } = new DelegateCommand<SettingValue>(
+        public static ICommand BrowseCommand { get; } = new DelegateCommand<PropertyValue>(
             value =>
             {
                 // TODO allow editor metadata to control things like file/directory path, file extensions, starting directory (project default), relative/absolute

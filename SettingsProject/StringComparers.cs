@@ -2,13 +2,13 @@
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal static class StringComparers
     {
         public static StringComparer ConfigurationDimensionNames { get; } = StringComparer.OrdinalIgnoreCase;
         public static StringComparer ConfigurationDimensionValues { get; } = StringComparer.OrdinalIgnoreCase;
-        public static StringComparer SettingValues { get; } = StringComparer.OrdinalIgnoreCase;
+        public static StringComparer PropertyValues { get; } = StringComparer.OrdinalIgnoreCase;
     }
 
     internal static class StringComparisons

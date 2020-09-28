@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 #nullable disable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal static partial class Converters
     {

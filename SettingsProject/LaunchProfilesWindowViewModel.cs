@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     internal sealed class LaunchProfilesWindowViewModel : INotifyPropertyChanged
     {
@@ -64,9 +64,9 @@ namespace SettingsProject
             NewCommand = new DelegateCommand<LaunchProfileKind>(kind =>
             {
                 //TODO: find appropriate default value for each property somehow
-                var settings = kind.Metadata.Select(md => new Setting(md, new SettingValue("", ""))).ToImmutableArray();
+                var properties = kind.Metadata.Select(md => new Property(md, new PropertyValue("", ""))).ToImmutableArray();
 
-                var context = new SettingContext(Array.Empty<KeyValuePair<string, ImmutableArray<string>>>(), kind.Conditions, settings);
+                var context = new PropertyContext(Array.Empty<KeyValuePair<string, ImmutableArray<string>>>(), kind.Conditions, properties);
 
                 var newProfile = new LaunchProfileViewModel(Resources.LaunchProfileNewProfileName, kind, context) { IsRenaming = true };
 

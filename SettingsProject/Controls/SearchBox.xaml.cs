@@ -2,7 +2,7 @@
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     public partial class SearchBox
     {
@@ -10,13 +10,13 @@ namespace SettingsProject
             "WatermarkText",
             typeof(string),
             typeof(SearchBox),
-            new PropertyMetadata(""));
+            new System.Windows.PropertyMetadata(""));
 
         public static readonly DependencyProperty SearchTextProperty = DependencyProperty.Register(
             "SearchText",
             typeof(string),
             typeof(SearchBox),
-            new PropertyMetadata(""));
+            new System.Windows.PropertyMetadata(""));
 
         public SearchBox()
         {

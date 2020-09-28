@@ -5,67 +5,66 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Microsoft;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal static class SettingsLoader
+    internal static class PropertiesLoader
     {
         private static readonly ImmutableDictionary<string, string> DebugConfiguration = new Dictionary<string, string> {{"Configuration", "Debug"}}.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
         private static readonly ImmutableDictionary<string, string> ReleaseConfiguration = new Dictionary<string, string> {{"Configuration", "Release"}}.ToImmutableDictionary(StringComparers.ConfigurationDimensionNames);
 
         // TODO control 'Prefer 32-bit' visibility based on target framework(s)
 
-        private static readonly ImmutableArray<SettingCondition> DefaultConditions = ImmutableArray.Create(
+        private static readonly ImmutableArray<PropertyCondition> DefaultConditions = ImmutableArray.Create(
             // Multi-targeting
-            new SettingCondition(
-                source: new SettingIdentity("Application", "General", "Multi-targeting"),
+            new PropertyCondition(
+                source: new PropertyIdentity("Application", "General", "Multi-targeting"),
                 sourceValue: true,
-                target: new SettingIdentity("Application", "General", "Target frameworks")),
-            new SettingCondition(
-                source: new SettingIdentity("Application", "General", "Multi-targeting"),
+                target: new PropertyIdentity("Application", "General", "Target frameworks")),
+            new PropertyCondition(
+                source: new PropertyIdentity("Application", "General", "Multi-targeting"),
                 sourceValue: false,
-                target: new SettingIdentity("Application", "General", "Target framework")),
+                target: new PropertyIdentity("Application", "General", "Target framework")),
             // Resources
-            new SettingCondition(
-                source: new SettingIdentity("Application", "Resources", "Resources"),
+            new PropertyCondition(
+                source: new PropertyIdentity("Application", "Resources", "Resources"),
                 sourceValue: "Icon and manifest",
-                target: new SettingIdentity("Application", "Resources", "Icon path")),
-            new SettingCondition(
-                source: new SettingIdentity("Application", "Resources", "Resources"),
+                target: new PropertyIdentity("Application", "Resources", "Icon path")),
+            new PropertyCondition(
+                source: new PropertyIdentity("Application", "Resources", "Resources"),
                 sourceValue: "Icon and manifest",
-                target: new SettingIdentity("Application", "Resources", "Manifest path")),
-            new SettingCondition(
-                source: new SettingIdentity("Application", "Resources", "Resources"),
+                target: new PropertyIdentity("Application", "Resources", "Manifest path")),
+            new PropertyCondition(
+                source: new PropertyIdentity("Application", "Resources", "Resources"),
                 sourceValue: "Resource file",
-                target: new SettingIdentity("Application", "Resources", "Resource file path")),
+                target: new PropertyIdentity("Application", "Resources", "Resource file path")),
 
-            new SettingCondition(
-                source: new SettingIdentity("Packaging", "License", "License specification"),
+            new PropertyCondition(
+                source: new PropertyIdentity("Packaging", "License", "License specification"),
                 sourceValue: "Expression",
-                target: new SettingIdentity("Packaging", "License", "License expression")),
-            new SettingCondition(
-                source: new SettingIdentity("Packaging", "License", "License specification"),
+                target: new PropertyIdentity("Packaging", "License", "License expression")),
+            new PropertyCondition(
+                source: new PropertyIdentity("Packaging", "License", "License specification"),
                 sourceValue: "Expression",
-                target: new SettingIdentity("Packaging", "License", "Read about SPDX license expressions")),
-            new SettingCondition(
-                source: new SettingIdentity("Packaging", "License", "License specification"),
+                target: new PropertyIdentity("Packaging", "License", "Read about SPDX license expressions")),
+            new PropertyCondition(
+                source: new PropertyIdentity("Packaging", "License", "License specification"),
                 sourceValue: "File",
-                target: new SettingIdentity("Packaging", "License", "License file path")),
+                target: new PropertyIdentity("Packaging", "License", "License file path")),
 
-            new SettingCondition(
-                source: new SettingIdentity("Signing", "General", "Signing"),
+            new PropertyCondition(
+                source: new PropertyIdentity("Signing", "General", "Signing"),
                 sourceValue: true,
-                target: new SettingIdentity("Signing", "General", "Key file path")),
-            new SettingCondition(
-                source: new SettingIdentity("Signing", "General", "Signing"),
+                target: new PropertyIdentity("Signing", "General", "Key file path")),
+            new PropertyCondition(
+                source: new PropertyIdentity("Signing", "General", "Signing"),
                 sourceValue: true,
-                target: new SettingIdentity("Signing", "General", "Delay signing"))
+                target: new PropertyIdentity("Signing", "General", "Delay signing"))
         );
 
-        public static SettingContext CreateDefaultContext() => new SettingContext(
+        public static PropertyContext CreateDefaultContext() => new PropertyContext(
             new KeyValuePair<string, ImmutableArray<string>>[]
             {
                 new ("Configuration", ImmutableArray.Create("Debug", "Release")),
@@ -83,53 +82,53 @@ namespace SettingsProject
                 ///// GENERAL
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Assembly name",
                         description: "Specifies the name of the generated assembly, both on the file system and in metadata.",
                         page: "Application",
                         category: "General",
                         priority: 10,
                         editorType: "String"),
-                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(ProjectName)", "ConsoleApp1")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Default namespace",
                         description: "Specifies the root namespace for the project, which controls code generation and analyzers.",
                         page: "Application",
                         category: "General",
                         priority: 200,
                         editorType: "String"),
-                    new SettingValue("$(DefaultNamespace)", "ConsoleApp1")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(DefaultNamespace)", "ConsoleApp1")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Multi-targeting",
                         description: "Build this project for multiple target frameworks.",
                         page: "Application",
                         category: "General",
                         priority: 300,
                         editorType: "Bool"),
-                    new SettingValue("false", false)),
-                // TODO come up with a better editing experience, perhaps via a FlagsSetting
+                    new PropertyValue("false", false)),
+                // TODO come up with a better editing experience, perhaps via a FlagsProperty
                 // TODO allow completion of values: new[] { ".net5", ".netcoreapp3.1", ".netcoreapp3.0", ".netcoreapp2.2", ".netcoreapp2.1", ".netcoreapp2.0", ".netcoreapp1.1", ".netcoreapp1.0" }
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Target frameworks",
                         description: "Specifies the semicolon-delimited list of frameworks that this project will target.",
                         page: "Application",
                         category: "General",
                         priority: 310,
                         editorType: "String"),
-                    new SettingValue("net5", "net5")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("net5", "net5")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Target framework",
                         description: "Specifies the framework that this project will target.",
                         page: "Application",
                         category: "General",
                         priority: 320,
                         editorType: "Enum"),
-                    new SettingValue("net5.0", "net5.0")
+                    new PropertyValue("net5.0", "net5.0")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue(".NET 5", "net5.0"),
@@ -141,8 +140,8 @@ namespace SettingsProject
                             new SupportedValue(".NET Core 1.1", "netcoreapp1.1"),
                             new SupportedValue(".NET Core 1.0", "netcoreapp1.0"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Install other frameworks",
                         description: null,
                         page: "Application",
@@ -156,24 +155,24 @@ namespace SettingsProject
                                     {"Action", "URL"},
                                     {"URL", "http://go.microsoft.com/fwlink/?LinkID=287120"}
                                 }))),
-                    values: ImmutableArray<SettingValue>.Empty),
-                new Setting(
-                    new SettingMetadata(
+                    values: ImmutableArray<PropertyValue>.Empty),
+                new Property(
+                    new PropertyMetadata(
                         name: "Output type",
                         description: "Specifies whether the output is executable, and whether it runs in a console or as a desktop application.",
                         page: "Application",
                         category: "General",
                         priority: 500,
                         editorType: "Enum"),
-                    new SettingValue("Exe", "Exe")
+                    new PropertyValue("Exe", "Exe")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Console Application", "Exe"),
                             new SupportedValue("Windows Application", "WinExe"),
                             new SupportedValue("Class Library", ""))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Binding redirects",
                         description: "Whether to auto-generate binding redirects.",
                         page: "Application",
@@ -183,9 +182,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("true", true)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("true", true)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Startup object",
                         description: "Specifies the entry point for the executable.",
                         page: "Application",
@@ -195,58 +194,58 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("(Not set)", "(Not set)")
+                    value: new PropertyValue("(Not set)", "(Not set)")
                     {
                         SupportedValues = ImmutableArray.Create(new SupportedValue("(Not set)")),
                     }),
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Resources",
                         description: "Specifies how application resources will be managed.",
                         page: "Application",
                         category: "Resources",
                         priority: 800,
                         editorType: "Enum"),
-                    value: new SettingValue("Icon and manifest", "Icon and manifest")
+                    value: new PropertyValue("Icon and manifest", "Icon and manifest")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Icon and manifest"),
                             new SupportedValue("Resource file")),
                     }),
-                // TODO make this IconBrowseSetting
-                new Setting(
-                    new SettingMetadata(
+                // TODO make this IconBrowseProperty
+                new Property(
+                    new PropertyMetadata(
                         name: "Icon path",
                         description: "Path to the icon to embed into the output assembly.",
                         page: "Application",
                         category: "Resources",
                         priority: 810,
                         editorType: "String"),
-                    new SettingValue("(Default Icon)", "(Default Icon)")),
-                // TODO make this FileBrowseSetting
+                    new PropertyValue("(Default Icon)", "(Default Icon)")),
+                // TODO make this FileBrowseProperty
                 // TODO this can appear disabled, find out why
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Manifest path",
                         description: "A manifest determines specific settings for an application. To embed a custom manifest, first add it to your project and then select it from the list.",
                         page: "Application",
                         category: "Resources",
                         priority: 820,
                         editorType: "Enum"),
-                    value: new SettingValue("", "")
+                    value: new PropertyValue("", "")
                     {
                         SupportedValues = ImmutableArray.Create(new SupportedValue(""))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Resource file path",
                         description: "Specifies a Win32 res file to compile into this project.",
                         page: "Application",
                         category: "Resources",
                         priority: 830,
                         editorType: "FileBrowse"),
-                    value: new SettingValue("", "")),
+                    value: new PropertyValue("", "")),
 
                 //////
                 ///// ASSEMBLY INFORMATION
@@ -254,7 +253,7 @@ namespace SettingsProject
 
                 // TODO this section is disabled for .NET Core projects -- if we have time, determine whether there's anything in here we couldn't add later
 
-//                new Setting(
+//                new Property(
 //                    context: DefaultContext,
 //                    name: "Assembly name",
 //                    initialValue: "ConsoleApp1",
@@ -273,8 +272,8 @@ namespace SettingsProject
                 ///// GENERAL
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Conditional compilation symbols",
                         description: "A semicolon-delimited list of symbols to define for the compilation.",
                         page: "Build",
@@ -284,9 +283,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("TRACE", "TRACE")),
-                new Setting(
-                    new SettingMetadata(
+                    value: new PropertyValue("TRACE", "TRACE")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Define DEBUG symbol",
                         description: "Specifies whether to define the DEBUG compilation symbol.",
                         page: "Build",
@@ -297,10 +296,10 @@ namespace SettingsProject
                         SupportsPerConfigurationValues = true
                     },
                     values: ImmutableArray.Create(
-                        new SettingValue("true", evaluatedValue: true, configurationDimensions: DebugConfiguration),
-                        new SettingValue("false", evaluatedValue: false, configurationDimensions: ReleaseConfiguration))),
-                new Setting(
-                    new SettingMetadata(
+                        new PropertyValue("true", evaluatedValue: true, configurationDimensions: DebugConfiguration),
+                        new PropertyValue("false", evaluatedValue: false, configurationDimensions: ReleaseConfiguration))),
+                new Property(
+                    new PropertyMetadata(
                         name: "Define TRACE symbol",
                         description: "Specifies whether to define the TRACE compilation symbol.",
                         page: "Build",
@@ -310,9 +309,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Platform target",
                         description: "The platform to target in this project configuration.",
                         page: "Build",
@@ -322,21 +321,21 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("Any CPU", "Any CPU")
+                    value: new PropertyValue("Any CPU", "Any CPU")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Any CPU"),
                             new SupportedValue("x86"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Nullable reference types",
                         description: "Controls use of nullable annotations and warnings.",
                         page: "Build",
                         category: "General",
                         priority: 500,
                         editorType: "Enum"),
-                    value: new SettingValue("enable", "Enable")
+                    value: new PropertyValue("enable", "Enable")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Disable"),
@@ -345,8 +344,8 @@ namespace SettingsProject
                             new SupportedValue("Annotations"))
                     }),
                 // TODO this is disabled in .NET Core -- why?
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Prefer 32-bit",
                         description: "Specifies whether to prefer 32-bit when available.",
                         page: "Build",
@@ -356,9 +355,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Unsafe code",
                         description: "Allow unsafe code in this project.",
                         page: "Build",
@@ -368,9 +367,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Optimize code",
                         description: "Produce optimized output. Optimized binaries may be harder to debug.",
                         page: "Build",
@@ -381,15 +380,15 @@ namespace SettingsProject
                         SupportsPerConfigurationValues = true
                     },
                     values: ImmutableArray.Create(
-                        new SettingValue("false", evaluatedValue: false, configurationDimensions: DebugConfiguration),
-                        new SettingValue("true", evaluatedValue: true, configurationDimensions: ReleaseConfiguration))),
+                        new PropertyValue("false", evaluatedValue: false, configurationDimensions: DebugConfiguration),
+                        new PropertyValue("true", evaluatedValue: true, configurationDimensions: ReleaseConfiguration))),
 
                 //////
                 ///// ERRORS AND WARNINGS
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Warning level",
                         description: "Sets the warning level, where higher levels produce more warnings.",
                         //              readMore: "https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/warn-compiler-option",
@@ -400,7 +399,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("4", "4")
+                    value: new PropertyValue("4", "4")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("0"),
@@ -409,8 +408,8 @@ namespace SettingsProject
                             new SupportedValue("3"),
                             new SupportedValue("4"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Suppress specific warnings",
                         description: "A semicolon-delimited list of warning codes to suppress.",
                         page: "Build",
@@ -420,9 +419,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("1701;1702", "1701;1702")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("1701;1702", "1701;1702")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Warnings as errors",
                         description: "Controls which warnings are treated as errors.",
                         page: "Build",
@@ -432,15 +431,15 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("Specific warnings", "Specific warnings")
+                    value: new PropertyValue("Specific warnings", "Specific warnings")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
                             new SupportedValue("All"),
                             new SupportedValue("Specific warnings"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Treat specific warnings as errors",
                         description: "A semicolon-delimited list of warning codes to treat as errors.",
                         page: "Build",
@@ -450,14 +449,14 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("NU1605", "NU1605")),
+                    new PropertyValue("NU1605", "NU1605")),
 
                 //////
                 ///// OUTPUT
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Output path",
                         description: "Relative destination path for build output.",
                         page: "Build",
@@ -468,10 +467,10 @@ namespace SettingsProject
                         SupportsPerConfigurationValues = true
                     },
                     ImmutableArray.Create(
-                        new SettingValue("bin\\$(Configuration)", "bin\\Debug", DebugConfiguration),
-                        new SettingValue("bin\\$(Configuration)", "bin\\Release", ReleaseConfiguration))),
-                new Setting(
-                    new SettingMetadata(
+                        new PropertyValue("bin\\$(Configuration)", "bin\\Debug", DebugConfiguration),
+                        new PropertyValue("bin\\$(Configuration)", "bin\\Release", ReleaseConfiguration))),
+                new Property(
+                    new PropertyMetadata(
                         name: "XML documentation path",
                         description: "Relative path to the output XML documentation. Clear to disable generation.",
                         page: "Build",
@@ -482,27 +481,27 @@ namespace SettingsProject
                         SupportsPerConfigurationValues = true
                     },
                     ImmutableArray.Create(
-                        new SettingValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Debug\\ConsoleApp1.xml", DebugConfiguration),
-                        new SettingValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Release\\ConsoleApp1.xml", ReleaseConfiguration))),
+                        new PropertyValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Debug\\ConsoleApp1.xml", DebugConfiguration),
+                        new PropertyValue("$(OutputPath)\\$(ProjectName).xml", "bin\\Release\\ConsoleApp1.xml", ReleaseConfiguration))),
                 // TODO this is disabled in .NET Core -- why?
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Register for COM interop",
                         description: "Add metadata from the output assembly to the registry, allowing COM clients to create .NET classes.",
                         page: "Build",
                         category: "Output",
                         priority: 300,
                         editorType: "Bool"),
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Generate serialization assembly",
                         description: null,
                         page: "Build",
                         category: "Output",
                         priority: 400,
                         editorType: "Enum"),
-                    value: new SettingValue("Auto", "Auto")
+                    value: new PropertyValue("Auto", "Auto")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Auto"),
@@ -514,8 +513,8 @@ namespace SettingsProject
                 ///// ADVANCED
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Language version",
                         description: "Why can't I select the C# language version?",
                         page: "Build",
@@ -529,10 +528,10 @@ namespace SettingsProject
                                     {"Action", "URL"},
                                     {"URL", "https://aka.ms/csharp-versions"}
                                 }))),
-                    values: ImmutableArray<SettingValue>.Empty),
+                    values: ImmutableArray<PropertyValue>.Empty),
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Internal compiler error reporting",
                         description: null,
                         page: "Build",
@@ -542,7 +541,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("Prompt", "Prompt")
+                    value: new PropertyValue("Prompt", "Prompt")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
@@ -550,8 +549,8 @@ namespace SettingsProject
                             new SupportedValue("Send"),
                             new SupportedValue("Queue"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Overflow checking",
                         description: "Enable arithmetic overflow checking at runtime.",
                         page: "Build",
@@ -561,9 +560,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Debugging information",
                         description: null,
                         page: "Build",
@@ -573,7 +572,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("Portable", "Portable")
+                    value: new PropertyValue("Portable", "Portable")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
@@ -582,8 +581,8 @@ namespace SettingsProject
                             new SupportedValue("Portable"),
                             new SupportedValue("Embedded"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "File alignment",
                         description: null,
                         page: "Build",
@@ -593,7 +592,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("512", "512")
+                    value: new PropertyValue("512", "512")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("512"),
@@ -602,8 +601,8 @@ namespace SettingsProject
                             new SupportedValue("4096"),
                             new SupportedValue("8192"))
                     }),
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Library base address",
                         description: null,
                         page: "Build",
@@ -613,7 +612,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("0x11000000", "0x11000000")),
+                    new PropertyValue("0x11000000", "0x11000000")),
 
                 /////////////
                 //////////// BUILD EVENTS
@@ -624,26 +623,26 @@ namespace SettingsProject
                 ////
 
                 // TODO both these build events can be edited in a pop-out editor with macro support
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Pre-build event",
                         description: "Commands to execute before a build occurs.",
                         page: "Build Events",
                         category: "General",
                         priority: 70,
                         editorType: "MultiLineString"),
-                    value: new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    value: new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Post-build event",
                         description: "Commands to execute after a build completes.",
                         page: "Build Events",
                         category: "General",
                         priority: 200,
                         editorType: "MultiLineString"),
-                    value: new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    value: new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Run the post-build event",
                         description: "Controls when any post-build event is executed.",
                         page: "Build Events",
@@ -653,7 +652,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    value: new SettingValue("On successful build", "On successful build")
+                    value: new PropertyValue("On successful build", "On successful build")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("Always"),
@@ -669,8 +668,8 @@ namespace SettingsProject
                 ///// GENERAL
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Generate NuGet package on build",
                         description: "Specifies whether a NuGet package should be produced in the output directory when the project is build.",
                         page: "Packaging",
@@ -680,171 +679,171 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Package ID",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 300,
                         editorType: "String"),
-                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
-                // TODO VersionSetting (note -- has different validation rules to assembly/file versions)
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(ProjectName)", "ConsoleApp1")),
+                // TODO VersionProperty (note -- has different validation rules to assembly/file versions)
+                new Property(
+                    new PropertyMetadata(
                         name: "Package version",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 400,
                         editorType: "String"),
-                    new SettingValue("$(Version)", "1.0.0")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(Version)", "1.0.0")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Authors",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 500,
                         editorType: "String"),
-                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(ProjectName)", "ConsoleApp1")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Company",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 600,
                         editorType: "String"),
-                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(ProjectName)", "ConsoleApp1")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Product",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 700,
                         editorType: "String"),
-                    new SettingValue("$(ProjectName)", "ConsoleApp1")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("$(ProjectName)", "ConsoleApp1")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Description",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 800,
                         editorType: "MultiLineString"),
-                    new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Copyright",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 900,
                         editorType: "String"),
-                    new SettingValue("", "")),
-                // TODO make this IconBrowseSetting
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                // TODO make this IconBrowseProperty
+                new Property(
+                    new PropertyMetadata(
                         name: "Package icon file",
                         description: "Path to the icon to include in and use for the package.",
                         page: "Packaging",
                         category: "General",
                         priority: 1100,
                         editorType: "String"),
-                    new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Repository URL",
                         description: null, // TODO describe what this URL means
                         page: "Packaging",
                         category: "General",
                         priority: 1200,
                         editorType: "String"),
-                    new SettingValue("", "")),
+                    new PropertyValue("", "")),
                 // TODO provide feedback about valid URLs here
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Repository type",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 1300,
                         editorType: "String"),
-                    new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Tags",
                         description: null, // TODO describe how this is delimited
                         page: "Packaging",
                         category: "General",
                         priority: 1400,
                         editorType: "String"),
-                    new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Release notes",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 1500,
                         editorType: "MultiLineString"),
-                    new SettingValue("", "")),
+                    new PropertyValue("", "")),
                 // TODO this is a combo box with many languages listed
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Assembly neutral language",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 1600,
                         editorType: "String"),
-                    new SettingValue("(None)", "(None)")),
-                // TODO VersionSetting
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("(None)", "(None)")),
+                // TODO VersionProperty
+                new Property(
+                    new PropertyMetadata(
                         name: "Assembly version",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 1700,
                         editorType: "String"),
-                    new SettingValue("1.0.0.0", "1.0.0.0")),
-                // TODO VersionSetting
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("1.0.0.0", "1.0.0.0")),
+                // TODO VersionProperty
+                new Property(
+                    new PropertyMetadata(
                         name: "Assembly file version",
                         description: null,
                         page: "Packaging",
                         category: "General",
                         priority: 1800,
                         editorType: "String"),
-                    new SettingValue("1.0.0.0", "1.0.0.0")),
+                    new PropertyValue("1.0.0.0", "1.0.0.0")),
 
                 //////
                 ///// LICENSE
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Require license acceptance",
                         description: "Controls whether consumers of the generated package are presented with a license acceptance prompt when adding a reference to this package.",
                         page: "Packaging",
                         category: "License",
                         priority: 85,
                         editorType: "Bool"),
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "License specification",
                         description: "Controls how the package's license is specified.",
                         page: "Packaging",
                         category: "License",
                         priority: 200,
                         editorType: "Enum"),
-                    value: new SettingValue("None", "None")
+                    value: new PropertyValue("None", "None")
                     {
                         SupportedValues = ImmutableArray.Create(
                             new SupportedValue("None"),
@@ -852,17 +851,17 @@ namespace SettingsProject
                             new SupportedValue("File"))
                     }),
                 // TODO provide some examples for auto-complete: Apache-2.0;MIT;...
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "License expression",
                         description: "The SPDX expression that specifies the package's license.",
                         page: "Packaging",
                         category: "License",
                         priority: 300,
                         editorType: "String"),
-                    new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Read about SPDX license expressions",
                         description: null,
                         page: "Packaging",
@@ -876,16 +875,16 @@ namespace SettingsProject
                                     {"Action", "URL"},
                                     {"URL", "https://spdx.org/licenses/"}
                                 }))),
-                    values: ImmutableArray<SettingValue>.Empty),
-                new Setting(
-                    new SettingMetadata(
+                    values: ImmutableArray<PropertyValue>.Empty),
+                new Property(
+                    new PropertyMetadata(
                         name: "License file path",
                         description: "The path to the license file to include in the package. May be relative to the project directory.",
                         page: "Packaging",
                         category: "License",
                         priority: 500,
                         editorType: "FileBrowse"),
-                    new SettingValue("", "")),
+                    new PropertyValue("", "")),
 
                 /////////////
                 //////////// DEBUG
@@ -896,8 +895,8 @@ namespace SettingsProject
                 ////
 
                 // TODO make this link action show the launch profiles UI
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Manage launch profiles",
                         description: null,
                         page: "Debug",
@@ -911,7 +910,7 @@ namespace SettingsProject
                                     {"Action", "Command"},
                                     {"Command", "ManageLaunchProfiles"}
                                 }))),
-                    values: ImmutableArray<SettingValue>.Empty),
+                    values: ImmutableArray<PropertyValue>.Empty),
 
                 /////////////
                 //////////// SIGNING
@@ -921,8 +920,8 @@ namespace SettingsProject
                 ///// GENERAL
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "Signing",
                         description: "Sign the project's output assembly.",
                         page: "Signing",
@@ -932,10 +931,10 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                // TODO StrongNameKeySetting -- with new/add and change password actions
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                // TODO StrongNameKeyProperty -- with new/add and change password actions
+                new Property(
+                    new PropertyMetadata(
                         name: "Key file path",
                         description: "Choose a string name key file",
                         page: "Signing",
@@ -945,9 +944,9 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("", "")),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("", "")),
+                new Property(
+                    new PropertyMetadata(
                         name: "Delay signing",
                         description: "Delay sign the assembly. When enabled the project will not run or be debuggable.",
                         page: "Signing",
@@ -957,7 +956,7 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
+                    new PropertyValue("false", false)),
 
                 /////////////
                 //////////// CODE ANALYSIS
@@ -967,8 +966,8 @@ namespace SettingsProject
                 ///// ANALYZERS
                 ////
 
-                new Setting(
-                    new SettingMetadata(
+                new Property(
+                    new PropertyMetadata(
                         name: "What are the benefits of source code analyzers?",
                         description: null,
                         page: "Code Analysis",
@@ -982,9 +981,9 @@ namespace SettingsProject
                                     {"Action", "URL"},
                                     {"URL", "https://docs.microsoft.com/visualstudio/code-quality/roslyn-analyzers-overview"}
                                 }))),
-                    values: ImmutableArray<SettingValue>.Empty),
-                new Setting(
-                    new SettingMetadata(
+                    values: ImmutableArray<PropertyValue>.Empty),
+                new Property(
+                    new PropertyMetadata(
                         name: "Run on build",
                         description: "Run analyzers during build.",
                         page: "Code Analysis",
@@ -994,21 +993,21 @@ namespace SettingsProject
                     {
                         SupportsPerConfigurationValues = true
                     },
-                    new SettingValue("false", false)),
-                new Setting(
-                    new SettingMetadata(
+                    new PropertyValue("false", false)),
+                new Property(
+                    new PropertyMetadata(
                         name: "Run live analysis",
                         description: "Run analyzers live in the IDE.",
                         page: "Code Analysis",
                         category: "Analyzers",
                         priority: 300,
                         editorType: "Bool"),
-                    new SettingValue("false", false))
+                    new PropertyValue("false", false))
             ));
 
-        #region SettingMetadata
+        #region PropertyMetadata
 
-        private static readonly SettingMetadata ExecutablePath = new SettingMetadata(
+        private static readonly PropertyMetadata ExecutablePath = new PropertyMetadata(
             name: "Executable path",
             description: "Path to the executable to debug.",
             page: "Debug",
@@ -1016,7 +1015,7 @@ namespace SettingsProject
             priority: 100,
             editorType: "FileBrowse");
 
-        private static readonly SettingMetadata ApplicationArguments = new SettingMetadata(
+        private static readonly PropertyMetadata ApplicationArguments = new PropertyMetadata(
             name: "Application arguments",
             description: "Arguments to be passed to the launched application.",
             page: "Debug",
@@ -1024,7 +1023,7 @@ namespace SettingsProject
             priority: 200,
             editorType: "String");
 
-        private static readonly SettingMetadata WorkingDirectory = new SettingMetadata(
+        private static readonly PropertyMetadata WorkingDirectory = new PropertyMetadata(
             name: "Working directory",
             description: "Absolute path to the working directory.",
             page: "Debug",
@@ -1032,7 +1031,7 @@ namespace SettingsProject
             priority: 300,
             editorType: "FileBrowse");
 
-        private static readonly SettingMetadata UseRemoteMachine = new SettingMetadata(
+        private static readonly PropertyMetadata UseRemoteMachine = new PropertyMetadata(
             name: "Use remote machine",
             description: "The debug target is on a remote machine.",
             page: "Debug",
@@ -1040,15 +1039,15 @@ namespace SettingsProject
             priority: 400,
             editorType: "Bool");
 
-        private static readonly SettingMetadata RemoteMachineHostName = new SettingMetadata(
+        private static readonly PropertyMetadata RemoteMachineHostName = new PropertyMetadata(
             name: "Remote machine host name",
             description: null,
             page: "Debug",
             category: "General",
             priority: 410,
-            editorType: "String"); // TODO RemoteMachineSetting, with support for the 'Find' button
+            editorType: "String"); // TODO RemoteMachineProperty, with support for the 'Find' button
 
-        private static readonly SettingMetadata AuthenticationMode = new SettingMetadata(
+        private static readonly PropertyMetadata AuthenticationMode = new PropertyMetadata(
             name: "Authentication mode",
             description: null,
             page: "Debug",
@@ -1056,7 +1055,7 @@ namespace SettingsProject
             priority: 420,
             editorType: "Enum");
 
-        private static readonly SettingMetadata LaunchBrowser = new SettingMetadata(
+        private static readonly PropertyMetadata LaunchBrowser = new PropertyMetadata(
             name: "Launch Browser",
             description: "Whether a browser should be launched when this profile is invoked.",
             page: "Debug",
@@ -1064,7 +1063,7 @@ namespace SettingsProject
             priority: 550,
             editorType: "Bool");
 
-        private static readonly SettingMetadata LaunchBrowserUrl = new SettingMetadata(
+        private static readonly PropertyMetadata LaunchBrowserUrl = new PropertyMetadata(
             name: "Launch Browser URL",
             description: "Absolute or relative URL to direct the browser to when launched.",
             page: "Debug",
@@ -1072,7 +1071,7 @@ namespace SettingsProject
             priority: 560,
             editorType: "String");
 
-        private static readonly SettingMetadata EnvironmentVariables = new SettingMetadata(
+        private static readonly PropertyMetadata EnvironmentVariables = new PropertyMetadata(
             name: "Environment variables",
             description: "Specifies environment variables to be set for the launched application.",
             page: "Debug",
@@ -1080,7 +1079,7 @@ namespace SettingsProject
             priority: 500,
             editorType: "String"); // TODO NameValueList
 
-        private static readonly SettingMetadata NativeCodeDebugging = new SettingMetadata(
+        private static readonly PropertyMetadata NativeCodeDebugging = new PropertyMetadata(
             name: "Native code debugging",
             description: "Enable native code debugging.",
             page: "Debug",
@@ -1088,7 +1087,7 @@ namespace SettingsProject
             priority: 600,
             editorType: "Bool");
 
-        private static readonly SettingMetadata SqlServerDebugging = new SettingMetadata(
+        private static readonly PropertyMetadata SqlServerDebugging = new PropertyMetadata(
             name: "SQL Server debugging",
             description: "Enable SQL Server debugging.",
             page: "Debug",
@@ -1096,7 +1095,7 @@ namespace SettingsProject
             priority: 700,
             editorType: "Bool");
 
-        private static readonly SettingMetadata AzureResource = new SettingMetadata(
+        private static readonly PropertyMetadata AzureResource = new PropertyMetadata(
             name: "Azure resource",
             description: "The Azure resource to use in your snapshot debugging session.",
             page: "Debug",
@@ -1104,7 +1103,7 @@ namespace SettingsProject
             priority: 100,
             editorType: "Enum"); // TODO AzureResource
 
-        private static readonly SettingMetadata AzureStorageAccount = new SettingMetadata(
+        private static readonly PropertyMetadata AzureStorageAccount = new PropertyMetadata(
             name: "Azure Storage account",
             description: "The Azure resource to use in your snapshot debugging session.",
             page: "Debug",
@@ -1112,7 +1111,7 @@ namespace SettingsProject
             priority: 200,
             editorType: "Enum"); // TODO editorType AzureStorage
 
-        private static readonly SettingMetadata AppUrl = new SettingMetadata(
+        private static readonly PropertyMetadata AppUrl = new PropertyMetadata(
             name: "App URL",
             description: "The URL at which the application will be hosted when running.",
             page: "Debug",
@@ -1120,7 +1119,7 @@ namespace SettingsProject
             priority: 1100,
             editorType: "String");
 
-        private static readonly SettingMetadata IisExpressBitness = new SettingMetadata(
+        private static readonly PropertyMetadata IisExpressBitness = new PropertyMetadata(
             name: "IIS Express Bitness",
             description: "Bitness of the IIS Express process to launch (x86, x64).",
             page: "Debug",
@@ -1128,7 +1127,7 @@ namespace SettingsProject
             priority: 1200,
             editorType: "Enum");
 
-        private static readonly SettingMetadata HostingModel = new SettingMetadata(
+        private static readonly PropertyMetadata HostingModel = new PropertyMetadata(
             name: "Hosting Model",
             description: "The URL at which the application will be hosted when running.",
             page: "Debug",
@@ -1136,7 +1135,7 @@ namespace SettingsProject
             priority: 1300,
             editorType: "Enum");
 
-        private static readonly SettingMetadata EnableSSL = new SettingMetadata(
+        private static readonly PropertyMetadata EnableSSL = new PropertyMetadata(
             name: "Enable SSL",
             description: null,
             page: "Debug",
@@ -1144,7 +1143,7 @@ namespace SettingsProject
             priority: 1400,
             editorType: "Bool");
 
-        private static readonly SettingMetadata EnableAnonymousAuthentication = new SettingMetadata(
+        private static readonly PropertyMetadata EnableAnonymousAuthentication = new PropertyMetadata(
             name: "Enable Anonymous Authentication",
             description: null,
             page: "Debug",
@@ -1152,7 +1151,7 @@ namespace SettingsProject
             priority: 1500,
             editorType: "Bool");
 
-        private static readonly SettingMetadata EnableWindowsAuthentication = new SettingMetadata(
+        private static readonly PropertyMetadata EnableWindowsAuthentication = new PropertyMetadata(
             name: "Enable Windows Authentication",
             description: null,
             page: "Debug",
@@ -1166,22 +1165,22 @@ namespace SettingsProject
         {
 
             var remoteMachineConditions = ImmutableArray.Create(
-                new SettingCondition(
+                new PropertyCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
                     target: RemoteMachineHostName.Identity),
-                new SettingCondition(
+                new PropertyCondition(
                     source: UseRemoteMachine.Identity,
                     sourceValue: true,
                     target: AuthenticationMode.Identity));
 
             var launchBrowserConditions = ImmutableArray.Create(
-                new SettingCondition(
+                new PropertyCondition(
                     source: LaunchBrowser.Identity,
                     sourceValue: true,
                     target: LaunchBrowserUrl.Identity));
 
-            var executableKindSettingMetadata = ImmutableArray.Create(
+            var executableKindPropertyMetadata = ImmutableArray.Create(
                 ExecutablePath,
                 ApplicationArguments,
                 WorkingDirectory,
@@ -1192,7 +1191,7 @@ namespace SettingsProject
                 NativeCodeDebugging,
                 SqlServerDebugging);
 
-            var projectKindSettingMetadata = ImmutableArray.Create(
+            var projectKindPropertyMetadata = ImmutableArray.Create(
                 ApplicationArguments,
                 WorkingDirectory,
                 UseRemoteMachine,
@@ -1202,11 +1201,11 @@ namespace SettingsProject
                 NativeCodeDebugging,
                 SqlServerDebugging);
 
-            var snapshotDebuggerKindSettingMetadata = ImmutableArray.Create(
+            var snapshotDebuggerKindPropertyMetadata = ImmutableArray.Create(
                 AzureResource,
                 AzureStorageAccount);
 
-            var iisExpressKindSettingMetadata = ImmutableArray.Create(
+            var iisExpressKindPropertyMetadata = ImmutableArray.Create(
                 ApplicationArguments,
                 WorkingDirectory,
                 LaunchBrowser,
@@ -1214,7 +1213,7 @@ namespace SettingsProject
                 EnvironmentVariables,
                 NativeCodeDebugging,
                 SqlServerDebugging,
-                // Web server settings
+                // Web server properties
                 AppUrl,
                 IisExpressBitness,
                 HostingModel,
@@ -1222,7 +1221,7 @@ namespace SettingsProject
                 EnableAnonymousAuthentication,
                 EnableWindowsAuthentication);
 
-            var iisKindSettingMetadata = ImmutableArray.Create(
+            var iisKindPropertyMetadata = ImmutableArray.Create(
                 ApplicationArguments,
                 WorkingDirectory,
                 LaunchBrowser,
@@ -1230,7 +1229,7 @@ namespace SettingsProject
                 EnvironmentVariables,
                 NativeCodeDebugging,
                 SqlServerDebugging,
-                // Web server settings
+                // Web server properties
                 AppUrl,
                 IisExpressBitness,
                 HostingModel,
@@ -1238,13 +1237,13 @@ namespace SettingsProject
                 EnableAnonymousAuthentication,
                 EnableWindowsAuthentication);
 
-            var projectKind = new LaunchProfileKind("Project", projectKindSettingMetadata, remoteMachineConditions, FindDrawing("IconApplicationDrawing"));
-            var executableKind = new LaunchProfileKind("Executable", executableKindSettingMetadata, remoteMachineConditions, FindDrawing("IconExecuteDrawing"));
-            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindSettingMetadata, ImmutableArray<SettingCondition>.Empty, FindDrawing("SnapshotDebuggerDrawing"));
-            var iisKind = new LaunchProfileKind("IIS", iisKindSettingMetadata, launchBrowserConditions, FindDrawing("IISDrawing"));
-            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindSettingMetadata, launchBrowserConditions, FindDrawing("IISExpressDrawing"));
+            var projectKind = new LaunchProfileKind("Project", projectKindPropertyMetadata, remoteMachineConditions, FindDrawing("IconApplicationDrawing"));
+            var executableKind = new LaunchProfileKind("Executable", executableKindPropertyMetadata, remoteMachineConditions, FindDrawing("IconExecuteDrawing"));
+            var snapshotDebuggerKind = new LaunchProfileKind("Snapshot Debugger", snapshotDebuggerKindPropertyMetadata, ImmutableArray<PropertyCondition>.Empty, FindDrawing("SnapshotDebuggerDrawing"));
+            var iisKind = new LaunchProfileKind("IIS", iisKindPropertyMetadata, launchBrowserConditions, FindDrawing("IISDrawing"));
+            var iisExpressKind = new LaunchProfileKind("IIS Express", iisExpressKindPropertyMetadata, launchBrowserConditions, FindDrawing("IISExpressDrawing"));
 
-            var supportedValuesBySetting = new Dictionary<SettingIdentity, ImmutableArray<SupportedValue>>
+            var supportedValuesByProperty = new Dictionary<PropertyIdentity, ImmutableArray<SupportedValue>>
             {
                 { AuthenticationMode.Identity, ImmutableArray.Create(new SupportedValue("None"), new SupportedValue("Windows")) },
                 { IisExpressBitness.Identity, ImmutableArray.Create(new SupportedValue("Default"), new SupportedValue("x64"), new SupportedValue("x86")) },
@@ -1265,25 +1264,25 @@ namespace SettingsProject
 
             var profiles = new ObservableCollection<LaunchProfileViewModel>
             {
-                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
+                CreateLaunchProfileViewModel("My project", projectKind, new Dictionary<PropertyIdentity, (string Unevaluated, object Evaluated)>
                 {
                     { ApplicationArguments.Identity, ("/foo /bar", "/foo /bar") }
                 }),
-                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
+                CreateLaunchProfileViewModel("devenv.exe", executableKind, new Dictionary<PropertyIdentity, (string Unevaluated, object Evaluated)>
                 {
                     { ExecutablePath.Identity, ("devenv.exe", "devenv.exe") },
                     { ApplicationArguments.Identity, ("/rootSuffix Exp", "/rootSuffix Exp") }
                 }),
-                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
+                CreateLaunchProfileViewModel("My Snapshot", snapshotDebuggerKind, new Dictionary<PropertyIdentity, (string Unevaluated, object Evaluated)>
                 {
                     // TODO
                 }),
-                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
+                CreateLaunchProfileViewModel("My IIS", iisKind, new Dictionary<PropertyIdentity, (string Unevaluated, object Evaluated)>
                 {
                     { AppUrl.Identity, ("http://localhost:52531", "http://localhost:52531") },
                     { LaunchBrowser.Identity, ("true", true) }
                 }),
-                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)>
+                CreateLaunchProfileViewModel("My IIS Express", iisExpressKind, new Dictionary<PropertyIdentity, (string Unevaluated, object Evaluated)>
                 {
                     { AppUrl.Identity, ("http://localhost:52531", "http://localhost:52531") },
                     { LaunchBrowser.Identity, ("true", true) }
@@ -1292,34 +1291,34 @@ namespace SettingsProject
 
             return new LaunchProfilesWindowViewModel(profiles, profileKinds);
 
-            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<SettingIdentity, (string Unevaluated, object Evaluated)> initialValues)
+            LaunchProfileViewModel CreateLaunchProfileViewModel(string name, LaunchProfileKind kind, Dictionary<PropertyIdentity, (string Unevaluated, object Evaluated)> initialValues)
             {
-                var context = new SettingContext(
+                var context = new PropertyContext(
                     Array.Empty<KeyValuePair<string, ImmutableArray<string>>>(),
                     kind.Conditions,
-                    kind.Metadata.Select(CreateSetting).ToImmutableArray());
+                    kind.Metadata.Select(CreateProperty).ToImmutableArray());
 
                 return new LaunchProfileViewModel(name, kind, context);
 
-                Setting CreateSetting(SettingMetadata metadata)
+                Property CreateProperty(PropertyMetadata metadata)
                 {
                     // Debug launch profile values are unconfigured
-                    var settingValue = new SettingValue(unevaluatedValue: "", evaluatedValue: "");
+                    var propertyValue = new PropertyValue(unevaluatedValue: "", evaluatedValue: "");
 
-                    if (supportedValuesBySetting.TryGetValue(metadata.Identity, out ImmutableArray<SupportedValue> supportedValues))
+                    if (supportedValuesByProperty.TryGetValue(metadata.Identity, out ImmutableArray<SupportedValue> supportedValues))
                     {
-                        settingValue.SupportedValues = supportedValues;
-                        settingValue.EvaluatedValue = supportedValues.First();
+                        propertyValue.SupportedValues = supportedValues;
+                        propertyValue.EvaluatedValue = supportedValues.First();
                     }
 
                     if (initialValues.TryGetValue(metadata.Identity, out (string Unevaluated, object Evaluated) value) ||
                         defaultValueByEditorType.TryGetValue(metadata.Editors.Last().TypeName, out value))
                     {
-                        settingValue.UnevaluatedValue = value.Unevaluated;
-                        settingValue.EvaluatedValue = value.Evaluated;
+                        propertyValue.UnevaluatedValue = value.Unevaluated;
+                        propertyValue.EvaluatedValue = value.Evaluated;
                     }
 
-                    return new Setting(metadata, ImmutableArray.Create(settingValue));
+                    return new Property(metadata, ImmutableArray.Create(propertyValue));
                 }
             }
 

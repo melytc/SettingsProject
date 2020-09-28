@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
-    internal partial class LaunchProfilesWindow
+    public partial class ProjectPropertiesWindow
     {
-        public LaunchProfilesWindow()
+        public ProjectPropertiesWindow()
         {
-            DataContext = new AsyncLoadViewModel(Designer.Resources.LaunchProfilesWindowAsyncLoadMessage);
+            DataContext = new AsyncLoadViewModel(Designer.Resources.ProjectPropertiesAsyncLoadMessage);
 
             InitializeComponent();
 
@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
                     // Simulate delayed load
                     await Task.Delay(1000);
 
-                    DataContext = PropertiesLoader.CreateLaunchProfiles();
+                    DataContext = new ProjectPropertiesViewModel(PropertiesLoader.CreateDefaultContext());
                 }));
         }
     }

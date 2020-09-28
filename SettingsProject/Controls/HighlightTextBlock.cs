@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 #nullable enable
 
-namespace SettingsProject
+namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.Designer
 {
     // TODO may be able to get better perf by not deriving from TextBlock and using GlyphRun/Glyph instead
 
@@ -22,13 +22,13 @@ namespace SettingsProject
             nameof(HighlightText),
             typeof(string),
             typeof(HighlightTextBlock),
-            new PropertyMetadata("", (d, e) => ((HighlightTextBlock)d).OnHighlightTextChanged(e.NewValue)));
+            new System.Windows.PropertyMetadata("", (d, e) => ((HighlightTextBlock)d).OnHighlightTextChanged(e.NewValue)));
 
         public static readonly DependencyProperty HighlightBrushProperty = DependencyProperty.Register(
             nameof(HighlightBrush),
             typeof(Brush),
             typeof(HighlightTextBlock),
-            new PropertyMetadata(Brushes.Yellow));
+            new System.Windows.PropertyMetadata(Brushes.Yellow));
 
         public string HighlightText
         {
