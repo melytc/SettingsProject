@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Windows;
@@ -40,6 +41,8 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
         private abstract class PropertyEditorBase : IPropertyEditor
         {
+            private static ResourceDictionary? resources;
+
             public string TypeName { get; }
             public DataTemplate PropertyDataTemplate { get; }
             public DataTemplate? UnconfiguredDataTemplate { get; }
@@ -49,7 +52,18 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
             {
                 TypeName = typeName;
 
-                var propertyDataTemplate = (DataTemplate?)Application.Current.FindResource(propertyDataTemplateName);
+                if (resources == null)
+                {
+                    if (!UriParser.IsKnownScheme("pack"))
+                        UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", defaultPort: -1);
+
+                    resources = new ResourceDictionary
+                    {
+                        Source = new Uri("pack://application:,,,/Resources/PropertyTemplates.xaml", UriKind.RelativeOrAbsolute)
+                    };
+                }
+
+                var propertyDataTemplate = (DataTemplate?)resources[propertyDataTemplateName];
 
                 Assumes.NotNull(propertyDataTemplate);
 
@@ -57,12 +71,12 @@ namespace Microsoft.VisualStudio.ProjectSystem.VS.Implementation.PropertyPages.D
 
                 if (unconfiguredDataTemplateName != null)
                 {
-                    UnconfiguredDataTemplate = (DataTemplate?)Application.Current.FindResource(unconfiguredDataTemplateName);
+                    UnconfiguredDataTemplate = (DataTemplate?)resources[unconfiguredDataTemplateName];
                 }
 
                 if (configuredDataTemplateName != null)
                 {
-                    ConfiguredDataTemplate = (DataTemplate?)Application.Current.FindResource(configuredDataTemplateName);
+                    ConfiguredDataTemplate = (DataTemplate?)resources[configuredDataTemplateName];
                 }
             }
 

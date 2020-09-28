@@ -16,110 +16,118 @@
 
   <Window.Resources>
 
-    <Style TargetType="Button" x:Key="ToolbarButton">
-      <Setter Property="Padding" Value="4" />
-      <Setter Property="BorderThickness" Value="0" />
-      <Setter Property="Background" Value="Transparent" />
-      <Setter Property="Margin" Value="4,4,0,4" />
-    </Style>
+    <ResourceDictionary>
 
-    <!-- minimal toolbar template -->
-    <Style TargetType="{x:Type ToolBar}">
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="{x:Type ToolBar}">
-            <ToolBarPanel IsItemsHost="True" Name="PART_ToolBarPanel" SnapsToDevicePixels="True" />
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
-    </Style>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Icons.xaml" />
+      </ResourceDictionary.MergedDictionaries>
 
-    <DataTemplate DataType="{x:Type local:AsyncLoadViewModel}">
-      <TextBlock Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-    </DataTemplate>
+      <Style TargetType="Button" x:Key="ToolbarButton">
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="4,4,0,4" />
+      </Style>
 
-    <DataTemplate DataType="{x:Type local:LaunchProfilesWindowViewModel}">
-      <Grid>
+      <!-- minimal toolbar template -->
+      <Style TargetType="{x:Type ToolBar}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ToolBar}">
+              <ToolBarPanel IsItemsHost="True" Name="PART_ToolBarPanel" SnapsToDevicePixels="True" />
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
 
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="200" MinWidth="140" />
-          <ColumnDefinition Width="8" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+      <DataTemplate DataType="{x:Type local:AsyncLoadViewModel}">
+        <TextBlock Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+      </DataTemplate>
 
-        <!-- Profile List and Management -->
-        <Border Background="#eeeeee" Padding="8,0,0,8">
-          <DockPanel>
+      <DataTemplate DataType="{x:Type local:LaunchProfilesWindowViewModel}">
+        <Grid>
 
-            <ToolBar DockPanel.Dock="Top" BorderThickness="0" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never">
-              <Menu VerticalAlignment="Center">
-                <MenuItem ToolTip="{x:Static local:Resources.LaunchProfileMenuNewToolTip}" ItemsSource="{Binding Path=ProfileKinds}" UsesItemContainerTemplate="False">
-                  <MenuItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                      <TextBlock Text="{x:Static local:Resources.LaunchProfileMenuNewText}" />
-                      <Path Fill="Black" Data="M 0 0 H 6 L 3 4 Z" VerticalAlignment="Center" Margin="4,0,0,0" SnapsToDevicePixels="True" />
-                    </StackPanel>
-                  </MenuItem.Header>
-                  <MenuItem.ItemContainerStyle>
-                    <Style>
-                      <Setter Property="MenuItem.Header" Value="{Binding DisplayName}" />
-                      <Setter Property="MenuItem.Icon">
-                        <Setter.Value>
-                          <Image Width="16" Height="16">
-                            <Image.Source>
-                              <DrawingImage Drawing="{Binding IconDrawing}" />
-                            </Image.Source>
-                          </Image>
-                        </Setter.Value>
-                      </Setter>
-                      <Setter Property="MenuItem.Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ToolBar}, Path=DataContext.NewCommand}" />
-                      <Setter Property="MenuItem.CommandParameter" Value="{Binding}" />
-                    </Style>
-                  </MenuItem.ItemContainerStyle>
-                </MenuItem>
-              </Menu>
-              <Button Style="{StaticResource ToolbarButton}" ToolTip="{x:Static local:Resources.LaunchProfileMenuDuplicateToolTip}" Command="{Binding CloneCommand}" CommandParameter="{Binding SelectedProfile}">
-                <Rectangle Width="16" Height="16" Fill="{StaticResource CloneIconBrush}" />
-              </Button>
-              <Button Style="{StaticResource ToolbarButton}" ToolTip="{x:Static local:Resources.LaunchProfileMenuDeleteToolTip}" Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedProfile}">
-                <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteIconBrush}" />
-              </Button>
-              <Button Style="{StaticResource ToolbarButton}" ToolTip="{x:Static local:Resources.LaunchProfileMenuRenameToolTip}" Command="{Binding RenameCommand}" CommandParameter="{Binding SelectedProfile}">
-                <Rectangle Width="16" Height="16" Fill="{StaticResource RenameIconBrush}" />
-              </Button>
-            </ToolBar>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" MinWidth="140" />
+            <ColumnDefinition Width="8" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-            <ListBox ItemsSource="{Binding Profiles}"
-                     SelectedItem="{Binding SelectedProfile}"
-                     BorderThickness="0"
-                     BorderBrush="Transparent"
-                     Background="#FBFBFB">
-              <ListBox.InputBindings>
-                <KeyBinding Key="F2" Command="{Binding RenameCommand}" />
-              </ListBox.InputBindings>
-              <ListBox.ItemTemplate>
-                <DataTemplate DataType="local:LaunchProfileViewModel">
-                  <DockPanel Margin="8">
-                    <Image DockPanel.Dock="Left" Width="16" Height="16">
-                      <Image.Source>
-                        <DrawingImage Drawing="{Binding Kind.IconDrawing}" />
-                      </Image.Source>
-                    </Image>
-                    <local:RenameLabel Margin="8,0,0,0" Text="{Binding Path=Name, Mode=TwoWay}" IsRenaming="{Binding Path=IsRenaming, Mode=TwoWay}" />
-                  </DockPanel>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
-          </DockPanel>
-        </Border>
+          <!-- Profile List and Management -->
+          <Border Background="#eeeeee" Padding="8,0,0,8">
+            <DockPanel>
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="16" Background="#eeeeee" BorderThickness="0" SnapsToDevicePixels="True" />
+              <ToolBar DockPanel.Dock="Top" BorderThickness="0" Background="#eeeeee" ToolBarTray.IsLocked="True" OverflowMode="Never">
+                <Menu VerticalAlignment="Center">
+                  <MenuItem ToolTip="{x:Static local:Resources.LaunchProfileMenuNewToolTip}" ItemsSource="{Binding Path=ProfileKinds}" UsesItemContainerTemplate="False">
+                    <MenuItem.Header>
+                      <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static local:Resources.LaunchProfileMenuNewText}" />
+                        <Path Fill="Black" Data="M 0 0 H 6 L 3 4 Z" VerticalAlignment="Center" Margin="4,0,0,0" SnapsToDevicePixels="True" />
+                      </StackPanel>
+                    </MenuItem.Header>
+                    <MenuItem.ItemContainerStyle>
+                      <Style>
+                        <Setter Property="MenuItem.Header" Value="{Binding DisplayName}" />
+                        <Setter Property="MenuItem.Icon">
+                          <Setter.Value>
+                            <Image Width="16" Height="16">
+                              <Image.Source>
+                                <DrawingImage Drawing="{Binding IconDrawing}" />
+                              </Image.Source>
+                            </Image>
+                          </Setter.Value>
+                        </Setter>
+                        <Setter Property="MenuItem.Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ToolBar}, Path=DataContext.NewCommand}" />
+                        <Setter Property="MenuItem.CommandParameter" Value="{Binding}" />
+                      </Style>
+                    </MenuItem.ItemContainerStyle>
+                  </MenuItem>
+                </Menu>
+                <Button Style="{StaticResource ToolbarButton}" ToolTip="{x:Static local:Resources.LaunchProfileMenuDuplicateToolTip}" Command="{Binding CloneCommand}" CommandParameter="{Binding SelectedProfile}">
+                  <Rectangle Width="16" Height="16" Fill="{StaticResource CloneIconBrush}" />
+                </Button>
+                <Button Style="{StaticResource ToolbarButton}" ToolTip="{x:Static local:Resources.LaunchProfileMenuDeleteToolTip}" Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedProfile}">
+                  <Rectangle Width="16" Height="16" Fill="{StaticResource DeleteIconBrush}" />
+                </Button>
+                <Button Style="{StaticResource ToolbarButton}" ToolTip="{x:Static local:Resources.LaunchProfileMenuRenameToolTip}" Command="{Binding RenameCommand}" CommandParameter="{Binding SelectedProfile}">
+                  <Rectangle Width="16" Height="16" Fill="{StaticResource RenameIconBrush}" />
+                </Button>
+              </ToolBar>
 
-        <!-- Profile Edit -->
-        <local:PropertyList Grid.Column="2" Properties="{Binding Path=SelectedProfile.Properties}" />
+              <ListBox ItemsSource="{Binding Profiles}"
+                       SelectedItem="{Binding SelectedProfile}"
+                       BorderThickness="0"
+                       BorderBrush="Transparent"
+                       Background="#FBFBFB">
+                <ListBox.InputBindings>
+                  <KeyBinding Key="F2" Command="{Binding RenameCommand}" />
+                </ListBox.InputBindings>
+                <ListBox.ItemTemplate>
+                  <DataTemplate DataType="local:LaunchProfileViewModel">
+                    <DockPanel Margin="8">
+                      <Image DockPanel.Dock="Left" Width="16" Height="16">
+                        <Image.Source>
+                          <DrawingImage Drawing="{Binding Kind.IconDrawing}" />
+                        </Image.Source>
+                      </Image>
+                      <local:RenameLabel Margin="8,0,0,0" Text="{Binding Path=Name, Mode=TwoWay}" IsRenaming="{Binding Path=IsRenaming, Mode=TwoWay}" />
+                    </DockPanel>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </DockPanel>
+          </Border>
 
-      </Grid>
-    </DataTemplate>
+          <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="16" Background="#eeeeee" BorderThickness="0" SnapsToDevicePixels="True" />
+
+          <!-- Profile Edit -->
+          <local:PropertyList Grid.Column="2" Properties="{Binding Path=SelectedProfile.Properties}" />
+
+        </Grid>
+      </DataTemplate>
+
+    </ResourceDictionary>
 
   </Window.Resources>
 

@@ -13,51 +13,59 @@
   Background="#FBFBFB">
 
   <Window.Resources>
-    
-    <DataTemplate DataType="{x:Type local:AsyncLoadViewModel}">
-      <TextBlock Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-    </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:ProjectPropertiesViewModel}">
-      <Grid>
+    <ResourceDictionary>
 
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto" />
-          <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Resources/Icons.xaml" />
+      </ResourceDictionary.MergedDictionaries>
 
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+      <DataTemplate DataType="{x:Type local:AsyncLoadViewModel}">
+        <TextBlock Text="{Binding Text}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+      </DataTemplate>
 
-        <local:SearchBox
-          Grid.Row="0"
-          Grid.Column="0"
-          Grid.ColumnSpan="2"
-          SearchText="{Binding SearchText, Mode=TwoWay}"
-          WatermarkText="{x:Static local:Resources.SearchTextBoxWatermarkText}"
-          Margin="8,8,8,16"
-          Padding="12,3" />
+      <DataTemplate DataType="{x:Type local:ProjectPropertiesViewModel}">
+        <Grid>
 
-        <local:NavigationTree
-          Grid.Row="1"
-          Grid.Column="0"
-          MinWidth="160"
-          Pages="{Binding NavigationViewModel.Pages}"
-          SelectedSection="{Binding NavigationViewModel.SelectedSection, Mode=TwoWay}" />
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
 
-        <local:PropertyList
-          Grid.Row="1"
-          Grid.Column="1"
-          Margin="24,0,0,0"
-          Padding="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={x:Static local:Converters.DoubleToBottomThickness}}"
-          Properties="{Binding Properties}"
-          SearchText="{Binding SearchText}"
-          CurrentSection="{Binding Path=NavigationViewModel.SelectedSection, Mode=TwoWay}" />
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
 
-      </Grid>
-    </DataTemplate>
+          <local:SearchBox
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            SearchText="{Binding SearchText, Mode=TwoWay}"
+            WatermarkText="{x:Static local:Resources.SearchTextBoxWatermarkText}"
+            Margin="8,8,8,16"
+            Padding="12,3" />
+
+          <local:NavigationTree
+            Grid.Row="1"
+            Grid.Column="0"
+            MinWidth="160"
+            Pages="{Binding NavigationViewModel.Pages}"
+            SelectedSection="{Binding NavigationViewModel.SelectedSection, Mode=TwoWay}" />
+
+          <local:PropertyList
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="24,0,0,0"
+            Padding="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight, Converter={x:Static local:Converters.DoubleToBottomThickness}}"
+            Properties="{Binding Properties}"
+            SearchText="{Binding SearchText}"
+            CurrentSection="{Binding Path=NavigationViewModel.SelectedSection, Mode=TwoWay}" />
+
+        </Grid>
+      </DataTemplate>
+
+    </ResourceDictionary>
 
   </Window.Resources>
 
